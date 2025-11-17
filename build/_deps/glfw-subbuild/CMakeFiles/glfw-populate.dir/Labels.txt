@@ -1,0 +1,14 @@
+# Target labels
+ glfw-populate
+# Source files and their labels
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/glfw-populate
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/0b4c1103c55bf95e25b598d0d222088a/glfw-populate.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/bd3ac7235e245478a67f26d1e3bd729d/glfw-populate-complete.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-build.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-configure.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-download.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-install.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-mkdir.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-patch.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-test.rule
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-update.rule

@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/glfw-populate"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/0b4c1103c55bf95e25b598d0d222088a/glfw-populate.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/bd3ac7235e245478a67f26d1e3bd729d/glfw-populate-complete.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-build.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-configure.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-download.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-install.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-mkdir.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-patch.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-test.rule"
+		},
+		{
+			"file" : "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-subbuild/CMakeFiles/59343862437a83121e1c65fef7915931/glfw-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"glfw-populate"
+		],
+		"name" : "glfw-populate"
+	}
+}

@@ -1,0 +1,3 @@
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/imgui-subbuild/CMakeFiles/imgui-populate.dir
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/imgui-subbuild/CMakeFiles/ALL_BUILD.dir
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/imgui-subbuild/CMakeFiles/ZERO_CHECK.dir

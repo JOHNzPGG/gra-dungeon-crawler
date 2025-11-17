@@ -1,0 +1,37 @@
+# ninja log v6
+5	69	7851164081411061	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	116875c5441de9c9
+3094	3275	7851164111836909	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
+3275	3347	7851164114298989	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
+5	69	7851164081411061	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	116875c5441de9c9
+70	3094	7851164111782923	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	86f8d2cbc8e53809
+70	3094	7851164111782923	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	86f8d2cbc8e53809
+3094	3275	7851164111836909	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
+3275	3347	7851164114298989	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
+3347	3418	7851164114996283	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
+3638	3740	7851164118219970	CMakeFiles/glfw-populate-complete	89b89198593d34d6
+3347	3418	7851164114996283	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
+3418	3491	7851164115722627	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
+3418	3491	7851164115722627	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
+3491	3570	7851164116515156	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
+3491	3570	7851164116515156	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
+3570	3638	7851164117213127	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
+3570	3638	7851164117213127	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
+3638	3740	7851164118219970	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
+3638	3740	7851164118219970	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	89b89198593d34d6
+3638	3740	7851164118219970	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
+12	154	7851184872195955	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
+12	154	7851184872195955	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
+154	212	7851184874150287	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
+154	212	7851184874150287	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
+212	275	7851184874769348	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
+212	275	7851184874769348	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
+275	339	7851184875413867	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
+275	339	7851184875413867	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
+339	398	7851184876003233	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
+339	398	7851184876003233	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
+398	458	7851184876605380	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
+398	458	7851184876605380	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
+458	540	7851184877429325	CMakeFiles/glfw-populate-complete	89b89198593d34d6
+458	540	7851184877429325	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
+458	540	7851184877429325	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	89b89198593d34d6
+458	540	7851184877429325	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6

@@ -1,0 +1,10 @@
+^D:\PLIKI\GRA DUNGEON PROJEKT\GRA-DUNGEON-CRAWLER\BUILD\_DEPS\GLM-SRC\GLM\CMAKELISTS.TXT
+setlocal
+"D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SD:/Pliki/gra dungeon projekt/gra-dungeon-crawler" "-BD:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build" --check-stamp-file "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glm-build/glm/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

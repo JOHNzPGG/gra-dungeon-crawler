@@ -1,0 +1,22 @@
+{
+  "OutputFoldersPerTargetSystem": {
+    "Local Machine": [
+      "out\\build\\x64-Debug",
+      "out\\install\\x64-Debug"
+    ]
+  },
+  "ExpandedNodes": [
+    "",
+    "\\build\\CMakeFiles",
+    "\\build\\CMakeFiles\\4.1.1-msvc1",
+    "\\include",
+    "\\include\\dungeon",
+    "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
+    "\\include\\dungeon\\io",
+    "\\include\\dungeon\\ui",
+    "\\src",
+    "\\src\\core"
+  ],
+  "PreviewInSolutionExplorer": false
+}

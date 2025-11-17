@@ -1,0 +1,20 @@
+# CMake generation dependency list for this directory.
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/CMakeGenericSystem.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/CMakeInitializeConfigs.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/CMakeSystemSpecificInformation.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/CMakeSystemSpecificInitialize.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/PatchInfo.txt.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/RepositoryInfo.txt.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/UpdateInfo.txt.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/cfgcmd.txt.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/gitclone.cmake.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/gitupdate.cmake.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/mkdirs.cmake.in
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/ExternalProject/shared_internal_commands.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/Platform/Windows-Initialize.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/Platform/Windows.cmake
+D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.1/Modules/Platform/WindowsPaths.cmake
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glm-subbuild/CMakeFiles/4.1.1-msvc1/CMakeSystem.cmake
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glm-subbuild/CMakeLists.txt
+D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glm-subbuild/glm-populate-prefix/tmp/glm-populate-mkdirs.cmake

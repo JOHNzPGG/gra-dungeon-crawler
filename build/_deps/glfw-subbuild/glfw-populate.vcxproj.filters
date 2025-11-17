@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\59343862437a83121e1c65fef7915931\glfw-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\bd3ac7235e245478a67f26d1e3bd729d\glfw-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\0b4c1103c55bf95e25b598d0d222088a\glfw-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-subbuild\CMakeFiles\glfw-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8AC05B58-6567-3C35-A667-BD6C9611467A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

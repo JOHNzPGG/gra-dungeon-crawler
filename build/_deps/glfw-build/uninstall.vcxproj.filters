@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\CMakeFiles\919ccf6211ffd909540101a4116f2aeb\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\glfw-build\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C16239F3-71ED-313C-B3C3-21A76F64792E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

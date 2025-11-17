@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\f38d2a3137fd58547cef612ce3dd1c09\imgui-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\e0e1ad3a2bb81d4edf93fcaac98f0032\imgui-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\6d0462532defc9f55ac7dcdec67420da\imgui-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\imgui-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{3B751E55-3A42-3D69-BC1F-D734F95CC538}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

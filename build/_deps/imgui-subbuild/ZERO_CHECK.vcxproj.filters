@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\_deps\imgui-subbuild\CMakeFiles\6d0462532defc9f55ac7dcdec67420da\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{3B751E55-3A42-3D69-BC1F-D734F95CC538}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
