@@ -174,12 +174,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\copy_assets.vcxproj">
-      <Project>{50472A97-8DD7-370C-80EF-AC66DD631F5F}</Project>
-      <Name>copy_assets</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </ProjectReference>
     <ProjectReference Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\dungeon.vcxproj">
       <Project>{0C2A5553-F168-3E7B-A623-9D6CC2A4DC6B}</Project>
       <Name>dungeon</Name>
@@ -199,10 +193,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\imgui_lib.vcxproj">
       <Project>{386A1D6B-2240-31FF-8032-D3B0A7628D37}</Project>
       <Name>imgui_lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\build\tests.vcxproj">
-      <Project>{766471B7-6432-389E-B3A8-E54D55487BEF}</Project>
-      <Name>tests</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
