@@ -66,20 +66,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -111,7 +112,7 @@ events:
       The output was:
       0
       Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-      Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:15.
+      Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:02.
       
       Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\4.1.1-msvc1\\CompilerIdCXX\\CompilerIdCXX.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
       PrepareForBuild:
@@ -149,7 +150,7 @@ events:
           Ostrze┼╝enia: 0
           Liczba b┼é─Öd├│w: 0
       
-      Czas, kt├│ry up┼éyn─ů┼é: 00:00:02.54
+      Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.07
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -213,20 +214,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -268,20 +270,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -341,20 +344,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -457,6 +461,12 @@ events:
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.com"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.exe"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link.com"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link.exe"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link.com"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link.exe"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link"
@@ -466,9 +476,6 @@ events:
       - "C:/Program Files/nodejs/lld-link.com"
       - "C:/Program Files/nodejs/lld-link.exe"
       - "C:/Program Files/nodejs/lld-link"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link"
@@ -481,6 +488,9 @@ events:
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link.com"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link.exe"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link"
@@ -496,9 +506,6 @@ events:
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link.com"
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link.exe"
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link.com"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link.exe"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link.com"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link.exe"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link"
@@ -548,20 +555,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -619,20 +627,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -674,20 +683,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -745,20 +755,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -830,20 +841,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -901,20 +913,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -956,20 +969,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -1029,20 +1043,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -1123,20 +1138,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -1157,8 +1173,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-y8gwoa"
-      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-y8gwoa"
+      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-t7ici0"
+      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-t7ici0"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -1168,49 +1184,49 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-y8gwoa'
+        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-t7ici0'
         
-        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1e453.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_27e04.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-        Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:18.
+        Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:03.
         
-        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\cmTC_1e453.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
+        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\cmTC_27e04.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu ÔÇ×cmTC_1e453.dir\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_27e04.dir\\Debug\\ÔÇŁ.
           Dane wyj┼Ťciowe ze struktur─ů s─ů w┼é─ůczone. Formatowanie diagnostyki kompilatora b─Ödzie odzwierciedla─ç hierarchi─Ö b┼é─Öd├│w. Aby uzyska─ç wi─Öcej informacji, zobacz https://aka.ms/cpp/structured-output.
-          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\ÔÇŁ.
-          Tworzenie katalogu ÔÇ×cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\ÔÇŁ.
         InitializeBuildStatus:
-          Trwa tworzenie ÔÇ×cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
-          Modyfikowanie ÔÇ×cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\unsuccessfulbuildÔÇŁ.
+          Trwa tworzenie ÔÇ×cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
+          Modyfikowanie ÔÇ×cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\unsuccessfulbuildÔÇŁ.
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Fo"cmTC_1e453.dir\\Debug\\\\" /Fd"cmTC_1e453.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Fo"cmTC_27e04.dir\\Debug\\\\" /Fd"cmTC_27e04.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ wersja kompilatora optymalizuj─ůcego 19.44.35219 dla x64
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrze┼╝one.
-          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Fo"cmTC_1e453.dir\\Debug\\\\" /Fd"cmTC_1e453.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Fo"cmTC_27e04.dir\\Debug\\\\" /Fd"cmTC_27e04.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\cmTC_1e453.exe" /INCREMENTAL /ILK:"cmTC_1e453.dir\\Debug\\cmTC_1e453.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-y8gwoa/Debug/cmTC_1e453.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-y8gwoa/Debug/cmTC_1e453.lib" /MACHINE:X64  /machine:x64 cmTC_1e453.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_1e453.vcxproj -> D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\cmTC_1e453.exe
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\cmTC_27e04.exe" /INCREMENTAL /ILK:"cmTC_27e04.dir\\Debug\\cmTC_27e04.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-t7ici0/Debug/cmTC_27e04.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-t7ici0/Debug/cmTC_27e04.lib" /MACHINE:X64  /machine:x64 cmTC_27e04.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_27e04.vcxproj -> D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\cmTC_27e04.exe
         AppLocalFromInstalled:
-          pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\cmTC_1e453.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\cmTC_1e453.write.1u.tlog" "cmTC_1e453.dir\\Debug\\vcpkg.applocal.log"
+          pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\cmTC_27e04.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\cmTC_27e04.write.1u.tlog" "cmTC_27e04.dir\\Debug\\vcpkg.applocal.log"
           'pwsh.exe' is not recognized as an internal or external command,
           operable program or batch file.
-          Polecenie ÔÇ×pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\cmTC_1e453.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\cmTC_1e453.write.1u.tlog" "cmTC_1e453.dir\\Debug\\vcpkg.applocal.log"ÔÇŁ zosta┼éo zako┼äczone przez kod 9009.
-          "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\Debug\\cmTC_1e453.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\cmTC_1e453.write.1u.tlog" "cmTC_1e453.dir\\Debug\\vcpkg.applocal.log"
+          Polecenie ÔÇ×pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\cmTC_27e04.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\cmTC_27e04.write.1u.tlog" "cmTC_27e04.dir\\Debug\\vcpkg.applocal.log"ÔÇŁ zosta┼éo zako┼äczone przez kod 9009.
+          "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\Debug\\cmTC_27e04.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\cmTC_27e04.write.1u.tlog" "cmTC_27e04.dir\\Debug\\vcpkg.applocal.log"
         FinalizeBuildStatus:
-          Usuwanie pliku ÔÇ×cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\unsuccessfulbuildÔÇŁ.
-          Modyfikowanie ÔÇ×cmTC_1e453.dir\\Debug\\cmTC_1e453.tlog\\cmTC_1e453.lastbuildstateÔÇŁ.
-        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y8gwoa\\cmTC_1e453.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe).
+          Usuwanie pliku ÔÇ×cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\unsuccessfulbuildÔÇŁ.
+          Modyfikowanie ÔÇ×cmTC_27e04.dir\\Debug\\cmTC_27e04.tlog\\cmTC_27e04.lastbuildstateÔÇŁ.
+        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-t7ici0\\cmTC_27e04.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe).
         
         Kompilacja powiod┼éa si─Ö.
             Ostrze┼╝enia: 0
             Liczba b┼é─Öd├│w: 0
         
-        Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.22
+        Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.11
         
       exitCode: 0
   -
@@ -1297,20 +1313,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -1423,6 +1440,12 @@ events:
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.com"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.exe"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/git.cmd.com"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/git.cmd.exe"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/git.cmd"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/git.cmd.com"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/git.cmd.exe"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/git.cmd"
@@ -1432,9 +1455,6 @@ events:
       - "C:/Program Files/nodejs/git.cmd.com"
       - "C:/Program Files/nodejs/git.cmd.exe"
       - "C:/Program Files/nodejs/git.cmd"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.com"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/git.cmd"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/git.cmd.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/git.cmd.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/git.cmd"
@@ -1447,6 +1467,9 @@ events:
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/git.cmd"
+      - "C:/Users/jasiu/.dotnet/tools/git.cmd.com"
+      - "C:/Users/jasiu/.dotnet/tools/git.cmd.exe"
+      - "C:/Users/jasiu/.dotnet/tools/git.cmd"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/git.cmd.com"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/git.cmd.exe"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/git.cmd"
@@ -1462,9 +1485,6 @@ events:
       - "C:/Users/jasiu/AppData/Roaming/npm/git.cmd.com"
       - "C:/Users/jasiu/AppData/Roaming/npm/git.cmd.exe"
       - "C:/Users/jasiu/AppData/Roaming/npm/git.cmd"
-      - "C:/Users/jasiu/.dotnet/tools/git.cmd.com"
-      - "C:/Users/jasiu/.dotnet/tools/git.cmd.exe"
-      - "C:/Users/jasiu/.dotnet/tools/git.cmd"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/git.cmd.com"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/git.cmd.exe"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/git.cmd"
@@ -1641,20 +1661,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -1724,20 +1745,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -1775,7 +1797,7 @@ events:
       The output was:
       0
       Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-      Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:25.
+      Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:09.
       
       Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\4.1.1-msvc1\\CompilerIdC\\CompilerIdC.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
       PrepareForBuild:
@@ -1813,7 +1835,7 @@ events:
           Ostrze┼╝enia: 0
           Liczba b┼é─Öd├│w: 0
       
-      Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.20
+      Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.17
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -1877,20 +1899,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -2005,6 +2028,12 @@ events:
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.com"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.exe"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link.com"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link.exe"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link.com"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link.exe"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/lld-link"
@@ -2014,9 +2043,6 @@ events:
       - "C:/Program Files/nodejs/lld-link.com"
       - "C:/Program Files/nodejs/lld-link.exe"
       - "C:/Program Files/nodejs/lld-link"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.com"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/lld-link"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/lld-link"
@@ -2029,6 +2055,9 @@ events:
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/lld-link"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link.com"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link.exe"
+      - "C:/Users/jasiu/.dotnet/tools/lld-link"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link.com"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link.exe"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/lld-link"
@@ -2044,9 +2073,6 @@ events:
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link.com"
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link.exe"
       - "C:/Users/jasiu/AppData/Roaming/npm/lld-link"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link.com"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link.exe"
-      - "C:/Users/jasiu/.dotnet/tools/lld-link"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link.com"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link.exe"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/lld-link"
@@ -2132,20 +2158,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"
@@ -2166,59 +2193,60 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-qqxq8u"
-      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-qqxq8u"
+      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-ld4w4h"
+      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-ld4w4h"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MSVC_RUNTIME_LIBRARY: "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
     buildResult:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-qqxq8u'
+        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-ld4w4h'
         
-        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7e83a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_557ae.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-        Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:27.
+        Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:11.
         
-        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\cmTC_7e83a.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
+        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\cmTC_557ae.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu ÔÇ×cmTC_7e83a.dir\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_557ae.dir\\Debug\\ÔÇŁ.
           Dane wyj┼Ťciowe ze struktur─ů s─ů w┼é─ůczone. Formatowanie diagnostyki kompilatora b─Ödzie odzwierciedla─ç hierarchi─Ö b┼é─Öd├│w. Aby uzyska─ç wi─Öcej informacji, zobacz https://aka.ms/cpp/structured-output.
-          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\ÔÇŁ.
-          Tworzenie katalogu ÔÇ×cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\ÔÇŁ.
         InitializeBuildStatus:
-          Trwa tworzenie ÔÇ×cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
-          Modyfikowanie ÔÇ×cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\unsuccessfulbuildÔÇŁ.
+          Trwa tworzenie ÔÇ×cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
+          Modyfikowanie ÔÇ×cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\unsuccessfulbuildÔÇŁ.
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_7e83a.dir\\Debug\\\\" /Fd"cmTC_7e83a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_557ae.dir\\Debug\\\\" /Fd"cmTC_557ae.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizuj─ůcego 19.44.35219 dla x64
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrze┼╝one.
-          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_7e83a.dir\\Debug\\\\" /Fd"cmTC_7e83a.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_557ae.dir\\Debug\\\\" /Fd"cmTC_557ae.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\cmTC_7e83a.exe" /INCREMENTAL /ILK:"cmTC_7e83a.dir\\Debug\\cmTC_7e83a.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-qqxq8u/Debug/cmTC_7e83a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-qqxq8u/Debug/cmTC_7e83a.lib" /MACHINE:X64  /machine:x64 cmTC_7e83a.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_7e83a.vcxproj -> D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\cmTC_7e83a.exe
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\cmTC_557ae.exe" /INCREMENTAL /ILK:"cmTC_557ae.dir\\Debug\\cmTC_557ae.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-ld4w4h/Debug/cmTC_557ae.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-ld4w4h/Debug/cmTC_557ae.lib" /MACHINE:X64  /machine:x64 cmTC_557ae.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_557ae.vcxproj -> D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\cmTC_557ae.exe
         AppLocalFromInstalled:
-          pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\cmTC_7e83a.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\cmTC_7e83a.write.1u.tlog" "cmTC_7e83a.dir\\Debug\\vcpkg.applocal.log"
+          pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\cmTC_557ae.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\cmTC_557ae.write.1u.tlog" "cmTC_557ae.dir\\Debug\\vcpkg.applocal.log"
           'pwsh.exe' is not recognized as an internal or external command,
           operable program or batch file.
-          Polecenie ÔÇ×pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\cmTC_7e83a.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\cmTC_7e83a.write.1u.tlog" "cmTC_7e83a.dir\\Debug\\vcpkg.applocal.log"ÔÇŁ zosta┼éo zako┼äczone przez kod 9009.
-          "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\Debug\\cmTC_7e83a.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\cmTC_7e83a.write.1u.tlog" "cmTC_7e83a.dir\\Debug\\vcpkg.applocal.log"
+          Polecenie ÔÇ×pwsh.exe -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\cmTC_557ae.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\cmTC_557ae.write.1u.tlog" "cmTC_557ae.dir\\Debug\\vcpkg.applocal.log"ÔÇŁ zosta┼éo zako┼äczone przez kod 9009.
+          "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -ExecutionPolicy Bypass -noprofile -File "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\scripts\\buildsystems\\msbuild\\applocal.ps1" "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\Debug\\cmTC_557ae.exe" "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\bin" "cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\cmTC_557ae.write.1u.tlog" "cmTC_557ae.dir\\Debug\\vcpkg.applocal.log"
         FinalizeBuildStatus:
-          Usuwanie pliku ÔÇ×cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\unsuccessfulbuildÔÇŁ.
-          Modyfikowanie ÔÇ×cmTC_7e83a.dir\\Debug\\cmTC_7e83a.tlog\\cmTC_7e83a.lastbuildstateÔÇŁ.
-        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-qqxq8u\\cmTC_7e83a.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe).
+          Usuwanie pliku ÔÇ×cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\unsuccessfulbuildÔÇŁ.
+          Modyfikowanie ÔÇ×cmTC_557ae.dir\\Debug\\cmTC_557ae.tlog\\cmTC_557ae.lastbuildstateÔÇŁ.
+        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-ld4w4h\\cmTC_557ae.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe).
         
         Kompilacja powiod┼éa si─Ö.
             Ostrze┼╝enia: 0
             Liczba b┼é─Öd├│w: 0
         
-        Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.32
+        Czas, kt├│ry up┼éyn─ů┼é: 00:00:01.30
         
       exitCode: 0
   -
@@ -2260,54 +2288,55 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-wunkgd"
-      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-wunkgd"
+      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-p9kx24"
+      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-p9kx24"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
       CMAKE_MODULE_PATH: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-src/CMake/modules"
+      CMAKE_MSVC_RUNTIME_LIBRARY: "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
     buildResult:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-wunkgd'
+        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-p9kx24'
         
-        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_af3b7.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_41547.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-        Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:28.
+        Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:12.
         
-        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\cmTC_af3b7.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
+        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\cmTC_41547.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu ÔÇ×cmTC_af3b7.dir\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_41547.dir\\Debug\\ÔÇŁ.
           Dane wyj┼Ťciowe ze struktur─ů s─ů w┼é─ůczone. Formatowanie diagnostyki kompilatora b─Ödzie odzwierciedla─ç hierarchi─Ö b┼é─Öd├│w. Aby uzyska─ç wi─Öcej informacji, zobacz https://aka.ms/cpp/structured-output.
-          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\Debug\\ÔÇŁ.
-          Tworzenie katalogu ÔÇ×cmTC_af3b7.dir\\Debug\\cmTC_af3b7.tlog\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_41547.dir\\Debug\\cmTC_41547.tlog\\ÔÇŁ.
         InitializeBuildStatus:
-          Trwa tworzenie ÔÇ×cmTC_af3b7.dir\\Debug\\cmTC_af3b7.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
-          Modyfikowanie ÔÇ×cmTC_af3b7.dir\\Debug\\cmTC_af3b7.tlog\\unsuccessfulbuildÔÇŁ.
+          Trwa tworzenie ÔÇ×cmTC_41547.dir\\Debug\\cmTC_41547.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
+          Modyfikowanie ÔÇ×cmTC_41547.dir\\Debug\\cmTC_41547.tlog\\unsuccessfulbuildÔÇŁ.
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_af3b7.dir\\Debug\\\\" /Fd"cmTC_af3b7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\src.c"
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_41547.dir\\Debug\\\\" /Fd"cmTC_41547.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\src.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizuj─ůcego 19.44.35219 dla x64
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrze┼╝one.
-          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_af3b7.dir\\Debug\\\\" /Fd"cmTC_af3b7.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\src.c"
+          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_41547.dir\\Debug\\\\" /Fd"cmTC_41547.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\src.c"
           src.c
-        D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\src.c(1,10): error C1083: Nie mo┼╝na otworzy─ç pliku do┼é─ůcz: 'pthread.h': No such file or directory [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\cmTC_af3b7.vcxproj]
-        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\cmTC_af3b7.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
+        D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\src.c(1,10): error C1083: Nie mo┼╝na otworzy─ç pliku do┼é─ůcz: 'pthread.h': No such file or directory [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\cmTC_41547.vcxproj]
+        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\cmTC_41547.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
         
         Kompilacja NIE POWIOD┼üA SI─ś.
         
-        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\cmTC_af3b7.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
+        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\cmTC_41547.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
         (element docelowy ClCompile) -> 
-          D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\src.c(1,10): error C1083: Nie mo┼╝na otworzy─ç pliku do┼é─ůcz: 'pthread.h': No such file or directory [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wunkgd\\cmTC_af3b7.vcxproj]
+          D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\src.c(1,10): error C1083: Nie mo┼╝na otworzy─ç pliku do┼é─ůcz: 'pthread.h': No such file or directory [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9kx24\\cmTC_41547.vcxproj]
         
             Ostrze┼╝enia: 0
             Liczba b┼é─Öd├│w: 1
         
-        Czas, kt├│ry up┼éyn─ů┼é: 00:00:00.44
+        Czas, kt├│ry up┼éyn─ů┼é: 00:00:00.41
         
       exitCode: 1
   -
@@ -2320,51 +2349,52 @@ events:
     checks:
       - "Looking for pthread_create in pthreads"
     directories:
-      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-mstv0v"
-      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-mstv0v"
+      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-gigf1k"
+      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-gigf1k"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
       CMAKE_MODULE_PATH: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-src/CMake/modules"
+      CMAKE_MSVC_RUNTIME_LIBRARY: "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
     buildResult:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-mstv0v'
+        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-gigf1k'
         
-        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_c7154.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_f600f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-        Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:29.
+        Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:13.
         
-        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\cmTC_c7154.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
+        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\cmTC_f600f.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu ÔÇ×cmTC_c7154.dir\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_f600f.dir\\Debug\\ÔÇŁ.
           Dane wyj┼Ťciowe ze struktur─ů s─ů w┼é─ůczone. Formatowanie diagnostyki kompilatora b─Ödzie odzwierciedla─ç hierarchi─Ö b┼é─Öd├│w. Aby uzyska─ç wi─Öcej informacji, zobacz https://aka.ms/cpp/structured-output.
-          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\Debug\\ÔÇŁ.
-          Tworzenie katalogu ÔÇ×cmTC_c7154.dir\\Debug\\cmTC_c7154.tlog\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_f600f.dir\\Debug\\cmTC_f600f.tlog\\ÔÇŁ.
         InitializeBuildStatus:
-          Trwa tworzenie ÔÇ×cmTC_c7154.dir\\Debug\\cmTC_c7154.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
-          Modyfikowanie ÔÇ×cmTC_c7154.dir\\Debug\\cmTC_c7154.tlog\\unsuccessfulbuildÔÇŁ.
+          Trwa tworzenie ÔÇ×cmTC_f600f.dir\\Debug\\cmTC_f600f.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
+          Modyfikowanie ÔÇ×cmTC_f600f.dir\\Debug\\cmTC_f600f.tlog\\unsuccessfulbuildÔÇŁ.
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_c7154.dir\\Debug\\\\" /Fd"cmTC_c7154.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\CheckFunctionExists.c"
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_f600f.dir\\Debug\\\\" /Fd"cmTC_f600f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\CheckFunctionExists.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizuj─ůcego 19.44.35219 dla x64
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrze┼╝one.
-          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_c7154.dir\\Debug\\\\" /Fd"cmTC_c7154.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\CheckFunctionExists.c"
+          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_f600f.dir\\Debug\\\\" /Fd"cmTC_f600f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\Debug\\cmTC_c7154.exe" /INCREMENTAL /ILK:"cmTC_c7154.dir\\Debug\\cmTC_c7154.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-mstv0v/Debug/cmTC_c7154.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-mstv0v/Debug/cmTC_c7154.lib" /MACHINE:X64  /machine:x64 cmTC_c7154.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthreads.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\cmTC_c7154.vcxproj]
-        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\cmTC_c7154.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\Debug\\cmTC_f600f.exe" /INCREMENTAL /ILK:"cmTC_f600f.dir\\Debug\\cmTC_f600f.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-gigf1k/Debug/cmTC_f600f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-gigf1k/Debug/cmTC_f600f.lib" /MACHINE:X64  /machine:x64 cmTC_f600f.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthreads.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\cmTC_f600f.vcxproj]
+        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\cmTC_f600f.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
         
         Kompilacja NIE POWIOD┼üA SI─ś.
         
-        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\cmTC_c7154.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
+        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\cmTC_f600f.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
         (element docelowy Link) -> 
-          LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthreads.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-mstv0v\\cmTC_c7154.vcxproj]
+          LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthreads.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-gigf1k\\cmTC_f600f.vcxproj]
         
             Ostrze┼╝enia: 0
             Liczba b┼é─Öd├│w: 1
@@ -2382,51 +2412,52 @@ events:
     checks:
       - "Looking for pthread_create in pthread"
     directories:
-      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-0dqasw"
-      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-0dqasw"
+      source: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-fq6g34"
+      binary: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-fq6g34"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
       CMAKE_MODULE_PATH: "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/_deps/glfw-src/CMake/modules"
+      CMAKE_MSVC_RUNTIME_LIBRARY: "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
     buildResult:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-0dqasw'
+        Change Dir: 'D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-fq6g34'
         
-        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7c3a2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "D:/Pliki/Visual Studio/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ff11f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Wersja programu MSBuild 18.0.2+995a3dce4 dla .NET Framework
-        Kompilacja rozpocz─Ö┼éa si─Ö 17.11.2025 22:34:30.
+        Kompilacja rozpocz─Ö┼éa si─Ö 18.11.2025 00:09:14.
         
-        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\cmTC_7c3a2.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
+        Projekt ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\cmTC_ff11f.vcxprojÔÇŁ w w─Ö┼║le 1 (domy┼Ťlne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu ÔÇ×cmTC_7c3a2.dir\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_ff11f.dir\\Debug\\ÔÇŁ.
           Dane wyj┼Ťciowe ze struktur─ů s─ů w┼é─ůczone. Formatowanie diagnostyki kompilatora b─Ödzie odzwierciedla─ç hierarchi─Ö b┼é─Öd├│w. Aby uzyska─ç wi─Öcej informacji, zobacz https://aka.ms/cpp/structured-output.
-          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\Debug\\ÔÇŁ.
-          Tworzenie katalogu ÔÇ×cmTC_7c3a2.dir\\Debug\\cmTC_7c3a2.tlog\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\Debug\\ÔÇŁ.
+          Tworzenie katalogu ÔÇ×cmTC_ff11f.dir\\Debug\\cmTC_ff11f.tlog\\ÔÇŁ.
         InitializeBuildStatus:
-          Trwa tworzenie ÔÇ×cmTC_7c3a2.dir\\Debug\\cmTC_7c3a2.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
-          Modyfikowanie ÔÇ×cmTC_7c3a2.dir\\Debug\\cmTC_7c3a2.tlog\\unsuccessfulbuildÔÇŁ.
+          Trwa tworzenie ÔÇ×cmTC_ff11f.dir\\Debug\\cmTC_ff11f.tlog\\unsuccessfulbuildÔÇŁ, poniewa┼╝ okre┼Ťlono "AlwaysCreate".
+          Modyfikowanie ÔÇ×cmTC_ff11f.dir\\Debug\\cmTC_ff11f.tlog\\unsuccessfulbuildÔÇŁ.
         VcpkgTripletSelection:
           Using triplet "x64-windows" from "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\"
           Using normalized configuration "Debug"
         ClCompile:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_7c3a2.dir\\Debug\\\\" /Fd"cmTC_7c3a2.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\CheckFunctionExists.c"
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_ff11f.dir\\Debug\\\\" /Fd"cmTC_ff11f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\CheckFunctionExists.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizuj─ůcego 19.44.35219 dla x64
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrze┼╝one.
-          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_7c3a2.dir\\Debug\\\\" /Fd"cmTC_7c3a2.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\CheckFunctionExists.c"
+          cl /c /I"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\include" /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_ff11f.dir\\Debug\\\\" /Fd"cmTC_ff11f.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\CheckFunctionExists.c"
           CheckFunctionExists.c
         Link:
-          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\Debug\\cmTC_7c3a2.exe" /INCREMENTAL /ILK:"cmTC_7c3a2.dir\\Debug\\cmTC_7c3a2.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-0dqasw/Debug/cmTC_7c3a2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-0dqasw/Debug/cmTC_7c3a2.lib" /MACHINE:X64  /machine:x64 cmTC_7c3a2.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthread.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\cmTC_7c3a2.vcxproj]
-        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\cmTC_7c3a2.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
+          D:\\Pliki\\Visual Studio\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\Debug\\cmTC_ff11f.exe" /INCREMENTAL /ILK:"cmTC_ff11f.dir\\Debug\\cmTC_ff11f.ilk" /NOLOGO /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib" /LIBPATH:"D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\manual-link" pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib "D:\\Pliki\\Visual Studio Biblioteki\\vcpkg-master\\installed\\x64-windows\\debug\\lib\\*.lib" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-fq6g34/Debug/cmTC_ff11f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/build/CMakeFiles/CMakeScratch/TryCompile-fq6g34/Debug/cmTC_ff11f.lib" /MACHINE:X64  /machine:x64 cmTC_ff11f.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthread.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\cmTC_ff11f.vcxproj]
+        Kompilowanie projektu ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\cmTC_ff11f.vcxprojÔÇŁ wykonane (domy┼Ťlne elementy docelowe) ÔÇö NIEPOWODZENIE.
         
         Kompilacja NIE POWIOD┼üA SI─ś.
         
-        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\cmTC_7c3a2.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
+        ÔÇ×D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\cmTC_ff11f.vcxprojÔÇŁ (domy┼Ťlny element docelowy) (1)->
         (element docelowy Link) -> 
-          LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthread.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0dqasw\\cmTC_7c3a2.vcxproj]
+          LINK : fatal error LNK1104: nie mo┼╝na otworzy─ç pliku "pthread.lib" [D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\build\\CMakeFiles\\CMakeScratch\\TryCompile-fq6g34\\cmTC_ff11f.vcxproj]
         
             Ostrze┼╝enia: 0
             Liczba b┼é─Öd├│w: 1
@@ -2485,20 +2516,21 @@ events:
       - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
       - "C:/Program Files/Git/cmd/"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/"
       - "C:/ProgramData/chocolatey/bin/"
       - "C:/Program Files/nodejs/"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/"
       - "C:/Users/jasiu/AppData/Local/Microsoft/WindowsApps/"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/"
+      - "C:/Users/jasiu/.dotnet/tools/"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/"
       - "C:/Program Files (x86)/Nmap/"
       - "D:/Pliki/android_sdk/platform-tools/"
       - "D:/Pliki/android_sdk/emulator/"
       - "C:/Users/jasiu/AppData/Roaming/npm/"
-      - "C:/Users/jasiu/.dotnet/tools/"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/"
       - "D:/Pliki/Visual Studio/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/"
@@ -2615,6 +2647,12 @@ events:
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/doxygen.com"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/doxygen.exe"
       - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/doxygen"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/doxygen.com"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/doxygen.exe"
+      - "C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/doxygen"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen.com"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/doxygen.com"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/doxygen.exe"
       - "C:/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.0/doxygen"
@@ -2624,9 +2662,6 @@ events:
       - "C:/Program Files/nodejs/doxygen.com"
       - "C:/Program Files/nodejs/doxygen.exe"
       - "C:/Program Files/nodejs/doxygen"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen.com"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/doxygen"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/doxygen.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/doxygen.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Python/Python310/Scripts/doxygen"
@@ -2639,6 +2674,9 @@ events:
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/doxygen.com"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/doxygen.exe"
       - "C:/Users/jasiu/AppData/Local/Programs/Microsoft VS Code/bin/doxygen"
+      - "C:/Users/jasiu/.dotnet/tools/doxygen.com"
+      - "C:/Users/jasiu/.dotnet/tools/doxygen.exe"
+      - "C:/Users/jasiu/.dotnet/tools/doxygen"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/doxygen.com"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/doxygen.exe"
       - "C:/Users/jasiu/AppData/Local/GitHubDesktop/bin/doxygen"
@@ -2654,9 +2692,6 @@ events:
       - "C:/Users/jasiu/AppData/Roaming/npm/doxygen.com"
       - "C:/Users/jasiu/AppData/Roaming/npm/doxygen.exe"
       - "C:/Users/jasiu/AppData/Roaming/npm/doxygen"
-      - "C:/Users/jasiu/.dotnet/tools/doxygen.com"
-      - "C:/Users/jasiu/.dotnet/tools/doxygen.exe"
-      - "C:/Users/jasiu/.dotnet/tools/doxygen"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/doxygen.com"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/doxygen.exe"
       - "D:/Pliki/Visual Studio/Common7/IDE/PrivateAssemblies/runtimes/win-x64/native/doxygen"
@@ -2757,20 +2792,21 @@ events:
         - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
         - "C:\\Program Files\\Git\\cmd"
         - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.1.0\\"
         - "C:\\ProgramData\\chocolatey\\bin"
         - "C:\\Program Files\\nodejs\\"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Python\\Python310\\"
         - "C:\\Users\\jasiu\\AppData\\Local\\Microsoft\\WindowsApps"
         - "C:\\Users\\jasiu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin"
+        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "C:\\Users\\jasiu\\AppData\\Local\\GitHubDesktop\\bin"
         - "C:\\Program Files (x86)\\Nmap"
         - "D:\\Pliki\\android_sdk\\platform-tools"
         - "D:\\Pliki\\android_sdk\\emulator"
         - "C:\\Users\\jasiu\\AppData\\Roaming\\npm"
-        - "C:\\Users\\jasiu\\.dotnet\\tools"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\PrivateAssemblies\\runtimes\\win-x64\\native"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
         - "D:\\Pliki\\Visual Studio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\Ninja"

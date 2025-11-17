@@ -7,12 +7,16 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CMakeLists.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\core\\App.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:include\\dungeon\\core\\App.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\core\\App.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\core\\App.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\core\\App.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:include\\dungeon\\core\\App.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\ui\\Hud.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -37,10 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\io\\MapLoader.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:include\\dungeon\\io\\MapLoader.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +54,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Hud.cpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\ui\\Hud.cpp",
               "RelativeDocumentMoniker": "src\\ui\\Hud.cpp",
@@ -62,12 +62,11 @@
               "RelativeToolTip": "src\\ui\\Hud.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-17T21:48:23.99Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:48:23.99Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "MapLoader.cpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\io\\MapLoader.cpp",
               "RelativeDocumentMoniker": "src\\io\\MapLoader.cpp",
@@ -75,12 +74,11 @@
               "RelativeToolTip": "src\\io\\MapLoader.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-17T21:48:09.416Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:48:09.416Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Shader.cpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\gfx\\Shader.cpp",
               "RelativeDocumentMoniker": "src\\gfx\\Shader.cpp",
@@ -88,12 +86,11 @@
               "RelativeToolTip": "src\\gfx\\Shader.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-17T21:47:12.854Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:47:12.854Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Shader.hpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\gfx\\Shader.hpp",
               "RelativeDocumentMoniker": "include\\dungeon\\gfx\\Shader.hpp",
@@ -101,51 +98,49 @@
               "RelativeToolTip": "include\\dungeon\\gfx\\Shader.hpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-17T21:46:28.967Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:46:28.967Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "App.hpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\core\\App.hpp",
               "RelativeDocumentMoniker": "include\\dungeon\\core\\App.hpp",
               "ToolTip": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\core\\App.hpp",
               "RelativeToolTip": "include\\dungeon\\core\\App.hpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-11-17T21:26:29.66Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "App.cpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\core\\App.cpp",
               "RelativeDocumentMoniker": "src\\core\\App.cpp",
               "ToolTip": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\core\\App.cpp",
               "RelativeToolTip": "src\\core\\App.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-11-17T21:25:11.98Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 3,
               "Title": "main.cpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\main.cpp",
               "RelativeDocumentMoniker": "src\\main.cpp",
               "ToolTip": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\src\\main.cpp",
               "RelativeToolTip": "src\\main.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-17T21:22:01.366Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:22:01.366Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Hud.hpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\ui\\Hud.hpp",
               "RelativeDocumentMoniker": "include\\dungeon\\ui\\Hud.hpp",
@@ -153,12 +148,11 @@
               "RelativeToolTip": "include\\dungeon\\ui\\Hud.hpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-17T21:21:40.79Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:21:40.79Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "MapLoader.hpp",
               "DocumentMoniker": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\include\\dungeon\\io\\MapLoader.hpp",
               "RelativeDocumentMoniker": "include\\dungeon\\io\\MapLoader.hpp",
@@ -166,8 +160,7 @@
               "RelativeToolTip": "include\\dungeon\\io\\MapLoader.hpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-17T21:21:11.854Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-17T21:21:11.854Z"
             },
             {
               "$type": "Document",
@@ -177,7 +170,7 @@
               "RelativeDocumentMoniker": "CMakeLists.txt",
               "ToolTip": "D:\\Pliki\\gra dungeon projekt\\gra-dungeon-crawler\\CMakeLists.txt",
               "RelativeToolTip": "CMakeLists.txt",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAADMAAAAAAAAAAAAYwFsAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
               "WhenOpened": "2025-11-17T21:00:01.209Z",
               "EditorCaption": ""

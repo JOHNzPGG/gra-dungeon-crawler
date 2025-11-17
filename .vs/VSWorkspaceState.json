@@ -7,16 +7,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\build\\CMakeFiles",
-    "\\build\\CMakeFiles\\4.1.1-msvc1",
+    "\\assets",
+    "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\core",
     "\\include\\dungeon\\gfx",
     "\\include\\dungeon\\io",
     "\\include\\dungeon\\ui",
     "\\src",
     "\\src\\core"
   ],
+  "SelectedNode": "\\docs",
   "PreviewInSolutionExplorer": false
 }

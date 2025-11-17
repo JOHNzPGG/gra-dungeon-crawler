@@ -6,12 +6,6 @@ if(MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 endif()
 
-if(MSVC)
-  set_property(TARGET glad PROPERTY
-    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-endif()
-
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -48,6 +42,11 @@ FetchContent_MakeAvailable(imgui)
 # ===== GLAD (rêcznie dodany folder external/glad) =====
 add_library(glad external/glad/src/glad.c)
 target_include_directories(glad PUBLIC external/glad/include)
+
+if(MSVC)
+  set_property(TARGET glad PROPERTY
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+endif()
 
 # ===== Biblioteka ImGui (z backendami GLFW + OpenGL3) =====
 add_library(imgui_lib
@@ -87,6 +86,13 @@ target_link_libraries(dungeon PRIVATE
   imgui_lib
 )
 
+# Po zbudowaniu dungeon.exe skopiuj katalog assets obok pliku exe
+add_custom_command(TARGET dungeon POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          "${CMAKE_SOURCE_DIR}/assets"
+          "$<TARGET_FILE_DIR:dungeon>/assets")
+
+
 # ===== Sanitizery (opcjonalnie) =====
 if (DUNGEON_ENABLE_ASAN AND MSVC)
   target_compile_options(dungeon PRIVATE /fsanitize=address)
@@ -104,15 +110,13 @@ if (DUNGEON_BUILD_TESTS)
     src/io/MapLoader.cpp      # <-- test kompiluje ten sam loader
   )
 
+add_custom_command(TARGET dungeon POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/assets
+          $<TARGET_FILE_DIR:dungeon>/assets)
+
+
   target_include_directories(tests PUBLIC include)
 
   add_test(NAME unit COMMAND tests)
 endif()
-
-# ===== Kopiowanie assets do build/ =====
-add_custom_target(copy_assets ALL
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${CMAKE_SOURCE_DIR}/assets
-          ${CMAKE_BINARY_DIR}/assets
-)
-add_dependencies(dungeon copy_assets)
