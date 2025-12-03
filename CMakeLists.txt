@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(dungeon LANGUAGES CXX)
 
 if(MSVC)
-  # Wymuœ /MD lub /MDd dla wszystkich targetów
+  # Wymuï¿½ /MD lub /MDd dla wszystkich targetï¿½w
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 endif()
 
@@ -39,7 +39,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-# ===== GLAD (rêcznie dodany folder external/glad) =====
+# ===== GLAD (rï¿½cznie dodany folder external/glad) =====
 add_library(glad external/glad/src/glad.c)
 target_include_directories(glad PUBLIC external/glad/include)
 
@@ -65,15 +65,30 @@ target_include_directories(imgui_lib PUBLIC
 
 target_compile_definitions(imgui_lib PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
-# ¯eby imgui_impl_glfw.cpp znalaz³ <GLFW/glfw3.h>
+# ï¿½eby imgui_impl_glfw.cpp znalazï¿½ <GLFW/glfw3.h>
 target_link_libraries(imgui_lib PUBLIC glfw)
 
 
-# ===== G³ówne Ÿród³a gry =====
+# ===== Gï¿½ï¿½wne ï¿½rï¿½dï¿½a gry =====
 file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 
 add_executable(dungeon
   ${SRC}
+        src/game/game.cpp
+        src/game/game.h
+        src/game/clases/object.cpp
+        src/game/clases/object.h
+        src/game/clases/entity.cpp
+        src/game/clases/entity.h
+        src/game/clases/item.cpp
+        src/game/clases/item.h
+        src/game/clases/player.cpp
+        src/game/clases/player.h
+        src/game/clases/enemy.cpp
+        src/game/clases/enemy.h
+        src/game/clases/skill.cpp
+        src/game/clases/skill.h
+        src/game/Gamedata.h
 )
 
 target_include_directories(dungeon PUBLIC
