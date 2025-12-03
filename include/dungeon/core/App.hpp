@@ -25,6 +25,12 @@ namespace dungeon {
         ThirdPerson
     };
 
+    enum class GameState {
+        MainMenu,
+        Options,
+        Playing
+    };
+
     class App {
     public:
         explicit App(const AppConfig& cfg);
@@ -48,6 +54,10 @@ namespace dungeon {
         void frame_render();
         void frame_ui();
         void frame_end();
+
+        void render_main_menu();
+        void render_options_menu();
+        void on_resize(int width, int height);
 
         GLuint load_texture(const char* path);
 
@@ -81,8 +91,9 @@ namespace dungeon {
         bool m_was_down_ = false;
 
         bool show_menu_ = false;
+        GameState state_ = GameState::MainMenu;
     };
 
 } // namespace dungeon
 
-#endif
+#endif // DUNGEON_CORE_APP_HPP

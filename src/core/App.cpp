@@ -92,6 +92,17 @@ namespace dungeon {
 
         glfwMakeContextCurrent(window_);
         glfwSwapInterval(1);
+
+        // pozwala wywołać metody App z callbacków GLFW
+        glfwSetWindowUserPointer(window_, this);
+
+        glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* win, int w, int h) {
+            auto* app = static_cast<App*>(glfwGetWindowUserPointer(win));
+            if (app) {
+                app->on_resize(w, h);
+            }
+            });
+
     }
 
     void App::init_gl() {
@@ -108,6 +119,27 @@ namespace dungeon {
 
         wall_texture_ = load_texture("assets/textures/sciana.png");
         floor_texture_ = load_texture("assets/textures/podloga.png");
+
+        // Start w trybie "full windowed"
+        glfwMaximizeWindow(window_);
+        int fb_w = 0, fb_h = 0;
+        glfwGetFramebufferSize(window_, &fb_w, &fb_h);
+        if (fb_w > 0 && fb_h > 0) {
+            on_resize(fb_w, fb_h);
+        }
+
+    }
+
+    void App::on_resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+
+        cfg_.width = width;
+        cfg_.height = height;
+
+        glViewport(0, 0, width, height);
+
+        float aspect = static_cast<float>(width) / static_cast<float>(height);
+        proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
     }
 
     void App::init_imgui() {
@@ -414,13 +446,181 @@ namespace dungeon {
         glfwSwapBuffers(window_);
     }
 
+    void App::render_main_menu() {
+        // Rozmiar okna ImGui (stały, ale możesz potem zmienić)
+        ImVec2 window_size(520, 320);
+
+        // Wyśrodkowanie okna względem aktualnej rozdzielczości
+        ImVec2 display_size = ImGui::GetIO().DisplaySize;
+        ImVec2 window_pos(
+            (display_size.x - window_size.x) * 0.5f,
+            (display_size.y - window_size.y) * 0.5f
+        );
+
+        ImGui::SetNextWindowSize(window_size, ImGuiCond_Always);
+        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always);
+
+        // Trochę ładniejszy styl okna
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(24.0f, 24.0f));
+
+        // Bez tytułu, bez resize/drag
+        ImGui::Begin("##MainMenu", nullptr,
+            ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoCollapse);
+
+        // Tytuł gry – wycentrowany
+        ImGui::PushFont(nullptr); // jeśli kiedyś dodasz większą czcionkę, użyjesz jej tutaj
+        const char* title = "Dungeon Crawler Prototype";
+        ImVec2 title_size = ImGui::CalcTextSize(title);
+        float title_x = (window_size.x - title_size.x) * 0.5f;
+        ImGui::SetCursorPosX(title_x);
+        ImGui::TextUnformatted(title);
+        ImGui::PopFont();
+
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 20.0f)); // odstęp pod tytułem
+
+        // Przyciski – szerokie, wycentrowane
+        const ImVec2 button_size(260.0f, 48.0f);
+        float button_x = (window_size.x - button_size.x) * 0.5f;
+
+        // Start Gry
+        ImGui::SetCursorPosX(button_x);
+        if (ImGui::Button("Start Gry", button_size)) {
+            state_ = GameState::Playing;
+        }
+
+        ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+        // Opcje
+        ImGui::SetCursorPosX(button_x);
+        if (ImGui::Button("Opcje", button_size)) {
+            state_ = GameState::Options;
+        }
+
+        ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+        // Wyjście
+        ImGui::SetCursorPosX(button_x);
+        if (ImGui::Button("Wyjscie", button_size)) {
+            glfwSetWindowShouldClose(window_, 1);
+        }
+
+        ImGui::End();
+        ImGui::PopStyleVar(3); // WindowRounding, FrameRounding, WindowPadding
+    }
+
+    void App::render_options_menu() {
+
+        ImGui::SetNextWindowSize(ImVec2(420, 300), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowPos(
+            ImVec2(cfg_.width / 2 - 210, cfg_.height / 2 - 150),
+            ImGuiCond_FirstUseEver
+        );
+
+        ImGui::Begin("Opcje", nullptr,
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoCollapse);
+
+        ImGui::Text("Ustawienia obrazu:");
+        ImGui::Separator();
+
+        // 1280 x 720 - normalne okno z ramką
+        if (ImGui::Button("1280 x 720 (okno)", ImVec2(250, 30))) {
+            glfwSetWindowMonitor(window_, nullptr, 100, 100, 1280, 720, 0);
+            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_TRUE);
+            on_resize(1280, 720);
+        }
+
+        // 1600 x 900 - większe okno z ramką
+        if (ImGui::Button("1600 x 900 (okno)", ImVec2(250, 30))) {
+            glfwSetWindowMonitor(window_, nullptr, 100, 100, 1600, 900, 0);
+            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_TRUE);
+            on_resize(1600, 900);
+        }
+
+        //// Fullscreen windowed (zmaksymalizowane okno z ramką)
+        //if (ImGui::Button("Fullscreen windowed", ImVec2(250, 30))) {
+        //    // upewniamy się, że to tryb okienkowy z ramką
+        //    glfwSetWindowMonitor(window_, nullptr, 100, 100, 1280, 720, 0);
+        //    glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_TRUE);
+
+        //    // maksymalizujemy okno
+        //    glfwMaximizeWindow(window_);
+
+        //    // aktualizujemy viewport i projekcję
+        //    int fb_w = 0, fb_h = 0;
+        //    glfwGetFramebufferSize(window_, &fb_w, &fb_h);
+        //    if (fb_w > 0 && fb_h > 0) {
+        //        on_resize(fb_w, fb_h);
+        //    }
+        //}
+
+
+        // Borderless fullscreen (okno bez ramek, na cały ekran)
+        if (ImGui::Button("Borderless fullscreen", ImVec2(250, 30))) {
+            GLFWmonitor* mon = glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(mon);
+
+            // okno jako zwykłe (monitor = nullptr), ale rozciągnięte na cały ekran i bez ramek
+            glfwSetWindowMonitor(window_, nullptr, 0, 0, mode->width, mode->height, 0);
+            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_FALSE);
+
+            on_resize(mode->width, mode->height);
+        }
+
+        // Pelny ekran ekskluzywny (GLFW fullscreen na monitorze)
+        if (ImGui::Button("Pelny ekran (exclusive)", ImVec2(250, 30))) {
+            GLFWmonitor* mon = glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(mon);
+
+            glfwSetWindowMonitor(window_, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+            on_resize(mode->width, mode->height);
+        }
+
+        ImGui::Separator();
+        ImGui::Text("Dźwięk:");
+        static float volume = 0.5f;
+        ImGui::SliderFloat("Glosnosc", &volume, 0.0f, 1.0f);
+
+        ImGui::Separator();
+        if (ImGui::Button("Wroc", ImVec2(200, 40))) {
+            state_ = GameState::MainMenu;
+        }
+
+        ImGui::End();
+    }
+
     void App::run() {
         while (!glfwWindowShouldClose(window_)) {
+
             frame_begin();
-            frame_render();
-            frame_ui();
+
+            switch (state_) {
+
+            case GameState::MainMenu:
+                render_main_menu();
+                break;
+
+            case GameState::Options:
+                render_options_menu();
+                break;
+
+            case GameState::Playing:
+                frame_render();   // render świata 3D
+                frame_ui();       // HUD gry
+                break;
+            }
+
             frame_end();
         }
+
     }
 
     GLuint App::load_texture(const char* path) {
