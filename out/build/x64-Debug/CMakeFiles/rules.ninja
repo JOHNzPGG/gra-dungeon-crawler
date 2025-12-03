@@ -14,7 +14,7 @@
 #############################################
 # localized /showIncludes string
 
-msvc_deps_prefix = Note: including file: 
+msvc_deps_prefix = Uwaga: w tym pliku:  
 
 
 #############################################
@@ -22,7 +22,7 @@ msvc_deps_prefix = Note: including file:
 
 rule C_COMPILER__glad_unscanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building C object $out
 
 
@@ -30,7 +30,7 @@ rule C_COMPILER__glad_unscanned_Debug
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__glad_Debug
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -40,7 +40,7 @@ rule C_STATIC_LIBRARY_LINKER__glad_Debug
 
 rule CXX_SCAN__imgui_lib_Debug
   deps = msvc
-  command = "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
+  command = "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
   description = Scanning $in for CXX dependencies
 
 
@@ -48,7 +48,7 @@ rule CXX_SCAN__imgui_lib_Debug
 # Rule to generate ninja dyndep files for CXX.
 
 rule CXX_DYNDEP__imgui_lib_Debug
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=CMakeFiles\imgui_lib.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=CMakeFiles\imgui_lib.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
   rspfile_content = $in
@@ -60,7 +60,7 @@ rule CXX_DYNDEP__imgui_lib_Debug
 
 rule CXX_COMPILER__imgui_lib_scanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -69,7 +69,7 @@ rule CXX_COMPILER__imgui_lib_scanned_Debug
 
 rule CXX_COMPILER__imgui_lib_unscanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -77,7 +77,7 @@ rule CXX_COMPILER__imgui_lib_unscanned_Debug
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__imgui_lib_Debug
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -87,7 +87,7 @@ rule CXX_STATIC_LIBRARY_LINKER__imgui_lib_Debug
 
 rule CXX_SCAN__dungeon_Debug
   deps = msvc
-  command = "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
+  command = "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
   description = Scanning $in for CXX dependencies
 
 
@@ -95,7 +95,7 @@ rule CXX_SCAN__dungeon_Debug
 # Rule to generate ninja dyndep files for CXX.
 
 rule CXX_DYNDEP__dungeon_Debug
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=CMakeFiles\dungeon.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=CMakeFiles\dungeon.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
   rspfile_content = $in
@@ -107,7 +107,7 @@ rule CXX_DYNDEP__dungeon_Debug
 
 rule CXX_COMPILER__dungeon_scanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -116,7 +116,7 @@ rule CXX_COMPILER__dungeon_scanned_Debug
 
 rule CXX_COMPILER__dungeon_unscanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -124,7 +124,7 @@ rule CXX_COMPILER__dungeon_unscanned_Debug
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__dungeon_Debug
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --msvc-ver=1950 --intdir=$OBJECT_DIR --rc="C:\PROGRA~2\Windows Kits\10\bin\10.0.26100.0\x64\rc.exe" --mt="C:\PROGRA~2\Windows Kits\10\bin\10.0.26100.0\x64\mt.exe" --manifests $MANIFESTS -- "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\link.exe" /nologo $in  /out:$TARGET_FILE /implib:$TARGET_IMPLIB /pdb:$TARGET_PDB /version:0.0 $LINK_FLAGS $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --msvc-ver=1950 --intdir=$OBJECT_DIR --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100261~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100261~1.0\x64\mt.exe --manifests $MANIFESTS -- "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\link.exe" /nologo $in  /out:$TARGET_FILE /implib:$TARGET_IMPLIB /pdb:$TARGET_PDB /version:0.0 $LINK_FLAGS $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
 
@@ -142,7 +142,7 @@ rule CUSTOM_COMMAND
 
 rule C_COMPILER__glfw_unscanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building C object $out
 
 
@@ -150,7 +150,7 @@ rule C_COMPILER__glfw_unscanned_Debug
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__glfw_Debug
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -160,7 +160,7 @@ rule C_STATIC_LIBRARY_LINKER__glfw_Debug
 
 rule CXX_SCAN__glm_Debug
   deps = msvc
-  command = "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
+  command = "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe" $DEFINES $INCLUDES $FLAGS $in -nologo -TP -showIncludes -scanDependencies $DYNDEP_INTERMEDIATE_FILE -Fo$OBJ_FILE
   description = Scanning $in for CXX dependencies
 
 
@@ -168,7 +168,7 @@ rule CXX_SCAN__glm_Debug
 # Rule to generate ninja dyndep files for CXX.
 
 rule CXX_DYNDEP__glm_Debug
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=_deps\glm-build\glm\CMakeFiles\glm.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E cmake_ninja_dyndep --tdi=_deps\glm-build\glm\CMakeFiles\glm.dir\CXXDependInfo.json --lang=CXX --modmapfmt=msvc --dd=$out @$out.rsp
   description = Generating CXX dyndep file $out
   rspfile = $out.rsp
   rspfile_content = $in
@@ -180,7 +180,7 @@ rule CXX_DYNDEP__glm_Debug
 
 rule CXX_COMPILER__glm_scanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes @$DYNDEP_MODULE_MAP_FILE /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -189,7 +189,7 @@ rule CXX_COMPILER__glm_scanned_Debug
 
 rule CXX_COMPILER__glm_unscanned_Debug
   deps = msvc
-  command = ${LAUNCHER}${CODE_CHECK}"C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
+  command = ${LAUNCHER}${CODE_CHECK}"D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\cl.exe"  /nologo /TP $DEFINES $INCLUDES $FLAGS /showIncludes /Fo$out /Fd$TARGET_COMPILE_PDB /FS -c $in
   description = Building CXX object $out
 
 
@@ -197,7 +197,7 @@ rule CXX_COMPILER__glm_unscanned_Debug
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__glm_Debug
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\PROGRA~1\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "D:\Pliki\Visual Studio\VC\Tools\MSVC\14.50.35717\bin\Hostx64\x64\lib.exe" /nologo $LINK_FLAGS /out:$TARGET_FILE $in && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -206,7 +206,7 @@ rule CXX_STATIC_LIBRARY_LINKER__glm_Debug
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug"
   description = Re-running CMake...
   generator = 1
 
@@ -215,7 +215,7 @@ rule RERUN_CMAKE
 # Rule for re-checking globbed directories.
 
 rule VERIFY_GLOBS
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P E:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake"
   description = Re-checking globbed directories...
   generator = 1
 
@@ -224,7 +224,7 @@ rule VERIFY_GLOBS
 # Rule for cleaning all built files.
 
 rule CLEAN
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" $FILE_ARG -t clean $TARGETS
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" $FILE_ARG -t clean $TARGETS
   description = Cleaning all built files...
 
 
@@ -232,6 +232,6 @@ rule CLEAN
 # Rule for printing all primary targets available.
 
 rule HELP
-  command = "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" -t targets
+  command = "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe" -t targets
   description = All primary targets available:
 

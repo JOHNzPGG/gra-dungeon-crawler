@@ -28,8 +28,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(imgui-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/ocornut/imgui.git" "EXTERNALPROJECT_INTERNAL_ARGUMENT_SEPARATOR" "GIT_TAG" "v1.91.0"
-                    SOURCE_DIR          "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-src"
-                    BINARY_DIR          "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-build"
+                    SOURCE_DIR          "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-src"
+                    BINARY_DIR          "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

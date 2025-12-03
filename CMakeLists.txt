@@ -80,7 +80,9 @@ add_executable(dungeon
  "include/stb_image.h")
 
 target_include_directories(dungeon PUBLIC
-  include
+  ${CMAKE_SOURCE_DIR}/src
+  ${CMAKE_SOURCE_DIR}/assets
+  ${CMAKE_SOURCE_DIR}/include
 )
 
 target_link_libraries(dungeon PRIVATE

@@ -1,79 +1,88 @@
-#pragma once
+#ifndef DUNGEON_CORE_APP_HPP
+#define DUNGEON_CORE_APP_HPP
+
 #include <string>
-#include <glm/mat4x4.hpp>
+
 #include <glad/glad.h>
-using GLuint = unsigned int;
+#include <GLFW/glfw3.h>
 
-#include "dungeon/io/MapLoader.hpp"
+#include <glm/mat4x4.hpp>
+
 #include "dungeon/gfx/Shader.hpp"
-#include <vector>
-#include <string>
-
-struct GLFWwindow;
+#include "dungeon/io/MapLoader.hpp"
+#include "game/clases/Player.h"
 
 namespace dungeon {
 
-	enum class Dir { North, East, South, West };
+    struct AppConfig {
+        int width = 1280;
+        int height = 720;
+        std::string title = "Dungeon Starter";
+    };
 
-	struct Player {
-		int x = 1;
-		int y = 1;
-		Dir dir = Dir::North;
-	};
+    enum class CameraMode {
+        FirstPerson,
+        ThirdPerson
+    };
 
-	struct AppConfig {
-		int width = 1280;
-		int height = 720;
-		std::string title = "Dungeon";
-	};
+    class App {
+    public:
+        explicit App(const AppConfig& cfg);
+        ~App();
 
-	class App {
-	public:
-		explicit App(const AppConfig& cfg);
-		~App();
-		void run();
+        void run();
 
-	private:
-		void init_glfw();
-		void init_gl();
-		void init_imgui();
-		void shutdown_imgui();
+    private:
+        void init_glfw();
+        void init_gl();
+        void init_imgui();
+        void shutdown_imgui();
 
-		void frame_begin();
-		void frame_render();
-		void frame_ui();
-		void frame_end();
+        void load_level();
+        bool can_move_to(int x, int y) const;
 
-		void handle_input();
-		bool can_move_to(int x, int y) const;
+        void build_world_mesh();
+        void handle_input();
 
+        void frame_begin();
+        void frame_render();
+        void frame_ui();
+        void frame_end();
 
-		void load_level();
-		void build_world_mesh();
+        GLuint load_texture(const char* path);
 
-		GLFWwindow* window_ = nullptr;
-		AppConfig cfg_{};
+    private:
+        AppConfig   cfg_;
+        GLFWwindow* window_ = nullptr;
 
-		// === nowoœci ===
-		io::Level level_{};
-		gfx::Shader world_shader_{};
-		unsigned wall_texture_ = 0;
-		unsigned floor_texture_ = 0;
-		unsigned load_texture(const char* path);
-		unsigned floor_vao_ = 0, floor_vbo_ = 0;
-		unsigned wall_vao_ = 0, wall_vbo_ = 0;
-		int floor_vertex_count_ = 0;
-		int wall_vertex_count_ = 0;
+        gfx::Shader world_shader_;
+        glm::mat4   proj_{ 1.0f };
+        glm::mat4   view_{ 1.0f };
 
-		glm::mat4 proj_{ 1.0f };
-		glm::mat4 view_{ 1.0f };
+        io::Level   level_{};
+        std::string current_map_name_;
 
-		Player player_{};
+        GLuint floor_vao_ = 0;
+        GLuint floor_vbo_ = 0;
+        GLuint wall_vao_ = 0;
+        GLuint wall_vbo_ = 0;
+        int    floor_vertex_count_ = 0;
+        int    wall_vertex_count_ = 0;
 
-		bool left_was_down_ = false;
-		bool right_was_down_ = false;
-		bool up_was_down_ = false;
-		std::string current_map_name_;
-	};
+        GLuint wall_texture_ = 0;
+        GLuint floor_texture_ = 0;
+
+        ::Player   player_;
+        CameraMode camera_mode_ = CameraMode::FirstPerson;
+
+        bool left_was_down_ = false;
+        bool right_was_down_ = false;
+        bool up_was_down_ = false;
+        bool m_was_down_ = false;
+
+        bool show_menu_ = false;
+    };
 
 } // namespace dungeon
+
+#endif
