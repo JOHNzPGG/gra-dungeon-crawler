@@ -26,7 +26,7 @@ public:
 
     void UseSkill(int index, Entity* target) {
         if (index < 0 || index >= skills.size()) return;
-        skills[index]->Use(this, target);
+        skills[index]->Use(this, { target });
     }
 
     void Equip(Item* item) {

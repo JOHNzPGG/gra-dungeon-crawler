@@ -1,37 +1,37 @@
 # ninja log v6
-5	69	7851164081411061	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	116875c5441de9c9
-11	149	7851240197228277	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
-149	207	7851240199063492	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
-5	69	7851164081411061	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	116875c5441de9c9
-70	3094	7851164111782923	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	86f8d2cbc8e53809
-70	3094	7851164111782923	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	86f8d2cbc8e53809
-11	149	7851240197228277	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
-149	207	7851240199063492	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
-207	265	7851240199696418	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
-447	527	7851240202228744	CMakeFiles/glfw-populate-complete	89b89198593d34d6
-207	265	7851240199696418	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
-265	326	7851240200334004	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
-265	326	7851240200334004	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
-327	385	7851240200951344	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
-327	385	7851240200951344	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
-386	447	7851240201546587	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
-386	447	7851240201546587	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
-447	527	7851240202228744	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
-447	527	7851240202228744	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	89b89198593d34d6
-447	527	7851240202228744	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
-13	155	7851254299233277	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
-13	155	7851254299233277	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	edc15962cbf55d6e
-155	213	7851254301224988	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
-155	213	7851254301224988	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	57d8214341e311ad
-213	271	7851254301767467	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
-213	271	7851254301767467	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	3a1382f119a305b0
-271	329	7851254302356941	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
-271	329	7851254302356941	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	f28230e5e307d96e
-329	388	7851254302958884	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
-329	388	7851254302958884	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	ac934487e7882c8d
-388	450	7851254303576290	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
-388	450	7851254303576290	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	699e8d1c3b9bb23
-451	530	7851254304373713	CMakeFiles/glfw-populate-complete	89b89198593d34d6
-451	530	7851254304373713	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
-451	530	7851254304373713	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	89b89198593d34d6
-451	530	7851254304373713	D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	89b89198593d34d6
+2	37	7864802632523004	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	a12f7f5fda84cc68
+2054	2142	7864802652730243	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	e7893c8ea7243925
+2142	2178	7864802653939407	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	4275c5366c7a3400
+2318	2367	7864802655819779	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	2161554d4330d415
+2	37	7864802632523004	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-mkdir	a12f7f5fda84cc68
+2214	2247	7864802654632864	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	7ead0c4729b8e7fb
+38	2054	7864802652695123	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	725f2f7dfdcac71c
+38	2054	7864802652695123	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-download	725f2f7dfdcac71c
+2054	2142	7864802652730243	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	e7893c8ea7243925
+2142	2178	7864802653939407	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	4275c5366c7a3400
+2179	2214	7864802654300538	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	2dc32a32cd597f9e
+2318	2367	7864802655819779	CMakeFiles/glfw-populate-complete	2161554d4330d415
+2179	2214	7864802654300538	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	2dc32a32cd597f9e
+2214	2247	7864802654632864	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	7ead0c4729b8e7fb
+2318	2367	7864802655819779	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	2161554d4330d415
+2248	2283	7864802654986780	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	9b99844308f10131
+2248	2283	7864802654986780	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	9b99844308f10131
+2284	2318	7864802655332493	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	6ed12336440693b4
+2284	2318	7864802655332493	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	6ed12336440693b4
+2318	2367	7864802655819779	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	2161554d4330d415
+10	90	7864833748012801	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	e7893c8ea7243925
+10	90	7864833748012801	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-update	e7893c8ea7243925
+90	122	7864833749099601	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	4275c5366c7a3400
+90	122	7864833749099601	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-patch	4275c5366c7a3400
+122	156	7864833749439942	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	2dc32a32cd597f9e
+122	156	7864833749439942	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-configure	2dc32a32cd597f9e
+156	198	7864833749858285	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	7ead0c4729b8e7fb
+156	198	7864833749858285	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-build	7ead0c4729b8e7fb
+198	229	7864833750166701	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	9b99844308f10131
+198	229	7864833750166701	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-install	9b99844308f10131
+229	261	7864833750492093	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	6ed12336440693b4
+229	261	7864833750492093	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-test	6ed12336440693b4
+262	307	7864833750942648	CMakeFiles/glfw-populate-complete	2161554d4330d415
+262	307	7864833750942648	glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	2161554d4330d415
+262	307	7864833750942648	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/CMakeFiles/glfw-populate-complete	2161554d4330d415
+262	307	7864833750942648	E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-subbuild/glfw-populate-prefix/src/glfw-populate-stamp/glfw-populate-done	2161554d4330d415

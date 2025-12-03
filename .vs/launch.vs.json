@@ -5,8 +5,8 @@
     {
       "type": "default",
       "project": "CMakeLists.txt",
-      "projectTarget": "",
-      "name": "CMakeLists.txt"
+      "projectTarget": "dungeon.exe",
+      "name": "dungeon.exe"
     }
   ]
 }

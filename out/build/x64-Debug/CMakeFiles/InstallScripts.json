@@ -1,7 +1,12 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/cmake_install.cmake"
+		"E:/projekt3d/github_main/out/build/x64-Debug/cmake_install.cmake",
+		"E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/cmake_install.cmake",
+		"E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/src/cmake_install.cmake",
+		"E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/docs/cmake_install.cmake",
+		"E:/projekt3d/github_main/out/build/x64-Debug/_deps/glm-build/cmake_install.cmake",
+		"E:/projekt3d/github_main/out/build/x64-Debug/_deps/glm-build/glm/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
