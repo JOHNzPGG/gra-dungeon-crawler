@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <glm/mat4x4.hpp>
 
@@ -8,6 +8,14 @@
 struct GLFWwindow;
 
 namespace dungeon {
+
+	enum class Dir { North, East, South, West };
+
+	struct Player {
+		int x = 1;
+		int y = 1;
+		Dir dir = Dir::North;
+	};
 
 	struct AppConfig {
 		int width = 1280;
@@ -32,13 +40,17 @@ namespace dungeon {
 		void frame_ui();
 		void frame_end();
 
+		void handle_input();
+		bool can_move_to(int x, int y) const;
+
+
 		void load_level();
 		void build_world_mesh();
 
 		GLFWwindow* window_ = nullptr;
 		AppConfig cfg_{};
 
-		// === nowoœci ===
+		// === nowoï¿½ci ===
 		io::Level level_{};
 		gfx::Shader world_shader_{};
 		unsigned floor_vao_ = 0, floor_vbo_ = 0;
@@ -48,6 +60,12 @@ namespace dungeon {
 
 		glm::mat4 proj_{ 1.0f };
 		glm::mat4 view_{ 1.0f };
+
+		Player player_{};
+
+		bool left_was_down_ = false;
+		bool right_was_down_ = false;
+		bool up_was_down_ = false;
 	};
 
 } // namespace dungeon
