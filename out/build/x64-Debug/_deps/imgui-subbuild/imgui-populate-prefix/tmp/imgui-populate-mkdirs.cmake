@@ -6,22 +6,22 @@ cmake_minimum_required(VERSION ${CMAKE_VERSION}) # this file comes with cmake
 # If CMAKE_DISABLE_SOURCE_CHANGES is set to true and the source directory is an
 # existing directory in our source tree, calling file(MAKE_DIRECTORY) on it
 # would cause a fatal error, even though it would be a no-op.
-if(NOT EXISTS "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-src")
-  file(MAKE_DIRECTORY "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-src")
+if(NOT EXISTS "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-src")
+  file(MAKE_DIRECTORY "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-src")
 endif()
 file(MAKE_DIRECTORY
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-build"
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix"
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/tmp"
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp"
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src"
-  "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-build"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/tmp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp/${subDir}")
+    file(MAKE_DIRECTORY "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "E:/projekt3d/github_main/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/imgui-subbuild/imgui-populate-prefix/src/imgui-populate-stamp${cfgdir}") # cfgdir has leading slash
 endif()

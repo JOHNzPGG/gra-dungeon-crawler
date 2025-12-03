@@ -39,7 +39,7 @@ include CMakeFiles\rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = E$:\projekt3d\github_main\out\build\x64-Debug\
+cmake_ninja_workdir = D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\
 # =============================================================================
 # Object build statements for STATIC_LIBRARY target glad
 
@@ -49,10 +49,10 @@ cmake_ninja_workdir = E$:\projekt3d\github_main\out\build\x64-Debug\
 
 build cmake_object_order_depends_target_glad: phony || .
 
-build CMakeFiles\glad.dir\external\glad\src\glad.c.obj: C_COMPILER__glad_unscanned_Debug E$:\projekt3d\github_main\external\glad\src\glad.c || cmake_object_order_depends_target_glad
+build CMakeFiles\glad.dir\external\glad\src\glad.c.obj: C_COMPILER__glad_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\external\glad\src\glad.c || cmake_object_order_depends_target_glad
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\external\glad\include
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include"
   OBJECT_DIR = CMakeFiles\glad.dir
   OBJECT_FILE_DIR = CMakeFiles\glad.dir\external\glad\src
   TARGET_COMPILE_PDB = CMakeFiles\glad.dir\glad.pdb
@@ -86,61 +86,61 @@ build glad.lib: C_STATIC_LIBRARY_LINKER__glad_Debug CMakeFiles\glad.dir\external
 
 build cmake_object_order_depends_target_imgui_lib: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw cmake_object_order_depends_target_glm
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\imgui.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\imgui.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
   TARGET_PDB = imgui_lib.pdb
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_draw.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\imgui_draw.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_draw.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\imgui_draw.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
   TARGET_PDB = imgui_lib.pdb
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_tables.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\imgui_tables.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_tables.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\imgui_tables.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
   TARGET_PDB = imgui_lib.pdb
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_widgets.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\imgui_widgets.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\imgui_widgets.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\imgui_widgets.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
   TARGET_PDB = imgui_lib.pdb
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends\imgui_impl_glfw.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends\imgui_impl_glfw.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends\imgui_impl_glfw.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends\imgui_impl_glfw.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
   TARGET_PDB = imgui_lib.pdb
 
-build CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends\imgui_impl_opengl3.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends\imgui_impl_opengl3.cpp || cmake_object_order_depends_target_imgui_lib
+build CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends\imgui_impl_opengl3.cpp.obj: CXX_COMPILER__imgui_lib_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends\imgui_impl_opengl3.cpp || cmake_object_order_depends_target_imgui_lib
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\imgui_lib.dir
   OBJECT_FILE_DIR = CMakeFiles\imgui_lib.dir\_deps\imgui-src\backends
   TARGET_COMPILE_PDB = CMakeFiles\imgui_lib.dir\imgui_lib.pdb
@@ -174,121 +174,121 @@ build imgui_lib.lib: CXX_STATIC_LIBRARY_LINKER__imgui_lib_Debug CMakeFiles\imgui
 
 build cmake_object_order_depends_target_dungeon: phony || cmake_object_order_depends_target_glad cmake_object_order_depends_target_glfw cmake_object_order_depends_target_glm cmake_object_order_depends_target_imgui_lib
 
-build CMakeFiles\dungeon.dir\src\core\App.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\core\App.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\core\App.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\core\App.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\core
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Enemy.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Enemy.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Enemy.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Enemy.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Entity.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Entity.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Entity.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Entity.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Item.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Item.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Item.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Item.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Object.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Object.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Object.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Object.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Player.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Player.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Player.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Player.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\clases\Skill.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\clases\Skill.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\clases\Skill.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\clases\Skill.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game\clases
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\game.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\game\game.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\game\game.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\game.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\gfx\Shader.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\gfx\Shader.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\gfx\Shader.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\gfx\Shader.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\gfx
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\io\MapLoader.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\io\MapLoader.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\io\MapLoader.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\io\MapLoader.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\io
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\main.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\main.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\main.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\main.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\ui\Hud.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug E$:\projekt3d\github_main\src\ui\Hud.cpp || cmake_object_order_depends_target_dungeon
+build CMakeFiles\dungeon.dir\src\ui\Hud.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\ui\Hud.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DIMGUI_IMPL_OPENGL_LOADER_GLAD
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -IE:\projekt3d\github_main\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\external\glad\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\imgui-src\backends -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = CMakeFiles\dungeon.dir
   OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\ui
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
@@ -308,7 +308,7 @@ build dungeon.exe: CXX_EXECUTABLE_LINKER__dungeon_Debug CMakeFiles\dungeon.dir\s
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = _deps\glfw-build\src\glfw3.lib  glad.lib  imgui_lib.lib  _deps\glfw-build\src\glfw3.lib  glad.lib  _deps\glm-build\glm\glm.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\dungeon.dir
-  POST_BUILD = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_directory E:/projekt3d/github_main/assets E:/projekt3d/github_main/out/build/x64-Debug/assets"
+  POST_BUILD = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "D:/Pliki/Visual Studio Biblioteki/vcpkg-master/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/dungeon.exe" -installedDir "D:/Pliki/Visual Studio Biblioteki/vcpkg-master/installed/x64-windows/debug/bin" -OutVariable out && cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_directory "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/assets" "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/assets""
   PRE_LINK = cd .
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_FILE = dungeon.exe
@@ -320,7 +320,7 @@ build dungeon.exe: CXX_EXECUTABLE_LINKER__dungeon_Debug CMakeFiles\dungeon.dir\s
 # Utility command for edit_cache
 
 build CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -331,7 +331,7 @@ build edit_cache: phony CMakeFiles\edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -349,7 +349,7 @@ build list_install_components: phony
 # Utility command for install
 
 build CMakeFiles\install.util: CUSTOM_COMMAND all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -361,7 +361,7 @@ build install: phony CMakeFiles\install.util
 # Utility command for install/local
 
 build CMakeFiles\install\local.util: CUSTOM_COMMAND all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -370,7 +370,7 @@ build install\local: phony CMakeFiles\install\local.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# E:/projekt3d/github_main/CMakeLists.txt
+# D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/CMakeLists.txt
 # =============================================================================
 
 
@@ -384,7 +384,7 @@ build _deps\glfw-build\uninstall: phony _deps\glfw-build\CMakeFiles\uninstall
 # Utility command for edit_cache
 
 build _deps\glfw-build\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -395,7 +395,7 @@ build _deps\glfw-build\edit_cache: phony _deps\glfw-build\CMakeFiles\edit_cache.
 # Utility command for rebuild_cache
 
 build _deps\glfw-build\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -413,7 +413,7 @@ build _deps\glfw-build\list_install_components: phony
 # Utility command for install
 
 build _deps\glfw-build\CMakeFiles\install.util: CUSTOM_COMMAND _deps\glfw-build\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -425,7 +425,7 @@ build _deps\glfw-build\install: phony _deps\glfw-build\CMakeFiles\install.util
 # Utility command for install/local
 
 build _deps\glfw-build\CMakeFiles\install\local.util: CUSTOM_COMMAND _deps\glfw-build\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -437,11 +437,11 @@ build _deps\glfw-build\install\local: phony _deps\glfw-build\CMakeFiles\install\
 # Custom command for _deps\glfw-build\CMakeFiles\uninstall
 
 build _deps\glfw-build\CMakeFiles\uninstall | ${cmake_ninja_workdir}_deps\glfw-build\CMakeFiles\uninstall: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/cmake_uninstall.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-build/cmake_uninstall.cmake""
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-src/CMakeLists.txt
+# D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-src/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -453,211 +453,211 @@ build _deps\glfw-build\CMakeFiles\uninstall | ${cmake_ninja_workdir}_deps\glfw-b
 
 build cmake_object_order_depends_target_glfw: phony || .
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\context.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\context.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\context.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\context.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\init.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\init.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\init.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\init.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\input.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\input.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\input.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\input.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\monitor.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\monitor.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\monitor.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\monitor.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\platform.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\platform.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\platform.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\platform.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\vulkan.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\vulkan.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\vulkan.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\vulkan.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\window.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\window.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\window.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\window.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\egl_context.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\egl_context.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\egl_context.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\egl_context.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\osmesa_context.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\osmesa_context.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\osmesa_context.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\osmesa_context.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_init.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\null_init.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_init.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\null_init.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\null_monitor.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\null_monitor.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_window.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\null_window.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_window.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\null_window.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\null_joystick.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\null_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\null_joystick.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_module.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_module.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_module.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_module.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_time.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_time.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_time.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_time.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_thread.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_thread.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_thread.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_thread.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_init.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_init.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_init.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_init.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_joystick.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_joystick.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_joystick.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_monitor.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_monitor.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_monitor.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_window.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\win32_window.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\win32_window.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\win32_window.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
   TARGET_PDB = _deps\glfw-build\src\glfw3.pdb
 
-build _deps\glfw-build\src\CMakeFiles\glfw.dir\wgl_context.c.obj: C_COMPILER__glfw_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src\wgl_context.c || cmake_object_order_depends_target_glfw
+build _deps\glfw-build\src\CMakeFiles\glfw.dir\wgl_context.c.obj: C_COMPILER__glfw_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src\wgl_context.c || cmake_object_order_depends_target_glfw
   CONFIG = Debug
   DEFINES = -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /W3
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\include -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src"
   OBJECT_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = _deps\glfw-build\src\CMakeFiles\glfw.dir
   TARGET_COMPILE_PDB = _deps\glfw-build\src\CMakeFiles\glfw.dir\glfw.pdb
@@ -693,7 +693,7 @@ build _deps\glfw-build\src\update_mappings: phony _deps\glfw-build\src\CMakeFile
 # Utility command for edit_cache
 
 build _deps\glfw-build\src\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -704,7 +704,7 @@ build _deps\glfw-build\src\edit_cache: phony _deps\glfw-build\src\CMakeFiles\edi
 # Utility command for rebuild_cache
 
 build _deps\glfw-build\src\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -722,7 +722,7 @@ build _deps\glfw-build\src\list_install_components: phony
 # Utility command for install
 
 build _deps\glfw-build\src\CMakeFiles\install.util: CUSTOM_COMMAND _deps\glfw-build\src\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -734,7 +734,7 @@ build _deps\glfw-build\src\install: phony _deps\glfw-build\src\CMakeFiles\instal
 # Utility command for install/local
 
 build _deps\glfw-build\src\CMakeFiles\install\local.util: CUSTOM_COMMAND _deps\glfw-build\src\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -746,12 +746,12 @@ build _deps\glfw-build\src\install\local: phony _deps\glfw-build\src\CMakeFiles\
 # Custom command for _deps\glfw-build\src\CMakeFiles\update_mappings
 
 build _deps\glfw-build\src\CMakeFiles\update_mappings | ${cmake_ninja_workdir}_deps\glfw-build\src\CMakeFiles\update_mappings: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-src\src && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-src/CMake/GenerateMappings.cmake mappings.h.in mappings.h"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\src" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-src/CMake/GenerateMappings.cmake" mappings.h.in mappings.h"
   DESC = Updating gamepad mappings from upstream repository
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-src/CMakeLists.txt
+# D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-src/CMakeLists.txt
 # =============================================================================
 
 
@@ -759,7 +759,7 @@ build _deps\glfw-build\src\CMakeFiles\update_mappings | ${cmake_ninja_workdir}_d
 # Utility command for edit_cache
 
 build _deps\glfw-build\docs\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\docs && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\docs" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -770,7 +770,7 @@ build _deps\glfw-build\docs\edit_cache: phony _deps\glfw-build\docs\CMakeFiles\e
 # Utility command for rebuild_cache
 
 build _deps\glfw-build\docs\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\docs && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\docs" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -788,7 +788,7 @@ build _deps\glfw-build\docs\list_install_components: phony
 # Utility command for install
 
 build _deps\glfw-build\docs\CMakeFiles\install.util: CUSTOM_COMMAND _deps\glfw-build\docs\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\docs && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\docs" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -800,7 +800,7 @@ build _deps\glfw-build\docs\install: phony _deps\glfw-build\docs\CMakeFiles\inst
 # Utility command for install/local
 
 build _deps\glfw-build\docs\CMakeFiles\install\local.util: CUSTOM_COMMAND _deps\glfw-build\docs\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\docs && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\docs" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -809,7 +809,7 @@ build _deps\glfw-build\docs\install\local: phony _deps\glfw-build\docs\CMakeFile
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# E:/projekt3d/github_main/CMakeLists.txt
+# D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/CMakeLists.txt
 # =============================================================================
 
 
@@ -817,7 +817,7 @@ build _deps\glfw-build\docs\install\local: phony _deps\glfw-build\docs\CMakeFile
 # Utility command for edit_cache
 
 build _deps\glm-build\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -828,7 +828,7 @@ build _deps\glm-build\edit_cache: phony _deps\glm-build\CMakeFiles\edit_cache.ut
 # Utility command for rebuild_cache
 
 build _deps\glm-build\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -846,7 +846,7 @@ build _deps\glm-build\list_install_components: phony
 # Utility command for install
 
 build _deps\glm-build\CMakeFiles\install.util: CUSTOM_COMMAND _deps\glm-build\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -858,7 +858,7 @@ build _deps\glm-build\install: phony _deps\glm-build\CMakeFiles\install.util
 # Utility command for install/local
 
 build _deps\glm-build\CMakeFiles\install\local.util: CUSTOM_COMMAND _deps\glm-build\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -867,7 +867,7 @@ build _deps\glm-build\install\local: phony _deps\glm-build\CMakeFiles\install\lo
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# E:/projekt3d/github_main/out/build/x64-Debug/_deps/glm-src/CMakeLists.txt
+# D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glm-src/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -879,10 +879,10 @@ build _deps\glm-build\install\local: phony _deps\glm-build\CMakeFiles\install\lo
 
 build cmake_object_order_depends_target_glm: phony || .
 
-build _deps\glm-build\glm\CMakeFiles\glm.dir\detail\glm.cpp.obj: CXX_COMPILER__glm_unscanned_Debug E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src\glm\detail\glm.cpp || cmake_object_order_depends_target_glm
+build _deps\glm-build\glm\CMakeFiles\glm.dir\detail\glm.cpp.obj: CXX_COMPILER__glm_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src\glm\detail\glm.cpp || cmake_object_order_depends_target_glm
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /Za /fp:precise
-  INCLUDES = -IE:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-src
+  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
   OBJECT_DIR = _deps\glm-build\glm\CMakeFiles\glm.dir
   OBJECT_FILE_DIR = _deps\glm-build\glm\CMakeFiles\glm.dir\detail
   TARGET_COMPILE_PDB = _deps\glm-build\glm\CMakeFiles\glm.dir\glm.pdb
@@ -912,7 +912,7 @@ build _deps\glm-build\glm\glm.lib: CXX_STATIC_LIBRARY_LINKER__glm_Debug _deps\gl
 # Utility command for edit_cache
 
 build _deps\glm-build\glm\CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\glm && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\glm" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -923,7 +923,7 @@ build _deps\glm-build\glm\edit_cache: phony _deps\glm-build\glm\CMakeFiles\edit_
 # Utility command for rebuild_cache
 
 build _deps\glm-build\glm\CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\glm && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SE:\projekt3d\github_main -BE:\projekt3d\github_main\out\build\x64-Debug"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\glm" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -S"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler" -B"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug""
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -941,7 +941,7 @@ build _deps\glm-build\glm\list_install_components: phony
 # Utility command for install
 
 build _deps\glm-build\glm\CMakeFiles\install.util: CUSTOM_COMMAND _deps\glm-build\glm\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\glm && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\glm" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -953,7 +953,7 @@ build _deps\glm-build\glm\install: phony _deps\glm-build\glm\CMakeFiles\install.
 # Utility command for install/local
 
 build _deps\glm-build\glm\CMakeFiles\install\local.util: CUSTOM_COMMAND _deps\glm-build\glm\all
-  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D E:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\glm && "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\glm" && "D:\Pliki\Visual Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -987,42 +987,42 @@ build update_mappings: phony _deps\glfw-build\src\update_mappings
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug
 
 build all: phony glad.lib imgui_lib.lib dungeon.exe _deps\glfw-build\all _deps\glm-build\all
 
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-build
 
 build _deps\glfw-build\all: phony _deps\glfw-build\src\all _deps\glfw-build\docs\all
 
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/docs
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-build/docs
 
 build _deps\glfw-build\docs\all: phony
 
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug/_deps/glfw-build/src
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glfw-build/src
 
 build _deps\glfw-build\src\all: phony _deps\glfw-build\src\glfw3.lib
 
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug/_deps/glm-build
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glm-build
 
 build _deps\glm-build\all: phony _deps\glm-build\glm\all
 
 # =============================================================================
 
 #############################################
-# Folder: E:/projekt3d/github_main/out/build/x64-Debug/_deps/glm-build/glm
+# Folder: D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/out/build/x64-Debug/_deps/glm-build/glm
 
 build _deps\glm-build\glm\all: phony _deps\glm-build\glm\glm.lib
 
@@ -1033,13 +1033,13 @@ build _deps\glm-build\glm\all: phony _deps\glm-build\glm\glm.lib
 #############################################
 # Phony target to force glob verification run.
 
-build E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake_force: phony
+build D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake_force: phony
 
 
 #############################################
 # Re-run CMake to check if globbed directories changed.
 
-build E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\cmake.verify_globs: VERIFY_GLOBS | E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake_force
+build D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\cmake.verify_globs: VERIFY_GLOBS | D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake_force
   pool = console
   restat = 1
 
@@ -1047,14 +1047,14 @@ build E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\cmake.verify_glob
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja E$:\projekt3d\github_main\out\build\x64-Debug\cmake_install.cmake E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\cmake_install.cmake E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\src\cmake_install.cmake E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glfw-build\docs\cmake_install.cmake E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\cmake_install.cmake E$:\projekt3d\github_main\out\build\x64-Debug\_deps\glm-build\glm\cmake_install.cmake: RERUN_CMAKE E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\cmake.verify_globs | C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\BasicConfigVersion-SameMajorVersion.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDependentOption.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakePackageConfigHelpers.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckCSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckIncludeFile.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckLibraryExists.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\ExternalProject\shared_internal_commands.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent\CMakeLists.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindDoxygen.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindGit.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindThreads.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\GNUInstallDirs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCXXLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCommonLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CheckSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\GNU.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Initialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\WindowsPaths.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles\4.1.1-msvc1\CMakeCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeSystem.cmake E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake E$:\projekt3d\github_main\CMakeLists.txt _deps\glfw-src\CMakeLists.txt _deps\glfw-src\CMake\cmake_uninstall.cmake.in _deps\glfw-src\CMake\glfw3.pc.in _deps\glfw-src\CMake\glfw3Config.cmake.in _deps\glfw-src\docs\CMakeLists.txt _deps\glfw-src\src\CMakeLists.txt _deps\glm-src\CMakeLists.txt _deps\glm-src\glm\CMakeLists.txt
+build build.ninja D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\cmake_install.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\cmake_install.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\src\cmake_install.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-build\docs\cmake_install.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\cmake_install.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-build\glm\cmake_install.cmake: RERUN_CMAKE D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\cmake.verify_globs | CMakeCache.txt CMakeFiles\4.1.1-msvc1\CMakeCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeSystem.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake D$:\Pliki\Visual$ Studio$ Biblioteki\vcpkg-master\scripts\buildsystems\vcpkg.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\BasicConfigVersion-SameMajorVersion.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCCompilerABI.c D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXCompilerABI.cpp D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCommonLanguageInclude.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCompilerIdDetection.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDependentOption.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCXXCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerABI.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerId.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerSupport.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineRCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineSystem.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeFindBinUtils.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeGenericSystem.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeInitializeConfigs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeLanguageInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakePackageConfigHelpers.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseImplicitIncludeInfo.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseImplicitLinkInfo.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseLibraryArchitecture.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystem.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInitialize.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCXXCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCompilerCommon.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestRCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckCSourceCompiles.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckIncludeFile.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckLibraryExists.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ADSP-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ARMCC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ARMClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\AppleClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Borland-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Bruce-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Clang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Clang-DetermineCompilerInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Compaq-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Cray-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CrayClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Diab-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Embarcadero-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Fujitsu-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GHS-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GNU-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\HP-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\HP-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IAR-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Intel-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\LCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX-CXXImportStd.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\NVHPC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\NVIDIA-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\OrangeC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\PGI-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\PathScale-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Renesas-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SCO-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SDCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SunPro-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TI-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TIClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Tasking-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Watcom-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XL-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XL-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XLClang-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\zOS-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\ExternalProject\shared_internal_commands.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent\CMakeLists.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindDoxygen.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindGit.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageHandleStandardArgs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageMessage.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindThreads.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\GNUInstallDirs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCXXLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCommonLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeDetermineLinkerId.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeInspectCLinker.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeInspectCXXLinker.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CheckSourceCompiles.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\FeatureTesting.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\GNU.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Determine-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Initialize.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\WindowsPaths.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\WriteBasicConfigVersionFile.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\CMakeLists.txt _deps\glfw-src\CMakeLists.txt _deps\glfw-src\CMake\cmake_uninstall.cmake.in _deps\glfw-src\CMake\glfw3.pc.in _deps\glfw-src\CMake\glfw3Config.cmake.in _deps\glfw-src\docs\CMakeLists.txt _deps\glfw-src\src\CMakeLists.txt _deps\glm-src\CMakeLists.txt _deps\glm-src\glm\CMakeLists.txt
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\BasicConfigVersion-SameMajorVersion.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCommonLanguageInclude.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDependentOption.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeGenericSystem.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeInitializeConfigs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeLanguageInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakePackageConfigHelpers.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInitialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckCSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckIncludeFile.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckLibraryExists.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CMakeCommonCompilerMacros.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\ExternalProject\shared_internal_commands.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent\CMakeLists.cmake.in C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindDoxygen.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindGit.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageHandleStandardArgs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageMessage.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindThreads.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\GNUInstallDirs.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCXXLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCommonLinkerInformation.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CheckSourceCompiles.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\GNU.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Initialize.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-C.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-CXX.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\WindowsPaths.cmake C$:\Program$ Files\Microsoft$ Visual$ Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\WriteBasicConfigVersionFile.cmake CMakeCache.txt CMakeFiles\4.1.1-msvc1\CMakeCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeSystem.cmake E$:\projekt3d\github_main\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake E$:\projekt3d\github_main\CMakeLists.txt _deps\glfw-src\CMakeLists.txt _deps\glfw-src\CMake\cmake_uninstall.cmake.in _deps\glfw-src\CMake\glfw3.pc.in _deps\glfw-src\CMake\glfw3Config.cmake.in _deps\glfw-src\docs\CMakeLists.txt _deps\glfw-src\src\CMakeLists.txt _deps\glm-src\CMakeLists.txt _deps\glm-src\glm\CMakeLists.txt: phony
+build CMakeCache.txt CMakeFiles\4.1.1-msvc1\CMakeCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeCXXCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeRCCompiler.cmake CMakeFiles\4.1.1-msvc1\CMakeSystem.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\out\build\x64-Debug\CMakeFiles\VerifyGlobs.cmake D$:\Pliki\Visual$ Studio$ Biblioteki\vcpkg-master\scripts\buildsystems\vcpkg.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\BasicConfigVersion-SameMajorVersion.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCCompilerABI.c D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXCompilerABI.cpp D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCXXInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCommonLanguageInclude.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeCompilerIdDetection.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDependentOption.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCXXCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerABI.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerId.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineCompilerSupport.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineRCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeDetermineSystem.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeFindBinUtils.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeGenericSystem.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeInitializeConfigs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeLanguageInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakePackageConfigHelpers.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseImplicitIncludeInfo.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseImplicitLinkInfo.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeParseLibraryArchitecture.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCCompiler.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeRCInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystem.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeSystemSpecificInitialize.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCXXCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestCompilerCommon.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CMakeTestRCCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckCSourceCompiles.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckIncludeFile.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\CheckLibraryExists.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ADSP-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ARMCC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\ARMClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\AppleClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Borland-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Bruce-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CMakeCommonCompilerMacros.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Clang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Clang-DetermineCompilerInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Compaq-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Cray-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\CrayClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Diab-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Embarcadero-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Fujitsu-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GHS-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GNU-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\HP-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\HP-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IAR-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Intel-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\LCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX-CXXImportStd.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\MSVC.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\NVHPC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\NVIDIA-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\OrangeC-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\PGI-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\PathScale-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Renesas-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SCO-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SDCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SunPro-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TI-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TIClang-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Tasking-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\Watcom-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XL-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XL-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XLClang-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\zOS-C-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\ExternalProject\shared_internal_commands.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FetchContent\CMakeLists.cmake.in D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindDoxygen.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindGit.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageHandleStandardArgs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindPackageMessage.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\FindThreads.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\GNUInstallDirs.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCXXLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeCommonLinkerInformation.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeDetermineLinkerId.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeInspectCLinker.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CMakeInspectCXXLinker.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\CheckSourceCompiles.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Internal\FeatureTesting.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\GNU.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Linker\Windows-GNU.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Determine-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-Initialize.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-C.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC-CXX.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows-MSVC.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\Windows.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\Platform\WindowsPaths.cmake D$:\Pliki\Visual$ Studio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\share\cmake-4.1\Modules\WriteBasicConfigVersionFile.cmake D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\CMakeLists.txt _deps\glfw-src\CMakeLists.txt _deps\glfw-src\CMake\cmake_uninstall.cmake.in _deps\glfw-src\CMake\glfw3.pc.in _deps\glfw-src\CMake\glfw3Config.cmake.in _deps\glfw-src\docs\CMakeLists.txt _deps\glfw-src\src\CMakeLists.txt _deps\glm-src\CMakeLists.txt _deps\glm-src\glm\CMakeLists.txt: phony
 
 
 #############################################
