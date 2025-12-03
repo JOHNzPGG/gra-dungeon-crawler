@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(dungeon LANGUAGES CXX)
+
+# ### POPRAWKA 1: Dodalem 'C', zeby CMake umial obsluzyc plik glad.c
+project(dungeon LANGUAGES CXX C)
 
 if(MSVC)
-  # Wymu� /MD lub /MDd dla wszystkich target�w
+  # Wymus /MD lub /MDd dla wszystkich targetow
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 endif()
 
@@ -39,8 +41,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-# ===== GLAD (r�cznie dodany folder external/glad) =====
-add_library(glad external/glad/src/glad.c)
+# ===== GLAD =====
+add_library(glad external/glad/src/glad.c "include/stb_image.h")
 target_include_directories(glad PUBLIC external/glad/include)
 
 if(MSVC)
@@ -48,7 +50,7 @@ if(MSVC)
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 endif()
 
-# ===== Biblioteka ImGui (z backendami GLFW + OpenGL3) =====
+# ===== Biblioteka ImGui =====
 add_library(imgui_lib
   ${imgui_SOURCE_DIR}/imgui.cpp
   ${imgui_SOURCE_DIR}/imgui_draw.cpp
@@ -56,7 +58,7 @@ add_library(imgui_lib
   ${imgui_SOURCE_DIR}/imgui_widgets.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-)
+ "include/stb_image.h")
 
 target_include_directories(imgui_lib PUBLIC
   ${imgui_SOURCE_DIR}
@@ -64,32 +66,18 @@ target_include_directories(imgui_lib PUBLIC
 )
 
 target_compile_definitions(imgui_lib PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLAD)
-
-# �eby imgui_impl_glfw.cpp znalaz� <GLFW/glfw3.h>
-target_link_libraries(imgui_lib PUBLIC glfw)
+target_link_libraries(imgui_lib PUBLIC glfw glad glm)
 
 
-# ===== G��wne �r�d�a gry =====
+# ===== Glowne zrodla gry =====
+# Ta komenda znajduje WSZYSTKIE pliki .cpp w folderze src
 file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 
+# ### POPRAWKA 2: Usunalem reczne wypisywanie plikow, bo ${SRC} juz je zawiera.
+# Dzieki temu nie bedzie bledow "multiple definition".
 add_executable(dungeon
   ${SRC}
-        src/game/game.cpp
-        src/game/game.h
-        src/game/clases/object.cpp
-        src/game/clases/object.h
-        src/game/clases/entity.cpp
-        src/game/clases/entity.h
-        src/game/clases/item.cpp
-        src/game/clases/item.h
-        src/game/clases/player.cpp
-        src/game/clases/player.h
-        src/game/clases/enemy.cpp
-        src/game/clases/enemy.h
-        src/game/clases/skill.cpp
-        src/game/clases/skill.h
-        src/game/Gamedata.h
-)
+ "include/stb_image.h")
 
 target_include_directories(dungeon PUBLIC
   include
@@ -101,14 +89,14 @@ target_link_libraries(dungeon PRIVATE
   imgui_lib
 )
 
-# Po zbudowaniu dungeon.exe skopiuj katalog assets obok pliku exe
+# Kopiowanie assets
 add_custom_command(TARGET dungeon POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           "${CMAKE_SOURCE_DIR}/assets"
           "$<TARGET_FILE_DIR:dungeon>/assets")
 
 
-# ===== Sanitizery (opcjonalnie) =====
+# ===== Sanitizery =====
 if (DUNGEON_ENABLE_ASAN AND MSVC)
   target_compile_options(dungeon PRIVATE /fsanitize=address)
 elseif(DUNGEON_ENABLE_ASAN)
@@ -122,16 +110,9 @@ if (DUNGEON_BUILD_TESTS)
 
   add_executable(tests
     tests/test_map_loader.cpp
-    src/io/MapLoader.cpp      # <-- test kompiluje ten sam loader
+    src/io/MapLoader.cpp
   )
 
-add_custom_command(TARGET dungeon POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${CMAKE_SOURCE_DIR}/assets
-          $<TARGET_FILE_DIR:dungeon>/assets)
-
-
   target_include_directories(tests PUBLIC include)
-
   add_test(NAME unit COMMAND tests)
 endif()

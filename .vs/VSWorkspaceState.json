@@ -11,12 +11,11 @@
     "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\gfx",
-    "\\include\\dungeon\\io",
-    "\\include\\dungeon\\ui",
+    "\\include\\dungeon\\core",
     "\\src",
-    "\\src\\core"
+    "\\src\\core",
+    "\\src\\game"
   ],
-  "SelectedNode": "\\docs",
+  "SelectedNode": "\\src\\core\\App.cpp",
   "PreviewInSolutionExplorer": false
 }

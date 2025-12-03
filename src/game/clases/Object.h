@@ -6,8 +6,8 @@
 #define GRA_DUNGEON_CRAWLER_OBJECT_H
 #include <string>
 
-#include "../../../cmake-build-debug-visual-studio/_deps/glm-src/glm/vec2.hpp"
-#include "../../../cmake-build-debug-visual-studio/_deps/glm-src/glm/vec3.hpp"
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 static const glm::ivec2 DIR8[8] = {
     { 0, -1 }, // 0: N / przód
    { 1, -1 }, // 1: NE / przód-prawo

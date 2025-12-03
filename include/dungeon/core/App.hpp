@@ -1,9 +1,13 @@
 #pragma once
 #include <string>
 #include <glm/mat4x4.hpp>
+#include <glad/glad.h>
+using GLuint = unsigned int;
 
 #include "dungeon/io/MapLoader.hpp"
 #include "dungeon/gfx/Shader.hpp"
+#include <vector>
+#include <string>
 
 struct GLFWwindow;
 
@@ -53,6 +57,9 @@ namespace dungeon {
 		// === nowoœci ===
 		io::Level level_{};
 		gfx::Shader world_shader_{};
+		unsigned wall_texture_ = 0;
+		unsigned floor_texture_ = 0;
+		unsigned load_texture(const char* path);
 		unsigned floor_vao_ = 0, floor_vbo_ = 0;
 		unsigned wall_vao_ = 0, wall_vbo_ = 0;
 		int floor_vertex_count_ = 0;
@@ -66,6 +73,7 @@ namespace dungeon {
 		bool left_was_down_ = false;
 		bool right_was_down_ = false;
 		bool up_was_down_ = false;
+		std::string current_map_name_;
 	};
 
 } // namespace dungeon
