@@ -89,6 +89,7 @@ add_executable(dungeon
         src/game/clases/skill.cpp
         src/game/clases/skill.h
         src/game/Gamedata.h
+        src/game/game.cpp
 )
 
 target_include_directories(dungeon PUBLIC

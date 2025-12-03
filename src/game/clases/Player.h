@@ -14,11 +14,18 @@
 
 class Player : public Entity {
 public:
+    int XP = 0;
+    int Level = 1;
     Item* equippedWeapon = nullptr;
     Item* equippedArmor = nullptr;
     Player(int x, int y, int yaw)
         : Entity(x, y, yaw, 100, 100, 2, 10, true, "Player") {}
     std::vector<Skill*> skills;
+    Player(int x, int y, int yaw,
+       int hp, int maxHp,
+       int ap, float damage,
+       const std::string& name)
+    : Entity(x, y, yaw, hp, maxHp, ap, damage, true, name) {}
 
     void LearnSkill(Skill* skill) {
         if (skill) skills.push_back(skill);
