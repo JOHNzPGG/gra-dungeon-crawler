@@ -2,22 +2,28 @@
 // Created by wdzik on 29.11.2025.
 //
 
-#ifndef GRA_DUNGEON_CRAWLER_ENEMY_H
-#define GRA_DUNGEON_CRAWLER_ENEMY_H
-#include "Entity.h"
-
-
 class Enemy : public Entity {
 public:
+    std::vector<Item> drops;
+    int XPValue = 20;
+
     Enemy(int x, int y, int yaw,
           int hp, int maxHp,
           int ap, float damage,
-          const std::string& name)
-        : Entity(x, y, yaw, hp, maxHp, ap, damage, true, name) {}
+          const std::string& name,
+          std::initializer_list<Item> dropList = {},
+          int xpValue = 20)
+        : Entity(x, y, yaw, hp, maxHp, ap, damage, true, name),
+          drops(dropList),
+          XPValue(xpValue)
+    {}
 
-    virtual void Skill1() {}
-    virtual void Skill2() {}
-    virtual void Skill3() {}
+    // Zwraca dropy do świata gry
+    std::vector<Item> OnDeath(Player& killer) {
+        killer.AddXP(XPValue);
+        return drops;
+    }
 };
+
 
 #endif //GRA_DUNGEON_CRAWLER_ENEMY_H
