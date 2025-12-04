@@ -7,15 +7,15 @@
   },
   "ExpandedNodes": [
     "",
-    "\\assets",
-    "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
     "\\src",
-    "\\src\\core",
-    "\\src\\game"
+    "\\src\\game",
+    "\\src\\game\\clases",
+    "\\src\\gfx",
+    "\\src\\io",
+    "\\src\\ui"
   ],
-  "SelectedNode": "\\src\\core\\App.cpp",
   "PreviewInSolutionExplorer": false
 }

@@ -18,6 +18,7 @@ namespace dungeon::gfx {
 		void setMat4(const char* name, const float* m) const;
 		void setVec3(const char* name, float x, float y, float z) const;
 		void setInt(const char* name, int v) const;
+		void setVec4(const std::string& name, float x, float y, float z, float w) const;
 
 	private:
 		unsigned program_ = 0;

@@ -6,7 +6,8 @@
       "type": "default",
       "project": "CMakeLists.txt",
       "projectTarget": "dungeon.exe",
-      "name": "dungeon.exe"
+      "name": "dungeon.exe",
+      "currentDir": "${workspaceRoot}"
     }
   ]
 }

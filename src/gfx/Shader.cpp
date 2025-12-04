@@ -60,5 +60,9 @@ namespace dungeon::gfx {
         int l = glGetUniformLocation(program_, name);
         if (l != -1) glUniform1i(l, v);
     }
+    void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const {
+        // Pobieramy lokalizacjê zmiennej w shaderze i wysy³amy 4 floaty
+        glUniform4f(glGetUniformLocation(program_, name.c_str()), x, y, z, w);
+    }
 
 } // namespace dungeon::gfx
