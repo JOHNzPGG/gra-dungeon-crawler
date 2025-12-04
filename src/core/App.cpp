@@ -4,6 +4,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -41,14 +44,31 @@ void main() {
 )";
 
 // 3. NOWY SHADER FRAGMENT (używa texture() zamiast koloru)
+//static const char* kWorldFS = R"(#version 330 core
+//out vec4 FragColor;
+//in vec2 vTexCoord;
+//
+//uniform sampler2D uTex; // Sampler tekstury
+//
+//void main() {
+//  FragColor = texture(uTex, vTexCoord);
+//}
+//)";
+// 3. ZAKTUALIZOWANY SHADER FRAGMENT
 static const char* kWorldFS = R"(#version 330 core
 out vec4 FragColor;
 in vec2 vTexCoord;
 
-uniform sampler2D uTex; // Sampler tekstury
+uniform sampler2D uTex; 
+uniform int uUseTex;    // 1 = użyj tekstury, 0 = użyj koloru
+uniform vec4 uColor;    // Kolor obiektu (jeśli uUseTex == 0)
 
 void main() {
-  FragColor = texture(uTex, vTexCoord);
+    if (uUseTex == 1) {
+        FragColor = texture(uTex, vTexCoord);
+    } else {
+        FragColor = uColor;
+    }
 }
 )";
 
@@ -104,7 +124,7 @@ namespace dungeon {
         world_shader_ = gfx::Shader(kWorldVS, kWorldFS);
 
         // Ładowanie tekstur
-        wall_texture_ = load_texture("assets/textures/sciana.png");
+        wall_texture_ = load_texture("assets/textures/wall.png");
         floor_texture_ = load_texture("assets/textures/podloga.png");
     }
 
@@ -198,14 +218,67 @@ namespace dungeon {
         up_was_down_ = up;
     }
 
+    // Funkcja pomocnicza: Wczytuje OBJ i zwraca "spłaszczone" dane (x,y,z, u,v)
+    static std::vector<float> load_obj_mesh(const std::string& path) {
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string err; // Tylko err, bez warn
+
+        // POPRAWKA: Usunięto parametr &warn, teraz pasuje do Twojej wersji biblioteki
+        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path.c_str());
+
+        // W tej wersji biblioteki ostrzeżenia mogą być dopisane do err,
+        // więc wypisujemy err niezależnie od wyniku, jeśli nie jest pusty.
+        if (!err.empty()) {
+            fprintf(stderr, "OBJ info/error: %s\n", err.c_str());
+        }
+
+        if (!ret) {
+            fprintf(stderr, "Failed to load/parse .obj: %s\n", path.c_str());
+            return {}; // Zwracamy pusty wektor w razie błędu
+        }
+
+        std::vector<float> data;
+
+        // Iterujemy po wszystkich kształtach w pliku
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                // --- POZYCJA (X, Y, Z) ---
+                data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                // --- TEKSTURA (U, V) ---
+                if (index.texcoord_index >= 0) {
+                    data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                    // Często w OpenGL trzeba odwrócić oś V (1.0 - v)
+                    data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                }
+                else {
+                    // Jeśli model nie ma UV, dajemy 0,0
+                    data.push_back(0.0f);
+                    data.push_back(0.0f);
+                }
+            }
+        }
+        return data;
+    }
+
     void App::build_world_mesh() {
         std::vector<float> floor_vertices;
         std::vector<float> wall_vertices;
 
+        // 1. WCZYTAJ MODEL ŚCIANY
+        // Używamy nowej funkcji statycznej
+        std::vector<float> wall_model = load_obj_mesh("assets/models/wall_improved.obj");
+
+        bool use_model = !wall_model.empty();
+
         const int w = level_.w;
         const int h = level_.h;
 
-        // Helper teraz przyjmuje też współrzędne UV (ua, va itd.)
+        // Helper lambda (bez zmian)
         auto add_quad = [](std::vector<float>& buf,
             glm::vec3 a, glm::vec2 ua,
             glm::vec3 b, glm::vec2 ub,
@@ -223,68 +296,105 @@ namespace dungeon {
             for (int x = 0; x < w; ++x) {
                 const auto cell = level_.cells[y * w + x];
 
-                // --- PODŁOGA ---
+                // --- PODŁOGA (bez zmian) ---
                 if (cell == io::Cell::Floor) {
-                    // Mapujemy teksturę 0.0-1.0 na cały kafelek
                     add_quad(floor_vertices,
                         { x, 0.0f, y }, { 0.0f, 0.0f },
                         { x + 1, 0.0f, y }, { 1.0f, 0.0f },
                         { x + 1, 0.0f, y + 1 }, { 1.0f, 1.0f },
                         { x, 0.0f, y + 1 }, { 0.0f, 1.0f });
                 }
+                float model_scale = 0.5f;
+                float model_offset_x = 0.5f;
+                float model_offset_z = 0.5f;
+                float model_offset_y = 0.5f;
 
-                // --- ŚCIANY ---
                 if (cell == io::Cell::Wall) {
-                    float h0 = 0.0f, h1 = 1.5f; // Wysokość ściany
+                    if (use_model) {
+                        // Skoro model w Blenderze ma idealnie 1m, to skala = 1.0f
+                        float scale = 1.0f;
 
-                    // Front (Z+1)
-                    add_quad(wall_vertices,
-                        { x, h0, y + 1 }, { 0.0f, 0.0f },
-                        { x + 1, h0, y + 1 }, { 1.0f, 0.0f },
-                        { x + 1, h1, y + 1 }, { 1.0f, 1.0f },
-                        { x, h1, y + 1 }, { 0.0f, 1.0f });
+                        // Offsety:
+                        // Y = 0.0 -> bo model ma Origin na spodzie (stoi na podłodze)
+                        // X, Z = 0.5 -> bo model ma Origin w środku osi, a my chcemy go wstawić na środek kratki
+                        float offset_x = 0.5f;
+                        float offset_y = 0.0f;
+                        float offset_z = 0.5f;
 
-                    // Back (Z)
-                    add_quad(wall_vertices,
-                        { x + 1, h0, y }, { 0.0f, 0.0f },
-                        { x, h0, y }, { 1.0f, 0.0f },
-                        { x, h1, y }, { 1.0f, 1.0f },
-                        { x + 1, h1, y }, { 0.0f, 1.0f });
+                        for (size_t i = 0; i < wall_model.size(); i += 5) {
+                            float vx = wall_model[i + 0];
+                            float vy = wall_model[i + 1];
+                            float vz = wall_model[i + 2];
+                            float tu = wall_model[i + 3];
+                            float tv = wall_model[i + 4];
 
-                    // Left (X)
-                    add_quad(wall_vertices,
-                        { x, h0, y }, { 0.0f, 0.0f },
-                        { x, h0, y + 1 }, { 1.0f, 0.0f },
-                        { x, h1, y + 1 }, { 1.0f, 1.0f },
-                        { x, h1, y }, { 0.0f, 1.0f });
+                            // 1. Aplikujemy skalę (teraz 1:1)
+                            vx *= scale;
+                            vy *= scale;
+                            vz *= scale;
 
-                    // Right (X+1)
-                    add_quad(wall_vertices,
-                        { x + 1, h0, y + 1 }, { 0.0f, 0.0f },
-                        { x + 1, h0, y }, { 1.0f, 0.0f },
-                        { x + 1, h1, y }, { 1.0f, 1.0f },
-                        { x + 1, h1, y + 1 }, { 0.0f, 1.0f });
+                            // 2. Centrujemy w kratce
+                            vx += offset_x;
+                            vy += offset_y;
+                            vz += offset_z;
+
+                            // 3. Przesuwamy na właściwe miejsce na mapie
+                            wall_vertices.push_back(vx + x);
+                            wall_vertices.push_back(vy);
+                            wall_vertices.push_back(vz + y);
+
+                            // UV bez zmian
+                            wall_vertices.push_back(tu);
+                            wall_vertices.push_back(tv);
+                        }
+                    }
+                    else {
+                        // Fallback: stary kod generujący sześcian (jeśli brak pliku .obj)
+                        float h0 = 0.0f, h1 = 1.0f; // Zmniejszyłem h1 do 1.0 dla standardowego sześcianu
+
+                        // Front
+                        add_quad(wall_vertices,
+                            { x, h0, y + 1 }, { 0.0f, 0.0f },
+                            { x + 1, h0, y + 1 }, { 1.0f, 0.0f },
+                            { x + 1, h1, y + 1 }, { 1.0f, 1.0f },
+                            { x, h1, y + 1 }, { 0.0f, 1.0f });
+                        // ... reszta ścian sześcianu (Back, Left, Right) ...
+                        add_quad(wall_vertices,
+                            { x + 1, h0, y }, { 0.0f, 0.0f },
+                            { x, h0, y }, { 1.0f, 0.0f },
+                            { x, h1, y }, { 1.0f, 1.0f },
+                            { x + 1, h1, y }, { 0.0f, 1.0f });
+
+                        add_quad(wall_vertices,
+                            { x, h0, y }, { 0.0f, 0.0f },
+                            { x, h0, y + 1 }, { 1.0f, 0.0f },
+                            { x, h1, y + 1 }, { 1.0f, 1.0f },
+                            { x, h1, y }, { 0.0f, 1.0f });
+
+                        add_quad(wall_vertices,
+                            { x + 1, h0, y + 1 }, { 0.0f, 0.0f },
+                            { x + 1, h0, y }, { 1.0f, 0.0f },
+                            { x + 1, h1, y }, { 1.0f, 1.0f },
+                            { x + 1, h1, y + 1 }, { 0.0f, 1.0f });
+                    }
                 }
             }
         }
 
-        // Zapamiętujemy ilość wierzchołków (teraz każdy vertex to 5 floatów, nie 3)
         floor_vertex_count_ = floor_vertices.size() / 5;
         wall_vertex_count_ = wall_vertices.size() / 5;
 
-        // --- Konfiguracja VAO (ZMIENIONA) ---
         auto setup_vao = [](GLuint& vao, GLuint& vbo, const std::vector<float>& data) {
+            if (data.empty()) return; // Zabezpieczenie przed pustym wektorem
             glGenVertexArrays(1, &vao);
             glGenBuffers(1, &vbo);
             glBindVertexArray(vao);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
             glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
 
-            // Atrybut 0: Pozycja (3 floaty)
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
             glEnableVertexAttribArray(0);
 
-            // Atrybut 1: TexCoord (2 floaty) - offset to 3 * float
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
             };
@@ -301,65 +411,6 @@ namespace dungeon {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-    }
-
-    void App::frame_render() {
-        // pozycja środka kratki gracza
-        float px = static_cast<float>(player_.x) + 0.5f;
-        float pz = static_cast<float>(player_.y) + 0.5f;
-
-        glm::vec3 forward;
-        int dx = 0;
-        int dz = 0;
-
-        switch (player_.dir) {
-        case Dir::North: forward = glm::vec3(0.0f, 0.0f, -1.0f); dx = 0;  dz = -1; break;
-        case Dir::South: forward = glm::vec3(0.0f, 0.0f, 1.0f); dx = 0;  dz = 1; break;
-        case Dir::West:  forward = glm::vec3(-1.0f, 0.0f, 0.0f);  dx = -1; dz = 0; break;
-        case Dir::East:  forward = glm::vec3(1.0f, 0.0f, 0.0f);  dx = 1;  dz = 0; break;
-        }
-
-        // sprawdzamy, co jest ZA graczem (kafelek odwrotnie do kierunku patrzenia)
-        int bx = player_.x - dx;
-        int by = player_.y - dz;
-
-        // jeśli NIE możemy wejść na kafelek za nami -> traktuj jako ścianę/blokadę
-        bool behind_is_blocked = !can_move_to(bx, by);
-
-        // punkt, na który patrzymy – trochę przed graczem i lekko nad podłogą
-        glm::vec3 cam_target = glm::vec3(px, 0.6f, pz) + forward * 0.35f;
-
-        // jeśli za plecami ściana → kamera bliżej, żeby nie wlatywać w nią głową
-        float cam_distance = behind_is_blocked ? 0.6f : 1.0f;
-        float cam_height = 0.6f;
-
-        glm::vec3 cam_pos = cam_target - forward * cam_distance
-            + glm::vec3(0.0f, cam_height, 0.0f);
-
-        view_ = glm::lookAt(cam_pos, cam_target, glm::vec3(0.0f, 1.0f, 0.0f));
-
-        // --- reszta bez zmian: rysowanie świata ---
-        world_shader_.use();
-        world_shader_.setMat4("uProj", &proj_[0][0]);
-        world_shader_.setMat4("uView", &view_[0][0]);
-
-        // Rysowanie PODŁOGI
-        glActiveTexture(GL_TEXTURE0);       // Wybieramy slot tekstury 0
-        glBindTexture(GL_TEXTURE_2D, floor_texture_); // Podpinamy teksturę podłogi
-        world_shader_.setInt("uTex", 0);    // Mówimy shaderowi, żeby brał ze slotu 0
-
-        glBindVertexArray(floor_vao_);
-        glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
-
-        // Rysowanie ŚCIAN
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, wall_texture_); // Podpinamy teksturę ściany
-        world_shader_.setInt("uTex", 0);
-
-        glBindVertexArray(wall_vao_);
-        glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
-
-        glBindVertexArray(0);
     }
 
     void App::frame_ui() {

@@ -8,14 +8,15 @@
   "ExpandedNodes": [
     "",
     "\\assets",
-    "\\assets\\maps",
+    "\\assets\\textures",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
     "\\src",
     "\\src\\core",
-    "\\src\\game"
+    "\\src\\game",
+    "\\src\\gfx"
   ],
-  "SelectedNode": "\\src\\core\\App.cpp",
+  "SelectedNode": "\\assets\\models\\wall_improved.mtl",
   "PreviewInSolutionExplorer": false
 }

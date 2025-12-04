@@ -1,4 +1,4 @@
-#include "dungeon/gfx/Shader.hpp"
+﻿#include "dungeon/gfx/Shader.hpp"
 #include <glad/glad.h>
 #include <stdexcept>
 
@@ -59,6 +59,10 @@ namespace dungeon::gfx {
     void Shader::setInt(const char* name, int v) const {
         int l = glGetUniformLocation(program_, name);
         if (l != -1) glUniform1i(l, v);
+    }
+    void Shader::setVec4(const std::string& name, float x, float y, float z, float w) const {
+        // Pobieramy lokalizację zmiennej w shaderze i wysyłamy 4 floaty
+        glUniform4f(glGetUniformLocation(program_, name.c_str()), x, y, z, w);
     }
 
 } // namespace dungeon::gfx
