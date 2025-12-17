@@ -143,9 +143,15 @@ namespace dungeon {
 		bool up_was_down_ = false;
 
 		std::string current_map_name_;
+
 		tinyobj::attrib_t attrib;
 		std::vector<tinyobj::shape_t> shapes;
 		std::vector<tinyobj::material_t> materials;
-		const std::string MODEL_PATH = "models/wall.obj";
+		const std::string MODEL_PATH = "models/Untitled.obj";
+
+		tinyobj::attrib_t floorAttrib;
+		std::vector<tinyobj::shape_t> floorShapes;
+		std::vector<tinyobj::material_t> floorMaterials;
+		const std::string FLOOR_MODEL_PATH = "models/kamien1.obj";
 	};
 } // namespace dungeon

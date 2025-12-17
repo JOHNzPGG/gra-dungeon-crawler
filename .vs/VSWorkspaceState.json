@@ -4,19 +4,5 @@
       "out\\build\\x64-Debug",
       "out\\install\\x64-Debug"
     ]
-  },
-  "ExpandedNodes": [
-    "",
-    "\\assets",
-    "\\assets\\textures",
-    "\\include",
-    "\\include\\dungeon",
-    "\\include\\dungeon\\gfx",
-    "\\src",
-    "\\src\\core",
-    "\\src\\game",
-    "\\src\\gfx"
-  ],
-  "SelectedNode": "\\assets\\models\\wall_improved.mtl",
-  "PreviewInSolutionExplorer": false
+  }
 }

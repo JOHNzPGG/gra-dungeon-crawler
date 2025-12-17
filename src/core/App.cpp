@@ -23,6 +23,10 @@
 
 #include <filesystem>
 
+struct MeshData {
+    std::vector<float> vertices;       // x,y,z, u,v, material_id
+    std::map<int, GLuint> textures;    // Mapa: ID materiału -> ID tekstury OpenGL
+};
 
 static void glfw_error_cb(int code, const char* desc) {
     std::fprintf(stderr, "GLFW error %d: %s\n", code, desc);
@@ -124,8 +128,8 @@ namespace dungeon {
         world_shader_ = gfx::Shader(kWorldVS, kWorldFS);
 
         // Ładowanie tekstur
-        wall_texture_ = load_texture("assets/textures/wall.png");
-        floor_texture_ = load_texture("assets/textures/podloga.png");
+        wall_texture_ = load_texture("assets/models/wmremove-transformed.PNG");
+        floor_texture_ = load_texture("assets/models/kamienna_posadzka.PNG");
     }
 
     void App::init_imgui() {
@@ -218,174 +222,206 @@ namespace dungeon {
         up_was_down_ = up;
     }
 
-    // Funkcja pomocnicza: Wczytuje OBJ i zwraca "spłaszczone" dane (x,y,z, u,v)
-    static std::vector<float> load_obj_mesh(const std::string& path) {
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
-        std::string err; // Tylko err, bez warn
-
-        // POPRAWKA: Usunięto parametr &warn, teraz pasuje do Twojej wersji biblioteki
-        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path.c_str());
-
-        // W tej wersji biblioteki ostrzeżenia mogą być dopisane do err,
-        // więc wypisujemy err niezależnie od wyniku, jeśli nie jest pusty.
-        if (!err.empty()) {
-            fprintf(stderr, "OBJ info/error: %s\n", err.c_str());
-        }
-
-        if (!ret) {
-            fprintf(stderr, "Failed to load/parse .obj: %s\n", path.c_str());
-            return {}; // Zwracamy pusty wektor w razie błędu
-        }
-
-        std::vector<float> data;
-
-        // Iterujemy po wszystkich kształtach w pliku
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
-                // --- POZYCJA (X, Y, Z) ---
-                data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                // --- TEKSTURA (U, V) ---
-                if (index.texcoord_index >= 0) {
-                    data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                    // Często w OpenGL trzeba odwrócić oś V (1.0 - v)
-                    data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
-                }
-                else {
-                    // Jeśli model nie ma UV, dajemy 0,0
-                    data.push_back(0.0f);
-                    data.push_back(0.0f);
-                }
-            }
-        }
-        return data;
-    }
-
     void App::build_world_mesh() {
         std::vector<float> floor_vertices;
         std::vector<float> wall_vertices;
 
-        // 1. WCZYTAJ MODEL ŚCIANY
-        // Używamy nowej funkcji statycznej
-        std::vector<float> wall_model = load_obj_mesh("assets/models/wall_improved.obj");
+        // Kontenery TinyObjLoader (będziemy ich używać dwukrotnie)
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string err;
+        std::string base_dir = "assets/models/";
 
-        bool use_model = !wall_model.empty();
+        // ---------------------------------------------------------
+        // KROK 1: ŁADOWANIE MODELU ŚCIANY
+        // ---------------------------------------------------------
+        std::string wall_obj_path = base_dir + "Untitled.obj"; // Plik ściany
+        std::vector<float> wall_model_data; // Tu trzymamy wzorzec ściany
+
+        bool retWall = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, wall_obj_path.c_str(), base_dir.c_str());
+
+        if (!err.empty()) fprintf(stderr, "[WALL INFO]: %s\n", err.c_str());
+
+        if (retWall) {
+            // A. Tekstura z MTL dla ściany
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                std::string tex_path = base_dir + materials[0].diffuse_texname;
+                if (wall_texture_) glDeleteTextures(1, &wall_texture_);
+                wall_texture_ = load_texture(tex_path.c_str());
+            }
+
+            // B. Spłaszczanie danych ściany
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        wall_model_data.push_back(0.0f); wall_model_data.push_back(0.0f);
+                    }
+                }
+            }
+        }
+
+        // ---------------------------------------------------------
+        // KROK 2: ŁADOWANIE MODELU PODŁOGI (NOWOŚĆ)
+        // ---------------------------------------------------------
+
+        // Czyścimy kontenery przed drugim ładowaniem
+        attrib.vertices.clear();
+        attrib.texcoords.clear();
+        shapes.clear();
+        materials.clear();
+        err.clear();
+
+        std::string floor_obj_path = base_dir + "kamien1.obj"; // TUTAJ WPISZ NAZWĘ PLIKU PODŁOGI
+        std::vector<float> floor_model_data; // Tu trzymamy wzorzec podłogi
+
+        bool retFloor = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, floor_obj_path.c_str(), base_dir.c_str());
+
+        if (!err.empty()) fprintf(stderr, "[FLOOR INFO]: %s\n", err.c_str());
+
+        if (retFloor) {
+            // A. Tekstura z MTL dla podłogi (opcjonalnie)
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                std::string tex_path = base_dir + materials[0].diffuse_texname;
+                if (floor_texture_) glDeleteTextures(1, &floor_texture_);
+                floor_texture_ = load_texture(tex_path.c_str());
+            }
+
+            // B. Spłaszczanie danych podłogi
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        floor_model_data.push_back(0.0f); floor_model_data.push_back(0.0f);
+                    }
+                }
+            }
+        }
+
+        bool use_wall_model = !wall_model_data.empty();
+        bool use_floor_model = !floor_model_data.empty();
+
+        // ---------------------------------------------------------
+        // KROK 3: GENEROWANIE SIATKI ŚWIATA
+        // ---------------------------------------------------------
 
         const int w = level_.w;
         const int h = level_.h;
 
-        // Helper lambda (bez zmian)
-        auto add_quad = [](std::vector<float>& buf,
-            glm::vec3 a, glm::vec2 ua,
-            glm::vec3 b, glm::vec2 ub,
-            glm::vec3 c, glm::vec2 uc,
-            glm::vec3 d, glm::vec2 ud) {
-                auto push = [&buf](glm::vec3 v, glm::vec2 uv) {
-                    buf.push_back(v.x); buf.push_back(v.y); buf.push_back(v.z);
-                    buf.push_back(uv.x); buf.push_back(uv.y);
-                    };
-                push(a, ua); push(b, ub); push(c, uc);
-                push(a, ua); push(c, uc); push(d, ud);
+        // Helper do generowania płaskiego quada (fallback, jeśli nie ma modelu)
+        auto add_quad = [](std::vector<float>& buf, glm::vec3 a, glm::vec2 ua, glm::vec3 b, glm::vec2 ub, glm::vec3 c, glm::vec2 uc, glm::vec3 d, glm::vec2 ud) {
+            auto push = [&buf](glm::vec3 v, glm::vec2 uv) {
+                buf.push_back(v.x); buf.push_back(v.y); buf.push_back(v.z);
+                buf.push_back(uv.x); buf.push_back(uv.y);
+                };
+            push(a, ua); push(b, ub); push(c, uc);
+            push(a, ua); push(c, uc); push(d, ud);
             };
 
         for (int y = 0; y < h; ++y) {
             for (int x = 0; x < w; ++x) {
                 const auto cell = level_.cells[y * w + x];
 
-                // --- PODŁOGA (bez zmian) ---
+                // === PODŁOGA ===
                 if (cell == io::Cell::Floor) {
-                    add_quad(floor_vertices,
-                        { x, 0.0f, y }, { 0.0f, 0.0f },
-                        { x + 1, 0.0f, y }, { 1.0f, 0.0f },
-                        { x + 1, 0.0f, y + 1 }, { 1.0f, 1.0f },
-                        { x, 0.0f, y + 1 }, { 0.0f, 1.0f });
+                    if (use_floor_model) {
+                        // Skalowanie i ustawianie modelu podłogi
+                        float scale = 0.53f;     // Dostosuj skalę
+                        float offset_x = 0.5f;  // Centrowanie w kratce
+                        float offset_y = 0.0f;  // Podłoga jest na poziomie 0
+                        float offset_z = 0.5f;  // Centrowanie w kratce
+
+                        for (size_t i = 0; i < floor_model_data.size(); i += 5) {
+                            float vx = floor_model_data[i + 0];
+                            float vy = floor_model_data[i + 1];
+                            float vz = floor_model_data[i + 2];
+                            float tu = floor_model_data[i + 3];
+                            float tv = floor_model_data[i + 4];
+
+                            vx = vx * scale + offset_x + x;
+                            vy = vy * scale + offset_y;     // Podłoga na 0
+                            vz = vz * scale + offset_z + y;
+
+                            floor_vertices.push_back(vx);
+                            floor_vertices.push_back(vy);
+                            floor_vertices.push_back(vz);
+                            floor_vertices.push_back(tu);
+                            floor_vertices.push_back(tv);
+                        }
+                    }
+                    else {
+                        // Fallback (stary sposób generowania quada)
+                        add_quad(floor_vertices,
+                            { x, 0.0f, y }, { 0.0f, 0.0f },
+                            { x + 1, 0.0f, y }, { 1.0f, 0.0f },
+                            { x + 1, 0.0f, y + 1 }, { 1.0f, 1.0f },
+                            { x, 0.0f, y + 1 }, { 0.0f, 1.0f });
+                    }
                 }
-                float model_scale = 0.5f;
-                float model_offset_x = 0.5f;
-                float model_offset_z = 0.5f;
-                float model_offset_y = 0.5f;
 
+                // === ŚCIANY ===
                 if (cell == io::Cell::Wall) {
-                    if (use_model) {
-                        // Skoro model w Blenderze ma idealnie 1m, to skala = 1.0f
-                        float scale = 1.0f;
-
-                        // Offsety:
-                        // Y = 0.0 -> bo model ma Origin na spodzie (stoi na podłodze)
-                        // X, Z = 0.5 -> bo model ma Origin w środku osi, a my chcemy go wstawić na środek kratki
+                    if (use_wall_model) {
+                        float scale = 0.50f;
+                        float yscale = 1.0f;
                         float offset_x = 0.5f;
-                        float offset_y = 0.0f;
+                        float offset_y = 0.5f;
                         float offset_z = 0.5f;
 
-                        for (size_t i = 0; i < wall_model.size(); i += 5) {
-                            float vx = wall_model[i + 0];
-                            float vy = wall_model[i + 1];
-                            float vz = wall_model[i + 2];
-                            float tu = wall_model[i + 3];
-                            float tv = wall_model[i + 4];
+                        for (size_t i = 0; i < wall_model_data.size(); i += 5) {
+                            float vx = wall_model_data[i + 0];
+                            float vy = wall_model_data[i + 1];
+                            float vz = wall_model_data[i + 2];
+                            float tu = wall_model_data[i + 3];
+                            float tv = wall_model_data[i + 4];
 
-                            // 1. Aplikujemy skalę (teraz 1:1)
-                            vx *= scale;
-                            vy *= scale;
-                            vz *= scale;
+                            vx = vx * scale + offset_x + x;
+                            vy = vy * yscale + offset_y;
+                            vz = vz * scale + offset_z + y;
 
-                            // 2. Centrujemy w kratce
-                            vx += offset_x;
-                            vy += offset_y;
-                            vz += offset_z;
-
-                            // 3. Przesuwamy na właściwe miejsce na mapie
-                            wall_vertices.push_back(vx + x);
+                            wall_vertices.push_back(vx);
                             wall_vertices.push_back(vy);
-                            wall_vertices.push_back(vz + y);
-
-                            // UV bez zmian
+                            wall_vertices.push_back(vz);
                             wall_vertices.push_back(tu);
                             wall_vertices.push_back(tv);
                         }
                     }
                     else {
-                        // Fallback: stary kod generujący sześcian (jeśli brak pliku .obj)
-                        float h0 = 0.0f, h1 = 1.0f; // Zmniejszyłem h1 do 1.0 dla standardowego sześcianu
-
-                        // Front
-                        add_quad(wall_vertices,
-                            { x, h0, y + 1 }, { 0.0f, 0.0f },
-                            { x + 1, h0, y + 1 }, { 1.0f, 0.0f },
-                            { x + 1, h1, y + 1 }, { 1.0f, 1.0f },
-                            { x, h1, y + 1 }, { 0.0f, 1.0f });
-                        // ... reszta ścian sześcianu (Back, Left, Right) ...
-                        add_quad(wall_vertices,
-                            { x + 1, h0, y }, { 0.0f, 0.0f },
-                            { x, h0, y }, { 1.0f, 0.0f },
-                            { x, h1, y }, { 1.0f, 1.0f },
-                            { x + 1, h1, y }, { 0.0f, 1.0f });
-
-                        add_quad(wall_vertices,
-                            { x, h0, y }, { 0.0f, 0.0f },
-                            { x, h0, y + 1 }, { 1.0f, 0.0f },
-                            { x, h1, y + 1 }, { 1.0f, 1.0f },
-                            { x, h1, y }, { 0.0f, 1.0f });
-
-                        add_quad(wall_vertices,
-                            { x + 1, h0, y + 1 }, { 0.0f, 0.0f },
-                            { x + 1, h0, y }, { 1.0f, 0.0f },
-                            { x + 1, h1, y }, { 1.0f, 1.0f },
-                            { x + 1, h1, y + 1 }, { 0.0f, 1.0f });
+                        // Fallback (sześcian)
+                        float h0 = 0.0f, h1 = 1.0f;
+                        add_quad(wall_vertices, { x, h0, y + 1 }, { 0.0f, 0.0f }, { x + 1, h0, y + 1 }, { 1.0f, 0.0f }, { x + 1, h1, y + 1 }, { 1.0f, 1.0f }, { x, h1, y + 1 }, { 0.0f, 1.0f });
+                        add_quad(wall_vertices, { x + 1, h0, y }, { 0.0f, 0.0f }, { x, h0, y }, { 1.0f, 0.0f }, { x, h1, y }, { 1.0f, 1.0f }, { x + 1, h1, y }, { 0.0f, 1.0f });
+                        add_quad(wall_vertices, { x, h0, y }, { 0.0f, 0.0f }, { x, h0, y + 1 }, { 1.0f, 0.0f }, { x, h1, y + 1 }, { 1.0f, 1.0f }, { x, h1, y }, { 0.0f, 1.0f });
+                        add_quad(wall_vertices, { x + 1, h0, y + 1 }, { 0.0f, 0.0f }, { x + 1, h0, y }, { 1.0f, 0.0f }, { x + 1, h1, y }, { 1.0f, 1.0f }, { x + 1, h1, y + 1 }, { 0.0f, 1.0f });
                     }
                 }
             }
         }
 
+        // ---------------------------------------------------------
+        // KROK 4: PRZESŁANIE DANYCH DO GPU (VAO / VBO)
+        // ---------------------------------------------------------
+
         floor_vertex_count_ = floor_vertices.size() / 5;
         wall_vertex_count_ = wall_vertices.size() / 5;
 
         auto setup_vao = [](GLuint& vao, GLuint& vbo, const std::vector<float>& data) {
-            if (data.empty()) return; // Zabezpieczenie przed pustym wektorem
+            if (data.empty()) return;
             glGenVertexArrays(1, &vao);
             glGenBuffers(1, &vbo);
             glBindVertexArray(vao);
@@ -399,10 +435,16 @@ namespace dungeon {
             glEnableVertexAttribArray(1);
             };
 
+        // Usuwamy stare bufory, jeśli istniały (ważne przy przeładowaniu poziomu)
+        if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
+        if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
+        if (wall_vao_) glDeleteVertexArrays(1, &wall_vao_);
+        if (wall_vbo_) glDeleteBuffers(1, &wall_vbo_);
+        floor_vao_ = 0; floor_vbo_ = 0; wall_vao_ = 0; wall_vbo_ = 0;
+
         setup_vao(floor_vao_, floor_vbo_, floor_vertices);
         setup_vao(wall_vao_, wall_vbo_, wall_vertices);
     }
-
     void App::frame_begin() {
         glfwPollEvents();
         handle_input();
