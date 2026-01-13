@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <cstdio>
 #include <vector>
+#include <cmath>
 #include <filesystem>
 #include <map> // Potrzebne dla tiny_obj_loader logic
 
@@ -34,11 +35,13 @@ layout(location=0) in vec3 aPos;
 layout(location=1) in vec2 aTexCoord;
 
 out vec2 vTexCoord;
+
 uniform mat4 uProj;
 uniform mat4 uView;
+uniform mat4 uModel;
 
 void main() {
-  gl_Position = uProj * uView * vec4(aPos, 1.0);
+  gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
   vTexCoord = aTexCoord;
 }
 )";
@@ -71,7 +74,9 @@ namespace dungeon {
         init_gl();
         init_imgui();
         load_level();
-        build_world_mesh();
+        build_world_mesh(); 
+        build_cube_mesh();
+        spawn_entities_from_level();
     }
 
     App::~App() {
@@ -86,6 +91,9 @@ namespace dungeon {
             glfwDestroyWindow(window_);
             glfwTerminate();
         }
+        if (cube_vbo_) glDeleteBuffers(1, &cube_vbo_);
+        if (cube_vao_) glDeleteVertexArrays(1, &cube_vao_);
+
     }
 
     void App::init_glfw() {
@@ -189,6 +197,33 @@ namespace dungeon {
         player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
     }
 
+    void App::spawn_entities_from_level() {
+        enemies_world_pos_.clear();
+        items_world_pos_.clear();
+        items_alive_.clear();
+
+        // Enemy: środek kafelka + lekko w górę (lewituje)
+        for (const auto& p : level_.enemy_spawns) {
+            float x = static_cast<float>(p.x) + 0.5f;
+            float z = static_cast<float>(p.y) + 0.5f;
+            float y = 0.75f;
+            enemies_world_pos_.push_back(glm::vec3(x, y, z));
+        }
+
+        // Item: środek kafelka + lekko nad ziemią
+        for (const auto& p : level_.item_spawns) {
+            float x = static_cast<float>(p.x) + 0.5f;
+            float z = static_cast<float>(p.y) + 0.5f;
+            float y = 0.7f;
+            items_world_pos_.push_back(glm::vec3(x, y, z));
+
+            // --- POPRAWKA TUTAJ ---
+            // Musisz zsynchronizować wektory. Skoro dodajesz pozycję, 
+            // musisz też dodać informację, że przedmiot "żyje".
+            items_alive_.push_back(true);
+        }
+    }
+
     bool App::can_move_to(int x, int y) const {
         if (x < 0 || y < 0) return false;
         if (x >= level_.w || y >= level_.h) return false;
@@ -229,6 +264,7 @@ namespace dungeon {
             int nx = player_.GameX;
             int ny = player_.GameY;
 
+
             int yaw = ((player_.yaw % 360) + 360) % 360;
 
             switch (yaw) {
@@ -243,6 +279,20 @@ namespace dungeon {
                 player_.GameX = nx;
                 player_.GameY = ny;
                 player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
+            }
+        }
+
+        // po ruchu sprawdź pickup
+        for (size_t i = 0; i < items_world_pos_.size(); ++i) {
+            if (!items_alive_[i]) continue;
+
+            int ix = (int)std::floor(items_world_pos_[i].x);
+            int iy = (int)std::floor(items_world_pos_[i].z);
+
+            if (ix == player_.GameX && iy == player_.GameY) {
+                items_alive_[i] = false;
+                has_held_item_ = true;
+                break;
             }
         }
 
@@ -477,6 +527,48 @@ namespace dungeon {
         setup_vao(wall_vao_, wall_vbo_, wall_vertices);
     }
 
+    void App::build_cube_mesh() {
+        // Kostka jednostkowa w centrum (od -0.5 do +0.5)
+        // Vertex: pos(3) + uv(2) => 5 floatów, żeby pasowało do shadera
+        const float v[] = {
+            // front
+            -0.5f,-0.5f, 0.5f, 0,0,   0.5f,-0.5f, 0.5f, 1,0,   0.5f, 0.5f, 0.5f, 1,1,
+            -0.5f,-0.5f, 0.5f, 0,0,   0.5f, 0.5f, 0.5f, 1,1,  -0.5f, 0.5f, 0.5f, 0,1,
+            // back
+             0.5f,-0.5f,-0.5f, 0,0,  -0.5f,-0.5f,-0.5f, 1,0,  -0.5f, 0.5f,-0.5f, 1,1,
+             0.5f,-0.5f,-0.5f, 0,0,  -0.5f, 0.5f,-0.5f, 1,1,   0.5f, 0.5f,-0.5f, 0,1,
+             // left
+             -0.5f,-0.5f,-0.5f, 0,0,  -0.5f,-0.5f, 0.5f, 1,0,  -0.5f, 0.5f, 0.5f, 1,1,
+             -0.5f,-0.5f,-0.5f, 0,0,  -0.5f, 0.5f, 0.5f, 1,1,  -0.5f, 0.5f,-0.5f, 0,1,
+             // right
+              0.5f,-0.5f, 0.5f, 0,0,   0.5f,-0.5f,-0.5f, 1,0,   0.5f, 0.5f,-0.5f, 1,1,
+              0.5f,-0.5f, 0.5f, 0,0,   0.5f, 0.5f,-0.5f, 1,1,   0.5f, 0.5f, 0.5f, 0,1,
+              // top
+              -0.5f, 0.5f, 0.5f, 0,0,   0.5f, 0.5f, 0.5f, 1,0,   0.5f, 0.5f,-0.5f, 1,1,
+              -0.5f, 0.5f, 0.5f, 0,0,   0.5f, 0.5f,-0.5f, 1,1,  -0.5f, 0.5f,-0.5f, 0,1,
+              // bottom
+              -0.5f,-0.5f,-0.5f, 0,0,   0.5f,-0.5f,-0.5f, 1,0,   0.5f,-0.5f, 0.5f, 1,1,
+              -0.5f,-0.5f,-0.5f, 0,0,   0.5f,-0.5f, 0.5f, 1,1,  -0.5f,-0.5f, 0.5f, 0,1,
+        };
+
+        cube_vertex_count_ = (int)(sizeof(v) / sizeof(float) / 5);
+
+        glGenVertexArrays(1, &cube_vao_);
+        glGenBuffers(1, &cube_vbo_);
+        glBindVertexArray(cube_vao_);
+        glBindBuffer(GL_ARRAY_BUFFER, cube_vbo_);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        glBindVertexArray(0);
+    }
+
+
     void App::frame_begin() {
         glfwPollEvents();
         handle_input();
@@ -535,6 +627,9 @@ namespace dungeon {
         world_shader_.use();
         world_shader_.setMat4("uProj", &proj_[0][0]);
         world_shader_.setMat4("uView", &view_[0][0]);
+        glm::mat4 I(1.0f);
+        world_shader_.setMat4("uModel", &I[0][0]);
+
 
         // WAŻNE: Włączamy teksturowanie dla nowego shadera
         world_shader_.setInt("uUseTex", 1);
@@ -559,13 +654,76 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
+        // --- ENEMIES (czarne kostki 0.5m) ---
+        world_shader_.setInt("uUseTex", 0);
+        world_shader_.setVec4("uColor", 0.0f, 0.0f, 0.0f, 1.0f);
+
+        glBindVertexArray(cube_vao_);
+
+        for (const auto& pos : enemies_world_pos_) {
+            glm::mat4 M(1.0f);
+            M = glm::translate(M, pos);
+            M = glm::scale(M, glm::vec3(0.5f)); // 0.5m szerokości
+            world_shader_.setMat4("uModel", &M[0][0]);
+
+            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+        }
         glBindVertexArray(0);
+
+        // --- ITEMS (placeholder: jasnoszara kostka 0.25m) ---
+        world_shader_.setInt("uUseTex", 0);
+        world_shader_.setVec4("uColor", 0.8f, 0.8f, 0.8f, 1.0f);
+
+        glBindVertexArray(cube_vao_);
+        for (const auto& pos : items_world_pos_) {
+            glm::mat4 M(1.0f);
+            M = glm::translate(M, pos);
+            M = glm::scale(M, glm::vec3(0.25f)); // mniejszy niż enemy
+            world_shader_.setMat4("uModel", &M[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+        }
+        glBindVertexArray(0);
+
+        // --- HELD ITEM (placeholder przy kamerze) ---
+        if (has_held_item_) {
+            glm::vec3 up(0.0f, 1.0f, 0.0f);
+            glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
+
+            // pozycja zależna od kamery (działa w FPP i TPP)
+            glm::vec3 item_pos = cam_pos
+                + forward * 0.55f    // przed kamerą
+                + rightv * 0.25f    // w prawo
+                + up * -0.20f;  // w dół
+
+            float t = (float)glfwGetTime();
+
+            world_shader_.setInt("uUseTex", 0);
+            world_shader_.setVec4("uColor", 0.15f, 0.15f, 0.15f, 1.0f);
+
+            glm::mat4 M(1.0f);
+            M = glm::translate(M, item_pos);
+            M = glm::rotate(M, t * 2.0f, glm::vec3(0, 1, 0));           // obrót
+            M = glm::scale(M, glm::vec3(0.18f, 0.18f, 0.40f));          // “kształt broni”
+
+            world_shader_.setMat4("uModel", &M[0][0]);
+
+            glBindVertexArray(cube_vao_);
+            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            glBindVertexArray(0);
+
+            // ważne: przywróć model na identity, żebyś nie złapał artefaktów w przyszłości
+            world_shader_.setMat4("uModel", &I[0][0]);
+        }
+
     }
 
     void App::frame_ui() {
         dungeon::ui::HudState hud;
         hud.log = "Starter uruchomiony\nMapa: " + current_map_name_ + "\nWidok: ";
         hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
+        hud.log += "\nItem: ";
+        hud.log += (has_held_item_ ? "TAK" : "NIE");
+        
         dungeon::ui::draw_hud(hud);
 
         if (show_menu_) {

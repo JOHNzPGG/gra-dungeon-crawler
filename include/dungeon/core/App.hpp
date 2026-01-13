@@ -5,6 +5,8 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
+#include <glm/glm.hpp>
 
 #include <glm/mat4x4.hpp>
 
@@ -61,6 +63,9 @@ namespace dungeon {
 
         GLuint load_texture(const char* path);
 
+        void build_cube_mesh();
+        void spawn_entities_from_level();
+
     private:
         AppConfig   cfg_;
         GLFWwindow* window_ = nullptr;
@@ -92,6 +97,16 @@ namespace dungeon {
 
         bool show_menu_ = false;
         GameState state_ = GameState::MainMenu;
+
+        GLuint cube_vao_ = 0;
+        GLuint cube_vbo_ = 0;
+        int cube_vertex_count_ = 0;
+        std::vector<glm::vec3> enemies_world_pos_;
+        bool has_held_item_ = false;
+        GLuint item_texture_ = 0; // kiedyœ tekstura
+        std::vector<glm::vec3> items_world_pos_;
+        std::vector<bool>      items_alive_;   // czy item jeszcze le¿y
+
     };
 
 } // namespace dungeon
