@@ -13,6 +13,9 @@
 #include "dungeon/gfx/Shader.hpp"
 #include "dungeon/io/MapLoader.hpp"
 #include "game/clases/Player.h"
+#include "game/clases/Enemy.h"
+#include "game/clases/Skill.h"
+
 
 namespace dungeon {
 
@@ -52,6 +55,12 @@ namespace dungeon {
         void build_world_mesh();
         void handle_input();
 
+        Entity* GetEnemyInFront(const Entity& unit);
+        std::vector<Entity*> ResolveSkillTarget(const Entity& unit, Skill* skill);
+
+
+        void EnemiesTurn();
+
         void frame_begin();
         void frame_render();
         void frame_ui();
@@ -88,12 +97,18 @@ namespace dungeon {
         GLuint floor_texture_ = 0;
 
         ::Player   player_;
+        std::vector<Enemy*> enemies_;
         CameraMode camera_mode_ = CameraMode::FirstPerson;
+
 
         bool left_was_down_ = false;
         bool right_was_down_ = false;
         bool up_was_down_ = false;
         bool m_was_down_ = false;
+        bool atk_was_down_ = false;
+        bool k1_was_down_  = false;
+        bool k2_was_down_  = false;
+        bool k3_was_down_  = false;
 
         bool show_menu_ = false;
         GameState state_ = GameState::MainMenu;
@@ -103,9 +118,9 @@ namespace dungeon {
         int cube_vertex_count_ = 0;
         std::vector<glm::vec3> enemies_world_pos_;
         bool has_held_item_ = false;
-        GLuint item_texture_ = 0; // kiedyœ tekstura
+        GLuint item_texture_ = 0; // kiedyï¿½ tekstura
         std::vector<glm::vec3> items_world_pos_;
-        std::vector<bool>      items_alive_;   // czy item jeszcze le¿y
+        std::vector<bool>      items_alive_;   // czy item jeszcze leï¿½y
 
     };
 

@@ -24,10 +24,11 @@ public:
         if (skill) skills.push_back(skill);
     }
 
-    void UseSkill(int index, Entity* target) {
+    void UseSkill(int index, const std::vector<Entity*>& targets) {
         if (index < 0 || index >= skills.size()) return;
-        skills[index]->Use(this, { target });
+        skills[index]->Use(this, targets);
     }
+
 
     void Equip(Item* item) {
         if (!item) return;

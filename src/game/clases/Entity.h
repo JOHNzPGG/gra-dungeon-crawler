@@ -29,29 +29,24 @@ public:
         name = entityName;
         RenderPosition = glm::vec3(GameX, 0, GameY);
     }
-
-    void MoveForward(int map[MAP_HEIGHT_MAX][MAP_WIDTH_MAX]) {
-        MoveInDirection(map, 0);
+    glm::ivec2 GetMoveTarget(int offsetSteps = 0) const {
+        int dirIndex = (GetDirIndex() + offsetSteps) % 8;
+        return {
+            GameX + DIR8[dirIndex].x,
+            GameY + DIR8[dirIndex].y
+        };
     }
 
-    void MoveBackward(int map[MAP_HEIGHT_MAX][MAP_WIDTH_MAX]) {
-        MoveInDirection(map, 4);
-    }
+    glm::ivec2 GetForwardTile() const  { return GetMoveTarget(0); }
+    glm::ivec2 GetRightTile() const    { return GetMoveTarget(2); }
+    glm::ivec2 GetBackTile() const     { return GetMoveTarget(4); }
+    glm::ivec2 GetLeftTile() const     { return GetMoveTarget(6); }
 
-    void MoveRight(int map[MAP_HEIGHT_MAX][MAP_WIDTH_MAX]) {
-        MoveInDirection(map, 2);
-    }
-
-    void MoveLeft(int map[MAP_HEIGHT_MAX][MAP_WIDTH_MAX]) {
-        MoveInDirection(map, 6);
-    }
     void TakeDamage(int dmg) {
         health -= dmg;
         if (health < 0) health = 0;
     }
-    bool DealDamageTo(Entity* target, int dmg) {
-        target->TakeDamage(dmg);
-    }
+
 
     void Heal(int amount) {
         if (IsAlive()) {
@@ -71,12 +66,15 @@ public:
     }
     void ResetActionPoints(int ap) { ActionPoints = ap; }
 
-    void Attack(Entity* target) {
-        UseActionPoints(1);
-        glm::ivec2 frontTile = GetTileInDirection(0);
-        if (target->GameX == frontTile.x && target->GameY == frontTile.y) {
+    bool  Attack(Entity* target) {
+        if (!target || !UseActionPoints(1)) return false;
+
+        glm::ivec2 front = GetForwardTile();
+        if (target->GameX == front.x && target->GameY == front.y) {
             target->TakeDamage(base_damage);
+            return true;
         }
+        return false;
     }
 
     void TurnLeft()  { yaw = (yaw - 90 + 360) % 360; UpdateOrientation(); }

@@ -232,74 +232,140 @@ namespace dungeon {
         return cell != io::Cell::Wall;
     }
 
+    // Zwraca wskaźnik do przeciwnika stojącego przed daną jednostką
+    Entity* App::GetEnemyInFront(const Entity& unit) {
+        glm::ivec2 front = unit.GetForwardTile();
+        for (Entity* e : enemies_) {
+            if (!e->IsAlive()) continue;
+            if (e->GameX == front.x && e->GameY == front.y) return e;
+        }
+        return nullptr;
+    }
+
+    // Zwraca wektor jednostek trafionych przez dany skill
+    std::vector<Entity*> App::ResolveSkillTarget(const Entity& unit, Skill* skill) {
+        std::vector<Entity*> targets;
+        for (const auto& offset : skill->offsets) {
+            int tx = unit.GameX + offset.x;
+            int ty = unit.GameY + offset.y;
+
+            for (Entity* e : enemies_) {
+                if (!e->IsAlive()) continue;
+                if (e->GameX == tx && e->GameY == ty) targets.push_back(e);
+            }
+        }
+        return targets;
+    }
+
     void App::handle_input() {
-        bool left = (glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS);
-        bool right = (glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS);
-        bool up = (glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS);
-        bool m = (glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS);
+    bool left  = glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS;
+    bool right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS;
+    bool up    = glfwGetKey(window_, GLFW_KEY_UP)    == GLFW_PRESS;
+    bool atk   = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
 
-        // --- Toggle menu (M) ---
-        if (m && !m_was_down_) {
-            show_menu_ = !show_menu_;
-        }
+    bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
+    bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
+    bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
 
-        if (show_menu_) {
-            left_was_down_ = left;
-            right_was_down_ = right;
-            up_was_down_ = up;
-            m_was_down_ = m;
-            return;
-        }
+    bool m = glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS;
 
-        // Obrót
-        if (left && !left_was_down_) {
-            player_.TurnLeft();
-        }
-        if (right && !right_was_down_) {
-            player_.TurnRight();
-        }
+    // --- Toggle menu ---
+    if (m && !m_was_down_) {
+        show_menu_ = !show_menu_;
+    }
 
-        // Ruch do przodu (siatka, 1 kafelek)
-        if (up && !up_was_down_) {
-            int nx = player_.GameX;
-            int ny = player_.GameY;
-
-
-            int yaw = ((player_.yaw % 360) + 360) % 360;
-
-            switch (yaw) {
-            case 0:   ny -= 1; break; // północ
-            case 180: ny += 1; break; // południe
-            case 270: nx -= 1; break; // zachód
-            case 90:  nx += 1; break; // wschód
-            default: break;
-            }
-
-            if (can_move_to(nx, ny)) {
-                player_.GameX = nx;
-                player_.GameY = ny;
-                player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
-            }
-        }
-
-        // po ruchu sprawdź pickup
-        for (size_t i = 0; i < items_world_pos_.size(); ++i) {
-            if (!items_alive_[i]) continue;
-
-            int ix = (int)std::floor(items_world_pos_[i].x);
-            int iy = (int)std::floor(items_world_pos_[i].z);
-
-            if (ix == player_.GameX && iy == player_.GameY) {
-                items_alive_[i] = false;
-                has_held_item_ = true;
-                break;
-            }
-        }
-
-        left_was_down_ = left;
+    if (show_menu_) {
+        left_was_down_  = left;
         right_was_down_ = right;
-        up_was_down_ = up;
-        m_was_down_ = m;
+        up_was_down_    = up;
+        atk_was_down_   = atk;
+        k1_was_down_    = k1;
+        k2_was_down_    = k2;
+        k3_was_down_    = k3;
+        m_was_down_     = m;
+        return;
+    }
+
+    // --- Obrót ---
+    if (left && !left_was_down_) {
+        player_.TurnLeft();
+    }
+
+    if (right && !right_was_down_) {
+        player_.TurnRight();
+    }
+
+    // --- Ruch do przodu (1 kafelek) ---
+    if (up && !up_was_down_) {
+        glm::ivec2 target = player_.GetForwardTile();
+        if (can_move_to(target.x, target.y)) {
+            player_.GameX = target.x;
+            player_.GameY = target.y;
+            player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+        }
+    }
+
+    // --- Atak (SPACE) ---
+        if (atk && !atk_was_down_) {
+            Entity* target = GetEnemyInFront(player_);
+            if (target) player_.Attack(target);
+        }
+
+    // --- Skille ---
+        if (k1 && !k1_was_down_ && player_.skills.size() > 0) {
+            auto targets = ResolveSkillTarget(player_, player_.skills[0]);
+            for (Entity* t : targets) player_.skills[0]->Use(&player_, t);
+        }
+
+        if (k2 && !k2_was_down_ && player_.skills.size() > 1) {
+            auto targets = ResolveSkillTarget(player_, player_.skills[1]);
+            for (Entity* t : targets) player_.skills[1]->Use(&player_, t);
+        }
+
+        if (k3 && !k3_was_down_ && player_.skills.size() > 2) {
+            auto targets = ResolveSkillTarget(player_, player_.skills[2]);
+            for (Entity* t : targets) player_.skills[2]->Use(&player_, t);
+        }
+
+    // --- Zapamiętanie stanów ---
+    left_was_down_  = left;
+    right_was_down_ = right;
+    up_was_down_    = up;
+    atk_was_down_   = atk;
+    k1_was_down_    = k1;
+    k2_was_down_    = k2;
+    k3_was_down_    = k3;
+    m_was_down_     = m;
+
+        if (player_.ActionPoints <= 0) {
+            EnemiesTurn();
+            player_.ResetActionPoints(2);
+        }
+
+}
+    void App::EnemiesTurn() {
+        for (Enemy* enemy : enemies_) {
+            if (!enemy->IsAlive()) continue;
+
+            // prosty ruch w stronę gracza
+            glm::ivec2 playerPos = { player_.GameX, player_.GameY };
+            glm::ivec2 enemyPos  = { enemy->GameX, enemy->GameY };
+
+            int dx = (playerPos.x > enemyPos.x) ? 1 : (playerPos.x < enemyPos.x) ? -1 : 0;
+            int dy = (playerPos.y > enemyPos.y) ? 1 : (playerPos.y < enemyPos.y) ? -1 : 0;
+
+            int newX = enemy->GameX + dx;
+            int newY = enemy->GameY + dy;
+
+            if (can_move_to(newX, newY)) {
+                enemy->GameX = newX;
+                enemy->GameY = newY;
+                enemy->RenderPosition = glm::vec3(newX, 0.f, newY);
+            }
+
+            // Atak, jeśli gracz przed wrogiem
+            enemy->Attack(&player_);
+        }
     }
 
     // ZMIANA: Cała funkcja build_world_mesh podmieniona na wersję z drugiego kodu (ładowanie modeli)
