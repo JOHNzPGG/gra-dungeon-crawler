@@ -142,6 +142,8 @@ namespace dungeon {
 
         glViewport(0, 0, cfg_.width, cfg_.height);
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         float aspect = static_cast<float>(cfg_.width) / static_cast<float>(cfg_.height);
         proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
@@ -807,67 +809,88 @@ void App::EnemiesTurn() {
         // --- ENEMIES ---
         glBindVertexArray(cube_vao_);
 
-        for (const auto* enemy : enemies_) {
-            if (!enemy->IsAlive()) continue;
+        for (auto* enemy : enemies_) {
 
-            // 1. Logika koloru (BŁYSK)
-            if (enemy->IsHurt()) {
-                // Jeśli oberwał: Bardzo jasny biały
+            // 1. Aktualizacja czasu śmierci (delta time z ImGui)
+            float dt = ImGui::GetIO().DeltaTime;
+            enemy->UpdateDeath(dt);
+
+            // 2. Warunek rysowania:
+            // Rysujemy jeśli żyje LUB jeśli umiera (animacja trwa).
+            // Jeśli już umarł całkowicie (animacja finished), pomijamy.
+            if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
+
+            float alpha = 1.0f;
+            float y_offset = 0.75f; // Standardowa wysokość
+
+            // 3. Logika kolorów i animacji
+            if (!enemy->IsAlive()) {
+                // --- ANIMACJA ŚMIERCI ---
+                // Alpha maleje od 1.0 do 0.0 w ciągu 1 sekundy
+                alpha = 1.0f - enemy->deathTimer;
+                if (alpha < 0.0f) alpha = 0.0f;
+
+                // Opadanie: Powoli w dół (z 0.75 do 0.25)
+                y_offset -= (enemy->deathTimer * 0.5f);
+
+                // Kolor: Ciemniejący szary + Alpha
+                world_shader_.setInt("uUseTex", 0);
+                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, alpha);
+            }
+            else if (enemy->IsHurt()) {
+                // Błysk od obrażeń
                 world_shader_.setInt("uUseTex", 0);
                 world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f);
             }
             else {
-                // Normalnie: Fioletowy (dla odróżnienia od gracza/broni)
+                // Normalny kolor (Fioletowy)
                 world_shader_.setInt("uUseTex", 0);
                 world_shader_.setVec4("uColor", 0.6f, 0.0f, 1.0f, 1.0f);
             }
 
-            // 2. Pozycja i Rysowanie (TEGO BRAKOWAŁO)
+            // 4. Obliczanie macierzy modelu
             float x = static_cast<float>(enemy->GameX) + 0.5f;
-            float y = 0.75f; // "Lewituje"
             float z = static_cast<float>(enemy->GameY) + 0.5f;
 
             glm::mat4 M(1.0f);
-            M = glm::translate(M, glm::vec3(x, y, z));
+            M = glm::translate(M, glm::vec3(x, y_offset, z));
 
-            // Obrót wroga (żeby patrzył tam gdzie idzie)
+            // Obrót i ewentualne "przewrócenie się" przy śmierci
             M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
 
-            M = glm::scale(M, glm::vec3(0.5f)); // Skala 0.5m
+            // Opcjonalnie: Przechylenie w tył przy śmierci
+            if (!enemy->IsAlive()) {
+                // Przechylaj się w tył (oś X) w miarę upływu czasu
+                float deathAngle = -90.0f * enemy->deathTimer;
+                if (deathAngle < -90.0f) deathAngle = -90.0f;
+                M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
+            }
+
+            M = glm::scale(M, glm::vec3(0.5f));
 
             world_shader_.setMat4("uModel", &M[0][0]);
-
-            // Faktyczne polecenie rysowania
             glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
 
-            // === NOWOŚĆ: PASEK ŻYCIA NAD GŁOWĄ ===
-            // Rysujemy spłaszczoną kostkę nad wrogiem jako pasek HP
-            if (enemy->health < enemy->maxHealth) { // Pokazuj tylko jak ranny
+            // 5. Rysowanie paska HP (tylko jeśli żyje!)
+            if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
+                // ... (Tutaj wklej swój kod paska HP, który już masz) ...
+                // Pamiętaj, żeby nie rysować paska dla trupa!
 
-                // TŁO (Czerwone)
+                // TŁO
                 world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
                 glm::mat4 M_bg(1.0f);
-                // Pozycja: nad głową (y + 0.8)
-                M_bg = glm::translate(M_bg, glm::vec3(x, y + 0.8f, z));
-                // Skala: płaski i szeroki
+                M_bg = glm::translate(M_bg, glm::vec3(x, 0.75f + 0.8f, z)); // używamy stałego Y
                 M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
-
-                // Billboard: Obróć tak, żeby zawsze patrzył na kamerę (uproszczone: odwróć obrót kamery)
-                // (Dla prostoty w tym widoku izometrycznym/FPP wystarczy płaski pasek)
-
                 world_shader_.setMat4("uModel", &M_bg[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
 
-                // PASEK ZDROWIA (Zielony)
+                // PASEK
                 float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
-
                 world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
                 glm::mat4 M_hp(1.0f);
-                // Przesuwamy, żeby pasek malał "do lewej" a nie do środka
                 float offset = (1.0f - hpPercent) * 0.3f;
-                M_hp = glm::translate(M_hp, glm::vec3(x - offset, y + 0.8f, z + 0.01f)); // z+0.01 żeby był przed tłem
+                M_hp = glm::translate(M_hp, glm::vec3(x - offset, 0.75f + 0.8f, z + 0.01f));
                 M_hp = glm::scale(M_hp, glm::vec3(0.6f * hpPercent, 0.05f, 0.05f));
-
                 world_shader_.setMat4("uModel", &M_hp[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }

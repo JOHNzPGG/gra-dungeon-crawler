@@ -14,6 +14,8 @@ public:
     int base_damage;
     bool colision = true;
     float lastHitTime = -100.0f; // Czas ostatniego otrzymania obra¿eñ
+    float deathTimer = 0.0f;       // Ile czasu minê³o od œmierci
+    bool deathAnimFinished = false; // Czy animacja siê zakoñczy³a?
 
 
     Entity(int x, int y, int yawAngle,
@@ -62,6 +64,15 @@ public:
     }
 
     bool IsAlive() const { return health > 0; }
+
+    void UpdateDeath(float dt) {
+        if (!IsAlive()) {
+            deathTimer += dt;
+            if (deathTimer > 1.0f) { // Animacja trwa 1 sekundê
+                deathAnimFinished = true;
+            }
+        }
+    }
 
     bool UseActionPoints(int ap_used=1) {
         if (ActionPoints-ap_used >= 0) {
