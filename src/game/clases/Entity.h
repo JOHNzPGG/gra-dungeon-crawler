@@ -2,6 +2,7 @@
 #define GRA_DUNGEON_CRAWLER_ENTITY_H
 
 #include "Object.h"
+#include <GLFW/glfw3.h>
 #define MAP_WIDTH_MAX  20
 #define MAP_HEIGHT_MAX 20
 
@@ -12,6 +13,7 @@ public:
     int ActionPoints;
     int base_damage;
     bool colision = true;
+    float lastHitTime = -100.0f; // Czas ostatniego otrzymania obra¿eñ
 
 
     Entity(int x, int y, int yawAngle,
@@ -42,11 +44,15 @@ public:
     glm::ivec2 GetBackTile() const     { return GetMoveTarget(4); }
     glm::ivec2 GetLeftTile() const     { return GetMoveTarget(6); }
 
-    void TakeDamage(int dmg) {
-        health -= dmg;
+    void TakeDamage(int amount) {
+        health -= amount;
         if (health < 0) health = 0;
+        lastHitTime = (float)glfwGetTime(); // Zapamiêtaj czas uderzenia!
     }
 
+    bool IsHurt() const {
+        return ((float)glfwGetTime() - lastHitTime) < 0.2f;
+    }
 
     void Heal(int amount) {
         if (IsAlive()) {

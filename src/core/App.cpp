@@ -77,11 +77,23 @@ namespace dungeon {
         build_world_mesh(); 
         build_cube_mesh();
         spawn_entities_from_level();
+        // Dodaj to, żeby gracz miał czym walczyć!
+        // Skill(nazwa, koszt AP, obrażenia)
+        player_.LearnSkill(new Skill("Strong Hit", 1, 15));
+        // Domyślny skill ma offset (0,0) czyli bije w miejscu stania? 
+        // Zwykle trzeba zdefiniować "offsets" w skillu, np. pole przed graczem:
+        if (!player_.skills.empty()) {
+            player_.skills[0]->offsets.push_back({ 0, -1 }); // przykładowy offset "przed siebie"
+        }
     }
 
     App::~App() {
         shutdown_imgui();
 
+        for (auto* e : enemies_) {
+            delete e;
+        }
+        enemies_.clear();
         if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
         if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
         if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
@@ -198,29 +210,46 @@ namespace dungeon {
     }
 
     void App::spawn_entities_from_level() {
-        enemies_world_pos_.clear();
-        items_world_pos_.clear();
-        items_alive_.clear();
 
-        // Enemy: środek kafelka + lekko w górę (lewituje)
+        for (auto* e : enemies_) delete e;
+        enemies_.clear();
+
+        // (W prawdziwym projekcie tu też przydałby się delete na itemData, jeśli nie masz managera zasobów)
+        world_items_.clear();
+
         for (const auto& p : level_.enemy_spawns) {
-            float x = static_cast<float>(p.x) + 0.5f;
-            float z = static_cast<float>(p.y) + 0.5f;
-            float y = 0.75f;
-            enemies_world_pos_.push_back(glm::vec3(x, y, z));
+            // Tworzymy przeciwnika w miejscu p.x, p.y
+            // Parametry: x, y, yaw, hp, maxHp, ap, damage, name
+            //Enemy* newEnemy = new Enemy(p.x, p.y, 180, 20, 20, 2, 5, "Skeleton");
+
+            // HP: 80 (wytrzyma ok. 4 zwykłe ataki po 20 dmg, lub 2 potężne backstaby)
+            // DMG: 35 (Gracz ma 100 HP, więc 35 to ok. 1/3 życia - 3 hity i giniemy!)
+            Enemy* newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
+            enemies_.push_back(newEnemy);
         }
 
-        // Item: środek kafelka + lekko nad ziemią
+        int counter = 0;
         for (const auto& p : level_.item_spawns) {
             float x = static_cast<float>(p.x) + 0.5f;
             float z = static_cast<float>(p.y) + 0.5f;
             float y = 0.7f;
-            items_world_pos_.push_back(glm::vec3(x, y, z));
 
-            // --- POPRAWKA TUTAJ ---
-            // Musisz zsynchronizować wektory. Skoro dodajesz pozycję, 
-            // musisz też dodać informację, że przedmiot "żyje".
-            items_alive_.push_back(true);
+            Item* newItem = nullptr;
+
+            // Pierwszy spawn to broń, reszta to mikstury
+            if (counter == 0) {
+                ItemStats stats; stats.damage = 20;
+                newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
+            }
+            else {
+                ItemStats stats; stats.health = 5;
+                newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
+            }
+
+            if (newItem) {
+                world_items_.push_back({ newItem, glm::vec3(x, y, z), true });
+            }
+            counter++;
         }
     }
 
@@ -258,115 +287,157 @@ namespace dungeon {
     }
 
     void App::handle_input() {
-    bool left  = glfwGetKey(window_, GLFW_KEY_LEFT)  == GLFW_PRESS;
-    bool right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS;
-    bool up    = glfwGetKey(window_, GLFW_KEY_UP)    == GLFW_PRESS;
-    bool atk   = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
-
-    bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
-    bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
-    bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
-
-    bool m = glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS;
-
-    // --- Toggle menu ---
-    if (m && !m_was_down_) {
-        show_menu_ = !show_menu_;
-    }
-
-    if (show_menu_) {
-        left_was_down_  = left;
-        right_was_down_ = right;
-        up_was_down_    = up;
-        atk_was_down_   = atk;
-        k1_was_down_    = k1;
-        k2_was_down_    = k2;
-        k3_was_down_    = k3;
-        m_was_down_     = m;
-        return;
-    }
-
-    // --- Obrót ---
-    if (left && !left_was_down_) {
-        player_.TurnLeft();
-    }
-
-    if (right && !right_was_down_) {
-        player_.TurnRight();
-    }
-
-    // --- Ruch do przodu (1 kafelek) ---
-    if (up && !up_was_down_) {
-        glm::ivec2 target = player_.GetForwardTile();
-        if (can_move_to(target.x, target.y)) {
-            player_.GameX = target.x;
-            player_.GameY = target.y;
-            player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+        // Jeśli trwa walka, blokujemy sterowanie.
+        // update_combat() wywołamy w run(), żeby działało niezależnie od inputu.
+        if (combat_lock_) {
+            return;
         }
-    }
 
-    // --- Atak (SPACE) ---
+        // --- Obsługa klawiszy (bez zmian) ---
+        bool raw_left = glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS;
+        bool raw_right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS;
+        bool raw_up = glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS;
+
+        bool raw_left_w = glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
+        bool raw_right_w = glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
+        bool raw_up_w = glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS;
+
+        bool left = raw_left || raw_left_w;
+        bool right = raw_right || raw_right_w;
+        bool up = raw_up || raw_up_w;
+
+        bool atk = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
+        bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
+        bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
+        bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
+        bool m = glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS;
+
+        // --- Menu (bez zmian) ---
+        if (m && !m_was_down_) {
+            show_menu_ = !show_menu_;
+        }
+
+        if (show_menu_) {
+            // Zapamiętaj stany i wyjdź
+            left_was_down_ = left;
+            right_was_down_ = right;
+            up_was_down_ = up;
+            atk_was_down_ = atk;
+            k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
+            m_was_down_ = m;
+            return;
+        }
+
+        // --- Obrót ---
+        if (left && !left_was_down_) player_.TurnLeft();
+        if (right && !right_was_down_) player_.TurnRight();
+
+        // --- Ruch ---
+        if (up && !up_was_down_) {
+            glm::ivec2 target = player_.GetForwardTile();
+            if (can_move_to(target.x, target.y)) {
+                if (player_.UseActionPoints(1)) {
+                    player_.GameX = target.x;
+                    player_.GameY = target.y;
+                    player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+                }
+            }
+        }
+
+        // --- Podnoszenie Przedmiotów (Item Pickup) ---
+        for (int i = 0; i < world_items_.size(); ++i) {
+            if (!world_items_[i].isAlive) continue;
+            int ix = (int)world_items_[i].position.x;
+            int iy = (int)world_items_[i].position.z;
+
+            if (ix == player_.GameX && iy == player_.GameY) {
+                Item* foundItem = world_items_[i].itemData;
+                if (foundItem->type == ItemType::Weapon) {
+                    if (player_.equippedWeapon != nullptr) {
+                        Item* oldWeapon = player_.equippedWeapon;
+                        WorldItem droppedItem;
+                        droppedItem.itemData = oldWeapon;
+                        droppedItem.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
+                        droppedItem.isAlive = true;
+                        world_items_.push_back(droppedItem);
+                    }
+                    player_.Equip(foundItem);
+                    has_held_item_ = true;
+                }
+                else {
+                    player_.AddToInventory(foundItem);
+                }
+                world_items_[i].isAlive = false;
+                break;
+            }
+        }
+
+        // --- Atak (SPACE) ---
         if (atk && !atk_was_down_) {
             Entity* target = GetEnemyInFront(player_);
-            if (target) player_.Attack(target);
+            attack_anim_timer_ = kAttackDuration_;
+
+            // Jeśli mamy AP, inicjujemy sekwencję walki
+            if (player_.ActionPoints > 0) {
+                if (target) {
+                    // START SEKWENCJI WALKI
+                    combat_lock_ = true;
+                    combat_timer_ = 1.0f;
+                    enemy_riposte_pending_ = true;
+                    current_combat_target_ = target;
+
+                    // Zadaj obrażenia (Twoja tura)
+                    int pYaw = (player_.yaw % 360 + 360) % 360;
+                    int eYaw = (target->yaw % 360 + 360) % 360;
+                    bool backstab = (pYaw == eYaw);
+
+                    int dmg = player_.base_damage;
+                    if (backstab) dmg *= 2;
+
+                    target->TakeDamage(dmg);
+                    target->UpdateOrientation((player_.yaw + 180) % 360);
+                }
+
+                // Zużyj AP (nawet jak nie trafisz)
+                player_.UseActionPoints(1);
+            }
         }
 
-    // --- Skille ---
-        if (k1 && !k1_was_down_ && player_.skills.size() > 0) {
-            auto targets = ResolveSkillTarget(player_, player_.skills[0]);
-            for (Entity* t : targets) player_.skills[0]->Use(&player_, t);
-        }
+        // --- Skille ---
+        if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
+        if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
+        if (k3 && !k3_was_down_) player_.UseSkill(2, ResolveSkillTarget(player_, player_.skills[2]));
 
-        if (k2 && !k2_was_down_ && player_.skills.size() > 1) {
-            auto targets = ResolveSkillTarget(player_, player_.skills[1]);
-            for (Entity* t : targets) player_.skills[1]->Use(&player_, t);
-        }
+        // --- Zapamiętanie stanów ---
+        left_was_down_ = left;
+        right_was_down_ = right;
+        up_was_down_ = up;
+        atk_was_down_ = atk;
+        k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
+        m_was_down_ = m;
 
-        if (k3 && !k3_was_down_ && player_.skills.size() > 2) {
-            auto targets = ResolveSkillTarget(player_, player_.skills[2]);
-            for (Entity* t : targets) player_.skills[2]->Use(&player_, t);
-        }
-
-    // --- Zapamiętanie stanów ---
-    left_was_down_  = left;
-    right_was_down_ = right;
-    up_was_down_    = up;
-    atk_was_down_   = atk;
-    k1_was_down_    = k1;
-    k2_was_down_    = k2;
-    k3_was_down_    = k3;
-    m_was_down_     = m;
-
-        if (player_.ActionPoints <= 0) {
+        // --- Koniec tury Gracza ---
+        // Wywołujemy turę wrogów TYLKO jeśli nie ma blokady walki
+        if (!combat_lock_ && player_.ActionPoints <= 0) {
             EnemiesTurn();
             player_.ResetActionPoints(2);
         }
 
-}
-    void App::EnemiesTurn() {
-        for (Enemy* enemy : enemies_) {
-            if (!enemy->IsAlive()) continue;
-
-            // prosty ruch w stronę gracza
-            glm::ivec2 playerPos = { player_.GameX, player_.GameY };
-            glm::ivec2 enemyPos  = { enemy->GameX, enemy->GameY };
-
-            int dx = (playerPos.x > enemyPos.x) ? 1 : (playerPos.x < enemyPos.x) ? -1 : 0;
-            int dy = (playerPos.y > enemyPos.y) ? 1 : (playerPos.y < enemyPos.y) ? -1 : 0;
-
-            int newX = enemy->GameX + dx;
-            int newY = enemy->GameY + dy;
-
-            if (can_move_to(newX, newY)) {
-                enemy->GameX = newX;
-                enemy->GameY = newY;
-                enemy->RenderPosition = glm::vec3(newX, 0.f, newY);
-            }
-
-            // Atak, jeśli gracz przed wrogiem
-            enemy->Attack(&player_);
-        }
+        // USUNIĘTO: Tutaj był kod resetujący grę przy śmierci. 
+        // Teraz śmierć obsługuje update_combat i pętla run.
     }
+
+void App::EnemiesTurn() {
+    for (Enemy* enemy : enemies_) {
+        if (!enemy->IsAlive()) continue;
+
+        // --- TO JEST KLUCZOWE ---
+        enemy->ResetActionPoints(1); // Odnów siły wroga na nową turę
+        // -------------------------
+
+        enemy->TakeTurn(&player_, level_);
+    }
+}
 
     // ZMIANA: Cała funkcja build_world_mesh podmieniona na wersję z drugiego kodu (ładowanie modeli)
     void App::build_world_mesh() {
@@ -519,6 +590,12 @@ namespace dungeon {
                             { x + 1, 0.0f, y + 1 }, { 1.0f, 1.0f },
                             { x, 0.0f, y + 1 }, { 0.0f, 1.0f });
                     }
+                    add_quad(floor_vertices,
+                        { x + 1, 1.5f, y }, { 1.0f, 0.0f }, // Prawy-Góra
+                        { x,     1.5f, y }, { 0.0f, 0.0f }, // Lewy-Góra
+                        { x,     1.5f, y + 1 }, { 0.0f, 1.0f }, // Lewy-Dół
+                        { x + 1, 1.5f, y + 1 }, { 1.0f, 1.0f }  // Prawy-Dół
+                    );
                 }
 
                 // === ŚCIANY ===
@@ -649,6 +726,13 @@ namespace dungeon {
 
     // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
     void App::frame_render() {
+
+        float dt = ImGui::GetIO().DeltaTime;
+        if (attack_anim_timer_ > 0.0f) {
+            attack_anim_timer_ -= dt;
+            if (attack_anim_timer_ < 0.0f) attack_anim_timer_ = 0.0f;
+        }
+
         float px = static_cast<float>(player_.GameX) + 0.5f;
         float pz = static_cast<float>(player_.GameY) + 0.5f;
 
@@ -720,56 +804,155 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
-        // --- ENEMIES (czarne kostki 0.5m) ---
-        world_shader_.setInt("uUseTex", 0);
-        world_shader_.setVec4("uColor", 0.0f, 0.0f, 0.0f, 1.0f);
-
+        // --- ENEMIES ---
         glBindVertexArray(cube_vao_);
 
-        for (const auto& pos : enemies_world_pos_) {
+        for (const auto* enemy : enemies_) {
+            if (!enemy->IsAlive()) continue;
+
+            // 1. Logika koloru (BŁYSK)
+            if (enemy->IsHurt()) {
+                // Jeśli oberwał: Bardzo jasny biały
+                world_shader_.setInt("uUseTex", 0);
+                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f);
+            }
+            else {
+                // Normalnie: Fioletowy (dla odróżnienia od gracza/broni)
+                world_shader_.setInt("uUseTex", 0);
+                world_shader_.setVec4("uColor", 0.6f, 0.0f, 1.0f, 1.0f);
+            }
+
+            // 2. Pozycja i Rysowanie (TEGO BRAKOWAŁO)
+            float x = static_cast<float>(enemy->GameX) + 0.5f;
+            float y = 0.75f; // "Lewituje"
+            float z = static_cast<float>(enemy->GameY) + 0.5f;
+
             glm::mat4 M(1.0f);
-            M = glm::translate(M, pos);
-            M = glm::scale(M, glm::vec3(0.5f)); // 0.5m szerokości
+            M = glm::translate(M, glm::vec3(x, y, z));
+
+            // Obrót wroga (żeby patrzył tam gdzie idzie)
+            M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
+
+            M = glm::scale(M, glm::vec3(0.5f)); // Skala 0.5m
+
             world_shader_.setMat4("uModel", &M[0][0]);
 
+            // Faktyczne polecenie rysowania
+            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+
+            // === NOWOŚĆ: PASEK ŻYCIA NAD GŁOWĄ ===
+            // Rysujemy spłaszczoną kostkę nad wrogiem jako pasek HP
+            if (enemy->health < enemy->maxHealth) { // Pokazuj tylko jak ranny
+
+                // TŁO (Czerwone)
+                world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
+                glm::mat4 M_bg(1.0f);
+                // Pozycja: nad głową (y + 0.8)
+                M_bg = glm::translate(M_bg, glm::vec3(x, y + 0.8f, z));
+                // Skala: płaski i szeroki
+                M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
+
+                // Billboard: Obróć tak, żeby zawsze patrzył na kamerę (uproszczone: odwróć obrót kamery)
+                // (Dla prostoty w tym widoku izometrycznym/FPP wystarczy płaski pasek)
+
+                world_shader_.setMat4("uModel", &M_bg[0][0]);
+                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+
+                // PASEK ZDROWIA (Zielony)
+                float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
+
+                world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
+                glm::mat4 M_hp(1.0f);
+                // Przesuwamy, żeby pasek malał "do lewej" a nie do środka
+                float offset = (1.0f - hpPercent) * 0.3f;
+                M_hp = glm::translate(M_hp, glm::vec3(x - offset, y + 0.8f, z + 0.01f)); // z+0.01 żeby był przed tłem
+                M_hp = glm::scale(M_hp, glm::vec3(0.6f * hpPercent, 0.05f, 0.05f));
+
+                world_shader_.setMat4("uModel", &M_hp[0][0]);
+                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            }
+        }
+        glBindVertexArray(0);
+
+        // --- ITEMS ---
+        world_shader_.setInt("uUseTex", 0);
+        world_shader_.setVec4("uColor", 0.4f, 0.8f, 0.8f, 1.0f); // Szary kolor
+
+        glBindVertexArray(cube_vao_);
+        for (const auto& wItem : world_items_) {
+            if (!wItem.isAlive) continue; // Nie rysuj zebranych
+
+            // Opcjonalnie: Różne kolory dla różnych typów
+            if (wItem.itemData->type == ItemType::Weapon) {
+                world_shader_.setVec4("uColor", 0.0f, 0.5f, 0.5f, 1.0f); // Pomarańczowy dla broni
+            }
+            else {
+                world_shader_.setVec4("uColor", 0.2f, 0.2f, 1.0f, 1.0f); // Niebieski dla mikstur
+            }
+
+            glm::mat4 M(1.0f);
+            M = glm::translate(M, wItem.position);
+            M = glm::scale(M, glm::vec3(0.25f));
+            world_shader_.setMat4("uModel", &M[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
         }
         glBindVertexArray(0);
 
-        // --- ITEMS (placeholder: jasnoszara kostka 0.25m) ---
-        world_shader_.setInt("uUseTex", 0);
-        world_shader_.setVec4("uColor", 0.8f, 0.8f, 0.8f, 1.0f);
-
-        glBindVertexArray(cube_vao_);
-        for (const auto& pos : items_world_pos_) {
-            glm::mat4 M(1.0f);
-            M = glm::translate(M, pos);
-            M = glm::scale(M, glm::vec3(0.25f)); // mniejszy niż enemy
-            world_shader_.setMat4("uModel", &M[0][0]);
-            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-        }
-        glBindVertexArray(0);
-
-        // --- HELD ITEM (placeholder przy kamerze) ---
+        // --- HELD ITEM (Z ANIMACJĄ) ---
         if (has_held_item_) {
             glm::vec3 up(0.0f, 1.0f, 0.0f);
             glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
 
-            // pozycja zależna od kamery (działa w FPP i TPP)
+            // Pozycja bazowa (przy kamerze)
             glm::vec3 item_pos = cam_pos
-                + forward * 0.55f    // przed kamerą
-                + rightv * 0.25f    // w prawo
-                + up * -0.20f;  // w dół
+                + forward * 0.55f
+                + rightv * 0.25f
+                + up * -0.20f;
+
+            // --- OBLICZANIE ANIMACJI ---
+            float animOffset = 0.0f;
+            float animTilt = 0.0f;
+
+            if (attack_anim_timer_ > 0.0f) {
+                // Postęp animacji od 0.0 do 1.0
+                float progress = 1.0f - (attack_anim_timer_ / kAttackDuration_);
+
+                // Używamy funkcji sinus (0 -> 1 -> 0), żeby broń wróciła na miejsce
+                // sin(PI * progress) daje ładny łuk
+                float wave = std::sin(progress * 3.14159f);
+
+                animOffset = wave * 0.5f;  // Wysunięcie do przodu o 0.5m
+                animTilt = wave * 45.0f; // Przechylenie w dół o 45 stopni
+            }
+            // ---------------------------
+
+            // Aplikujemy przesunięcie animacji do pozycji
+            item_pos += forward * animOffset;
+            item_pos += up * (-animOffset * 0.5f); // Lekko w dół przy ataku
 
             float t = (float)glfwGetTime();
 
             world_shader_.setInt("uUseTex", 0);
-            world_shader_.setVec4("uColor", 0.15f, 0.15f, 0.15f, 1.0f);
+
+            // Kolor broni zależny od tego co trzymamy (opcjonalne)
+            if (player_.equippedWeapon)
+                world_shader_.setVec4("uColor", 0.6f, 0.6f, 0.7f, 1.0f); // Stalowy
+            else
+                world_shader_.setVec4("uColor", 0.15f, 0.15f, 0.15f, 1.0f); // Domyślny
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, item_pos);
-            M = glm::rotate(M, t * 2.0f, glm::vec3(0, 1, 0));           // obrót
-            M = glm::scale(M, glm::vec3(0.18f, 0.18f, 0.40f));          // “kształt broni”
+
+            // 1. Obrót "Idle" (lekkie kołysanie)
+            M = glm::rotate(M, t * 2.0f, glm::vec3(0, 1, 0));
+
+            // 2. Obrót ataku (Ciach!)
+            // Obracamy wokół lokalnej osi X (prawo), żeby pochylić miecz w dół
+            // Musimy uwzględnić obrót gracza (yaw), żeby oś obrotu była poprawna
+            glm::vec3 tiltAxis = rightv;
+            M = glm::rotate(M, glm::radians(animTilt), tiltAxis);
+
+            M = glm::scale(M, glm::vec3(0.18f, 0.18f, 0.40f));
 
             world_shader_.setMat4("uModel", &M[0][0]);
 
@@ -777,7 +960,6 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             glBindVertexArray(0);
 
-            // ważne: przywróć model na identity, żebyś nie złapał artefaktów w przyszłości
             world_shader_.setMat4("uModel", &I[0][0]);
         }
 
@@ -791,6 +973,73 @@ namespace dungeon {
         hud.log += (has_held_item_ ? "TAK" : "NIE");
         
         dungeon::ui::draw_hud(hud);
+
+        // --- NOWY PANEL (Prawy Górny Róg) ---
+
+        ImGuiIO& io = ImGui::GetIO();
+        float panelWidth = 200.0f;
+        float panelHeight = 400.0f; // lub io.DisplaySize.y dla paska na całą wysokość
+        float padding = 10.0f;
+
+        // Ustawiamy pozycję w prawym górnym rogu
+        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));
+        ImGui::SetNextWindowSize(ImVec2(panelWidth, 0)); // Wysokość auto (0)
+
+        ImGui::Begin("SidePanel", nullptr,
+            ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoCollapse);
+
+        // A. PLACEHOLDER NA MINIMAPĘ
+        ImGui::Text("Minimap");
+        // Pobieramy listę do rysowania w tym oknie
+        ImDrawList* drawList = ImGui::GetWindowDrawList();
+        ImVec2 p = ImGui::GetCursorScreenPos();
+
+        // Rysujemy czarny kwadrat z ramką
+        float mapSize = 180.0f;
+        drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255)); // Tło
+        drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255)); // Ramka
+
+        // Rezerwujemy miejsce w layoutcie ImGui, żeby tekst nie wszedł na mapę
+        ImGui::Dummy(ImVec2(mapSize, mapSize + 10.0f));
+
+        ImGui::Separator();
+
+        // B. EKWIPUNEK (Equipped)
+        ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Equipped:");
+        if (player_.equippedWeapon) {
+            ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
+        }
+        else {
+            ImGui::TextDisabled(" [No Weapon]");
+        }
+
+        if (player_.equippedArmor) {
+            ImGui::BulletText("%s (HP: %d)", player_.equippedArmor->name.c_str(), player_.equippedArmor->stats.maxHealth);
+        }
+
+        ImGui::Separator();
+
+        // C. PLECAK (Inventory)
+        ImGui::TextColored(ImVec4(0, 0.8f, 1, 1), "Backpack:");
+        if (player_.inventory.empty()) {
+            ImGui::TextDisabled(" (Empty)");
+        }
+        else {
+            for (auto* item : player_.inventory) {
+                // Wyświetlamy nazwę i ewentualnie statystyki
+                if (item->type == ItemType::Consumable) {
+                    ImGui::BulletText("%s (Heal: %d)", item->name.c_str(), item->stats.health);
+                }
+                else {
+                    ImGui::BulletText("%s", item->name.c_str());
+                }
+            }
+        }
+
+        ImGui::End();
 
         if (show_menu_) {
             ImGui::SetNextWindowSize(ImVec2(260, 140), ImGuiCond_FirstUseEver);
@@ -816,6 +1065,29 @@ namespace dungeon {
                 ImGui::Text("M - zamknij menu");
             }
             ImGui::End();
+        }
+
+        // --- EFEKT OBRYWANIA (DAMAGE FLASH) ---
+        if (player_.IsHurt()) {
+            // Pobieramy rozmiar ekranu
+            ImGuiIO& io = ImGui::GetIO();
+
+            // Ustawiamy kursor na 0,0 (lewy górny róg)
+            ImGui::SetNextWindowPos(ImVec2(0, 0));
+            ImGui::SetNextWindowSize(io.DisplaySize);
+
+            // Tworzymy okno bez tła, bez inputu, zawsze na wierzchu
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f)); // Czerwony, 40% przezroczystości
+            ImGui::Begin("##DamageFlash", nullptr,
+                ImGuiWindowFlags_NoDecoration |
+                ImGuiWindowFlags_NoInputs |
+                ImGuiWindowFlags_NoMove |
+                ImGuiWindowFlags_NoSavedSettings |
+                ImGuiWindowFlags_NoFocusOnAppearing |
+                ImGuiWindowFlags_NoNav);
+
+            ImGui::End();
+            ImGui::PopStyleColor();
         }
     }
 
@@ -960,11 +1232,13 @@ namespace dungeon {
 
     void App::run() {
         while (!glfwWindowShouldClose(window_)) {
-
             frame_begin();
 
-            switch (state_) {
+            if (state_ == GameState::Playing && combat_lock_) {
+                update_combat();
+            }
 
+            switch (state_) {
             case GameState::MainMenu:
                 render_main_menu();
                 break;
@@ -974,14 +1248,101 @@ namespace dungeon {
                 break;
 
             case GameState::Playing:
-                frame_render();   // render świata 3D
-                frame_ui();       // HUD gry
+                frame_render();   // Świat
+                frame_ui();       // HUD
+                break;
+
+            case GameState::GameOver:
+                frame_render();
+                render_game_over();
                 break;
             }
 
             frame_end();
         }
+    }
 
+    void App::reset_game() {
+        // 1. Reset statystyk gracza
+        player_.maxHealth = 100;
+        player_.health = player_.maxHealth;
+        player_.ActionPoints = 2;
+        player_.base_damage = 10;
+
+        // 2. Czyścimy ekwipunek (Totalny reset)
+        player_.inventory.clear();
+        player_.equippedWeapon = nullptr;
+        player_.equippedArmor = nullptr;
+
+        // 3. Reset pozycji (startowa z mapy)
+        load_level(); // Przeładuj mapę od zera (to zresetuje pozycje spawnu)
+
+        // 4. Respawn świata
+        spawn_entities_from_level(); // Tworzy wrogów i itemy na nowo
+
+        // Upewnij się, że pozycja gracza jest zsynchronizowana
+        player_.GameX = level_.player_x;
+        player_.GameY = level_.player_y;
+        player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
+
+        // Reset stanów walki
+        combat_lock_ = false;
+        player_.IsAlive(); // Tylko check, health już ustawione
+    }
+
+    void App::render_game_over() {
+        // Wycentrowane okno na środku ekranu
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+
+        if (ImGui::Begin("Game Over", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize)) {
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+            ImGui::SetWindowFontScale(2.0f);
+            ImGui::Text("NIE ZYJESZ");
+            ImGui::SetWindowFontScale(1.0f);
+            ImGui::PopStyleColor();
+
+            ImGui::Separator();
+            ImGui::Dummy(ImVec2(0, 10));
+
+            if (ImGui::Button("Wroc do Menu Glownego", ImVec2(200, 50))) {
+                state_ = GameState::MainMenu;
+                reset_game(); // Przygotuj grę na nową sesję
+            }
+        }
+        ImGui::End();
+    }
+
+    void App::update_combat() {
+        if (!combat_lock_) return; // Jeśli nie ma walki, nic nie rób
+
+        float dt = ImGui::GetIO().DeltaTime;
+        combat_timer_ -= dt;
+
+        // --- POŁOWA SEKWENCJI (0.5s): WRÓG ODDAJE ---
+        if (combat_timer_ <= 0.5f && enemy_riposte_pending_) {
+            if (current_combat_target_ && current_combat_target_->IsAlive()) {
+                // Wróg atakuje gracza (bez zużywania swoich AP, to jest riposta!)
+                int dmg = current_combat_target_->base_damage;
+                player_.TakeDamage(dmg);
+                // To wywoła IsHurt() i czerwony błysk ekranu w frame_ui
+            }
+            enemy_riposte_pending_ = false; // Już oddał
+        }
+
+        // --- KONIEC SEKWENCJI (0.0s): ODBLOKOWANIE ---
+        if (combat_timer_ <= 0.0f) {
+            combat_lock_ = false;
+            current_combat_target_ = nullptr;
+
+            // Odnawiamy AP gracza na nową turę (bo właśnie minęła "tura" wymiany ciosów)
+            player_.ResetActionPoints(2);
+
+            // Sprawdź czy przeżyliśmy
+            if (!player_.IsAlive()) {
+                state_ = GameState::GameOver;
+            }
+        }
     }
 
     GLuint App::load_texture(const char* path) {

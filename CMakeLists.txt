@@ -45,6 +45,8 @@ FetchContent_MakeAvailable(imgui)
 add_library(glad external/glad/src/glad.c "include/stb_image.h")
 target_include_directories(glad PUBLIC external/glad/include)
 
+# --- USUN¥£EM ST¥D LINIÊ Z GLM_ENABLE_EXPERIMENTAL ---
+
 if(MSVC)
   set_property(TARGET glad PROPERTY
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
@@ -78,6 +80,11 @@ file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 add_executable(dungeon
   ${SRC}
  "include/stb_image.h")
+
+# ===== TU JEST POPRAWIONE MIEJSCE DLA GLM =====
+# Definicja dodana DOPIERO PO stworzeniu 'dungeon'
+target_compile_definitions(dungeon PRIVATE GLM_ENABLE_EXPERIMENTAL)
+# ==============================================
 
 target_include_directories(dungeon PUBLIC
   ${CMAKE_SOURCE_DIR}/src

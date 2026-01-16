@@ -14,8 +14,9 @@
     "\\include\\dungeon\\core",
     "\\src",
     "\\src\\core",
-    "\\src\\game"
+    "\\src\\ui",
+    "\\tests"
   ],
-  "SelectedNode": "\\src\\core\\App.cpp",
+  "SelectedNode": "\\assets\\maps\\test.map",
   "PreviewInSolutionExplorer": false
 }

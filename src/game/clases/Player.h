@@ -16,8 +16,14 @@ class Player : public Entity {
 public:
     Item* equippedWeapon = nullptr;
     Item* equippedArmor = nullptr;
+
+    // NOWOŒÆ: Plecak na przedmioty
+    std::vector<Item*> inventory;
+
     Player(int x, int y, int yaw)
-        : Entity(x, y, yaw, 100, 100, 2, 10, true, "Player") {}
+        : Entity(x, y, yaw, 100, 100, 2, 10, true, "Player") {
+    }
+
     std::vector<Skill*> skills;
 
     void LearnSkill(Skill* skill) {
@@ -29,43 +35,54 @@ public:
         skills[index]->Use(this, targets);
     }
 
-
     void Equip(Item* item) {
         if (!item) return;
 
+        if (item->type == ItemType::Weapon && equippedWeapon) {
+            Unequip(equippedWeapon);
+        }
+        if (item->type == ItemType::Armor && equippedArmor) {
+            Unequip(equippedArmor);
+        }
+
         switch (item->type) {
-            case ItemType::Weapon:
-                equippedWeapon = item;
-                ApplyItemStats(item);
-                break;
-            case ItemType::Armor:
-                equippedArmor = item;
-                ApplyItemStats(item);
-                break;
-            default:
-                break;
+        case ItemType::Weapon:
+            equippedWeapon = item;
+            ApplyItemStats(item);
+            break;
+        case ItemType::Armor:
+            equippedArmor = item;
+            ApplyItemStats(item);
+            break;
+        default:
+            break;
         }
     }
+
+    void AddToInventory(Item* item) {
+        inventory.push_back(item);
+    }
+
     void ApplyItemStats(Item* item) {
         if (!item) return;
-
         maxHealth += item->stats.maxHealth;
         health += item->stats.health;
         base_damage += item->stats.damage;
         ActionPoints += item->stats.actionPoints;
     }
+
     void Unequip(Item* item) {
         if (!item) return;
 
         maxHealth -= item->stats.maxHealth;
-        health = std::min(health, maxHealth);
+        if (health > maxHealth) health = maxHealth;
+
         base_damage -= item->stats.damage;
         ActionPoints -= item->stats.actionPoints;
 
         if (item == equippedWeapon) equippedWeapon = nullptr;
         if (item == equippedArmor)  equippedArmor = nullptr;
     }
-
 };
 
 

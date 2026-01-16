@@ -33,7 +33,15 @@ namespace dungeon {
     enum class GameState {
         MainMenu,
         Options,
-        Playing
+        Playing,
+        GameOver
+    };
+
+    // Struktura reprezentująca przedmiot leżący na ziemi w świecie 3D
+    struct WorldItem {
+        Item* itemData;     // Wskaźnik do danych przedmiotu (statystyki, nazwa)
+        glm::vec3 position; // Gdzie leży
+        bool isAlive;       // Czy jeszcze nie został podniesiony
     };
 
     class App {
@@ -74,6 +82,10 @@ namespace dungeon {
 
         void build_cube_mesh();
         void spawn_entities_from_level();
+
+        void reset_game();       // Czyści mapę i EQ
+        void render_game_over(); // Rysuje ekran śmierci
+        void update_combat();    // Obsługuje sekwencję 1-sekundową
 
     private:
         AppConfig   cfg_;
@@ -119,8 +131,13 @@ namespace dungeon {
         std::vector<glm::vec3> enemies_world_pos_;
         bool has_held_item_ = false;
         GLuint item_texture_ = 0; // kiedy� tekstura
-        std::vector<glm::vec3> items_world_pos_;
-        std::vector<bool>      items_alive_;   // czy item jeszcze le�y
+        std::vector<WorldItem> world_items_;
+        float attack_anim_timer_ = 0.0f;       // Obecny czas animacji (0 = brak ataku)
+        const float kAttackDuration_ = 0.25f;  // Jak długo trwa cios (w sekundach)
+        bool combat_lock_ = false;       // Czy sterowanie jest zablokowane?
+        float combat_timer_ = 0.0f;      // Licznik czasu sekwencji (1.0s -> 0.0s)
+        bool enemy_riposte_pending_ = false; // Czy wróg ma nam oddać w połowie sekwencji?
+        Entity* current_combat_target_ = nullptr; // Kogo bijemy (żeby wiedział kto oddaje)
 
     };
 
