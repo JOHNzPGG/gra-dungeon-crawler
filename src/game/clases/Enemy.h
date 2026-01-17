@@ -98,6 +98,46 @@ public:
         return true;
     }
 
+    // --- ANIMACJA RUCHU ---
+    glm::vec3 VisualPos;       // Tutaj stoi model (p³ynne)
+    glm::vec3 AnimStartPos;    // Sk¹d wyruszyliœmy
+    glm::vec3 AnimTargetPos;   // Dok¹d idziemy (cel animacji)
+    float AnimTimer = 0.0f;
+    bool IsMoving = false;
+    const float AnimDuration = 0.15f; // Czas trwania (bardzo szybki suw)
+
+    // Funkcja do aktualizacji animacji (dodaj j¹ te¿ w .cpp lub zostaw w .h jak tutaj)
+    void UpdateAnimation(float dt) {
+        if (IsMoving) {
+            AnimTimer += dt;
+            float t = AnimTimer / AnimDuration;
+
+            if (t >= 1.0f) {
+                t = 1.0f;
+                IsMoving = false;
+                VisualPos = AnimTargetPos; // Doci¹gnij do celu
+            }
+            else {
+                // Interpolacja (Lerp)
+                VisualPos = AnimStartPos + (AnimTargetPos - AnimStartPos) * t;
+            }
+        }
+    }
+
+    // Funkcja startuj¹ca animacjê (wywo³amy j¹ po ruchu AI)
+    void StartMoveAnimation(int oldX, int oldY, int newX, int newY) {
+        // Logika 2D -> Wizualne 3D (pamiêtaj o +0.5f na œrodek kratki)
+        AnimStartPos = glm::vec3(oldX + 0.5f, 0.0f, oldY + 0.5f);
+        AnimTargetPos = glm::vec3(newX + 0.5f, 0.0f, newY + 0.5f);
+
+        // Zabezpieczenie: Startujemy z obecnej wizualnej, ¿eby nie by³o skoku
+        // jeœli poprzednia animacja siê nie skoñczy³a (choæ przy turach to rzadkie)
+        VisualPos = AnimStartPos;
+
+        IsMoving = true;
+        AnimTimer = 0.0f;
+    }
+
 private:
     void RotateTowards(int tx, int ty) {
         if (ty < GameY) yaw = 0;

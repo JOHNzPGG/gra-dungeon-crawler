@@ -8,14 +8,15 @@
   "ExpandedNodes": [
     "",
     "\\assets",
-    "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
+    "\\include\\dungeon\\io",
     "\\src",
-    "\\src\\core",
-    "\\src\\ui",
-    "\\tests"
+    "\\src\\game",
+    "\\src\\game\\clases",
+    "\\src\\gfx",
+    "\\src\\io"
   ],
   "SelectedNode": "\\assets\\maps\\test.map",
   "PreviewInSolutionExplorer": false

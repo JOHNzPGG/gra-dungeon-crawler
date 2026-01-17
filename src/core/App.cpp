@@ -1,6 +1,9 @@
 ﻿#include "dungeon/core/App.hpp"
 #include "dungeon/ui/Hud.hpp"
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -112,6 +115,8 @@ namespace dungeon {
         init_glfw();
         init_gl();
         init_imgui();
+        init_audio();
+        render_loading_screen();
         load_level();
         build_world_mesh(); 
         build_cube_mesh();
@@ -150,6 +155,10 @@ namespace dungeon {
         }
         if (cube_vbo_) glDeleteBuffers(1, &cube_vbo_);
         if (cube_vao_) glDeleteVertexArrays(1, &cube_vao_);
+
+        ma_sound_uninit(&bg_music_);
+        ma_sound_uninit(&sfx_torch_);
+        ma_engine_uninit(&audio_engine_);
 
     }
 
@@ -227,6 +236,7 @@ namespace dungeon {
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window_, true);
         ImGui_ImplOpenGL3_Init("#version 330");
+        ImGui_ImplOpenGL3_CreateFontsTexture();
     }
 
     void App::shutdown_imgui() {
@@ -238,78 +248,102 @@ namespace dungeon {
     void App::load_level() {
         namespace fs = std::filesystem;
 
-        std::string path = "assets/maps/test.map";
-        current_map_name_ = path;
-
-        if (!fs::exists(path)) {
-            throw std::runtime_error(
-                "Cannot open map: " + path +
-                "\nCurrent directory: " + fs::current_path().string());
+        // Zabezpieczenie na pustą nazwę mapy
+        if (current_map_name_.empty()) {
+            current_map_name_ = "assets/maps/test.map";
         }
 
-        level_ = io::load_map_ascii(path);
-        visited_cells_.assign(level_.w * level_.h, false);
+        std::string path = current_map_name_;
 
-        // startowa pozycja z mapy
+        // Sprawdź czy plik istnieje
+        if (!fs::exists(path)) {
+            // Jeśli nie ma mapy, spróbuj wczytać domyślną, żeby gra nie crashowała
+            printf("Brak mapy: %s. Próba wczytania test.map\n", path.c_str());
+            path = "assets/maps/test.map";
+            if (!fs::exists(path)) throw std::runtime_error("BRAK ZADNYCH MAP!");
+        }
+
+        // 1. Ładowanie danych
+        level_ = io::load_map_ascii(path);
+
+        // 2. Ustawianie LOGIKI (Gdzie jestem na siatce)
         player_.GameX = level_.player_x;
         player_.GameY = level_.player_y;
-        player_.yaw = 0; // 0° = "północ"
-        player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
+        player_.yaw = level_.player_start_yaw;
+
+        // 3. Ustawianie WIZUALIÓW (Gdzie jest kamera)
+        // TO JEST KLUCZOWE: Musimy zsynchronizować RenderPosition z GameX/Y!
+        player_.RenderPosition = glm::vec3(level_.player_x, 0.0f, level_.player_y);
+
+        // 4. Resetowanie zmiennych animacji
+        // Musimy powiedzieć grze: "Nie ruszamy się, stoimy w miejscu startu"
+        is_moving_ = false;
+        move_timer_ = 0.0f;
+        move_start_pos_ = player_.RenderPosition;
+        move_target_pos_ = player_.RenderPosition;
+
+        // 5. Inicjalizacja mgły wojny (Poprawka crasha)
+        visited_cells_.assign(level_.w * level_.h, false);
+        update_exploration(); // Odkryj startową pozycję
     }
 
     void App::spawn_entities_from_level() {
-
         for (auto* e : enemies_) delete e;
         enemies_.clear();
-
-        // (W prawdziwym projekcie tu też przydałby się delete na itemData, jeśli nie masz managera zasobów)
         world_items_.clear();
 
-        for (const auto& p : level_.enemy_spawns) {
+        // 1. WROGOWIE
+        for (const auto& spawn : level_.enemy_spawns) {
             Enemy* newEnemy = nullptr;
 
-            if (p.type == 'Z') {
-                // ZOMBIE: Wolny (1 AP), dużo życia (150), mocno bije (40)
-                // Możesz tu w przyszłości dać inny model/teksturę
-                newEnemy = new Enemy(p.x, p.y, 180, 150, 150, 1, 40, "Zombie");
+            if (newEnemy) {
+                newEnemy->yaw = 0.0f;
+
+                // --- NOWE: Inicjalizacja wizualna ---
+                // Ustawiamy VisualPos tam gdzie stoi logicznie
+                float vx = (float)newEnemy->GameX + 0.5f;
+                float vz = (float)newEnemy->GameY + 0.5f;
+                newEnemy->VisualPos = glm::vec3(vx, 0.0f, vz);
+                // ------------------------------------
+
+                enemies_.push_back(newEnemy);
+            }
+
+            if (spawn.type == 'Z') {
+                newEnemy = new Enemy(spawn.x, spawn.y, 180, 150, 150, 1, 45, "Zombie");
             }
             else {
-                // SZKIELET (S): Standardowy
-                // Tworzymy przeciwnika w miejscu p.x, p.y
-                // Parametry: x, y, yaw, hp, maxHp, ap, damage, name
-                //Enemy* newEnemy = new Enemy(p.x, p.y, 180, 20, 20, 2, 5, "Skeleton");
-
-                // HP: 80 (wytrzyma ok. 4 zwykłe ataki po 20 dmg, lub 2 potężne backstaby)
-                // DMG: 35 (Gracz ma 100 HP, więc 35 to ok. 1/3 życia - 3 hity i giniemy!)
-                Enemy* newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
-                newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
+                newEnemy = new Enemy(spawn.x, spawn.y, 180, 80, 80, 2, 35, "Skeleton");
             }
 
             if (newEnemy) {
+                // USUNĄŁEM IFY SPRAWDZAJĄCE ŚCIANY. 
+                // Ustawiamy sztywno 0 (lub 180, zależnie jak wolisz).
+                // Jeśli model "patrzy" tyłem, zmień to 0 na 180.
+                newEnemy->yaw = 0.0f;
+
                 enemies_.push_back(newEnemy);
             }
         }
 
+        // 2. ITEMY (Bez zmian)
         int counter = 0;
         for (const auto& p : level_.item_spawns) {
             float x = static_cast<float>(p.x) + 0.5f;
             float z = static_cast<float>(p.y) + 0.5f;
-            float y = 0.7f;
 
             Item* newItem = nullptr;
-
-            // Pierwszy spawn to broń, reszta to mikstury
             if (counter == 0) {
-                ItemStats stats; stats.damage = 20;
+                ItemStats stats; stats.damage = 100;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
             }
             else {
-                ItemStats stats; stats.health = 5;
+                ItemStats stats; stats.health = 50;
                 newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
             }
 
             if (newItem) {
-                world_items_.push_back({ newItem, glm::vec3(x, y, z), true });
+                world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
             }
             counter++;
         }
@@ -349,190 +383,225 @@ namespace dungeon {
     }
 
     void App::handle_input() {
-        // Jeśli trwa walka, blokujemy sterowanie.
-        // update_combat() wywołamy w run(), żeby działało niezależnie od inputu.
-        if (combat_lock_) {
+        // ------------------------------------------------------------
+        // 1. BLOKADY (Kiedy gracz nie może sterować)
+        // ------------------------------------------------------------
+
+        // Jeśli trwa animacja walki lub ruchu - czekamy
+        if (combat_lock_ || is_moving_ || attack_anim_timer_ > 0.0f) {
+            if (combat_lock_) update_combat(); // Upewnij się, że walka się aktualizuje
             return;
         }
 
-        // --- Obsługa klawiszy (bez zmian) ---
-        bool raw_left = glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS;
-        bool raw_right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS;
-        bool raw_up = glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS;
+        // ------------------------------------------------------------
+        // 2. ODCZYT KLAWISZY (Input Polling)
+        // ------------------------------------------------------------
 
-        bool raw_left_w = glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
-        bool raw_right_w = glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
-        bool raw_up_w = glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS;
+        // Ruch (Strzałki + WSAD)
+        bool left = glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
+        bool right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
+        bool up = glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS;
 
-        bool left = raw_left || raw_left_w;
-        bool right = raw_right || raw_right_w;
-        bool up = raw_up || raw_up_w;
-
+        // Akcje
         bool atk = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
+        bool esc = glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+
+        // Skille (1, 2, 3)
         bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
         bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
         bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
-        bool m = glfwGetKey(window_, GLFW_KEY_M) == GLFW_PRESS;
 
-        // --- Menu (bez zmian) ---
-        if (m && !m_was_down_) {
-            show_menu_ = !show_menu_;
+        // ------------------------------------------------------------
+        // 3. PAUZA I MENU (ESC)
+        // ------------------------------------------------------------
+
+        // Obsługa przełączania pauzy
+        if (esc && !esc_was_down_) { // Pamiętaj zmienić m_was_down_ na esc_was_down_ w .hpp!
+            if (state_ == GameState::Playing) {
+                state_ = GameState::Paused;
+            }
+            else if (state_ == GameState::Paused) {
+                state_ = GameState::Playing;
+            }
+            else if (state_ == GameState::Options) {
+                // Z opcji wracamy do pauzy (jeśli byliśmy w grze)
+                state_ = GameState::Paused;
+            }
         }
+        esc_was_down_ = esc;
 
-        if (show_menu_) {
-            // Zapamiętaj stany i wyjdź
+        // Jeśli gra jest zapauzowana lub jesteśmy w menu - ignorujemy resztę sterowania
+        if (state_ != GameState::Playing) {
+            // Resetujemy flagi "was_down" dla ruchu, żeby postać nie ruszyła po odpałzowaniu
             left_was_down_ = left;
             right_was_down_ = right;
             up_was_down_ = up;
             atk_was_down_ = atk;
-            k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
-            m_was_down_ = m;
             return;
         }
 
-        // --- Obrót ---
+        // ------------------------------------------------------------
+        // 4. LOGIKA ROZGRYWKI (Tylko gdy GameState::Playing)
+        // ------------------------------------------------------------
+
+        // A. OBRÓT
         if (left && !left_was_down_) player_.TurnLeft();
         if (right && !right_was_down_) player_.TurnRight();
 
-        // --- Ruch ---
+        // B. RUCH
         if (up && !up_was_down_) {
             glm::ivec2 target = player_.GetForwardTile();
 
-            // 1. Sprawdź czy to nie ściana (istniejące)
+            // Sprawdź czy pole jest wolne (ściana + wróg)
             if (can_move_to(target.x, target.y)) {
-
-                // 2. NOWOŚĆ: Sprawdź, czy na polu docelowym nie stoi wróg!
-                // Jeśli GetEnemyInFront zwróci cokolwiek innego niż nullptr, to znaczy że ktoś tam stoi.
                 if (GetEnemyInFront(player_) == nullptr) {
 
-                    // 3. Dopiero teraz sprawdzamy AP i ruszamy
+                    // Próba ruchu (kosztuje 1 AP)
                     if (player_.UseActionPoints(1)) {
+                        // Animacja: Start
+                        move_start_pos_ = glm::vec3(player_.RenderPosition.x, 0.0f, player_.RenderPosition.z);
+                        move_target_pos_ = glm::vec3(target.x, 0.0f, target.y);
+
+                        // Logika: Aktualizacja pozycji
                         player_.GameX = target.x;
                         player_.GameY = target.y;
-                        player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+
+                        // Sprawdź pola specjalne (Wyjście / Next Level)
+                        int idx = target.y * level_.w + target.x;
+                        if (idx >= 0 && idx < level_.cells.size()) {
+                            auto cellType = level_.cells[idx];
+                            if (cellType == io::Cell::NextLevel) load_next_level();
+                            else if (cellType == io::Cell::Exit) state_ = GameState::Victory;
+                        }
+
+                        // Uruchomienie timera animacji
+                        is_moving_ = true;
+                        move_timer_ = 0.0f;
                     }
                 }
                 else {
+                    // Opcjonalnie: Dźwięk błędu / komunikat "Wróg blokuje drogę"
                     std::cout << "Blokada: Przeciwnik na drodze!" << std::endl;
-                    // Opcjonalnie: Możesz tu dodać dźwięk "bump" w przyszłości
                 }
             }
-
-            if (player_.UseActionPoints(1)) {
-                player_.GameX = target.x;
-                player_.GameY = target.y;
-                player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
-
-                // --- NOWE: SPRAWDZANIE PÓL SPECJALNYCH ---
-                int idx = target.y * level_.w + target.x;
-                auto cellType = level_.cells[idx];
-
-                if (cellType == io::Cell::NextLevel) {
-                    std::cout << "Przechodze do nastepnego poziomu!" << std::endl;
-                    //load_next_level(); // Funkcja którą dodałeś wcześniej
-                }
-                else if (cellType == io::Cell::Exit) {
-                    std::cout << "Zwyciestwo!" << std::endl;
-                    //state_ = GameState::Victory; // Stan zwycięstwa
-                }
-            }
-
         }
 
-        // --- Podnoszenie Przedmiotów (Item Pickup) ---
-        for (int i = 0; i < world_items_.size(); ++i) {
-            if (!world_items_[i].isAlive) continue;
-            int ix = (int)world_items_[i].position.x;
-            int iy = (int)world_items_[i].position.z;
+        // C. AUTOMATYCZNE PODNOSZENIE PRZEDMIOTÓW
+        // Sprawdzamy, czy stoimy na czymś po ruchu
+        for (auto& wItem : world_items_) {
+            if (!wItem.isAlive) continue;
 
-            if (ix == player_.GameX && iy == player_.GameY) {
-                Item* foundItem = world_items_[i].itemData;
-                if (foundItem->type == ItemType::Weapon) {
-                    if (player_.equippedWeapon != nullptr) {
-                        Item* oldWeapon = player_.equippedWeapon;
-                        WorldItem droppedItem;
-                        droppedItem.itemData = oldWeapon;
-                        droppedItem.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
-                        droppedItem.isAlive = true;
-                        world_items_.push_back(droppedItem);
+            // Sprawdź kolizję (proste porównanie intów)
+            if ((int)wItem.position.x == player_.GameX && (int)wItem.position.z == player_.GameY) {
+                Item* item = wItem.itemData;
+
+                if (item->type == ItemType::Weapon) {
+                    // Podmiana broni (wyrzuć starą, weź nową)
+                    if (player_.equippedWeapon) {
+                        WorldItem dropped;
+                        dropped.itemData = player_.equippedWeapon;
+                        dropped.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
+                        dropped.isAlive = true;
+                        world_items_.push_back(dropped);
                     }
-                    player_.Equip(foundItem);
+                    player_.Equip(item);
                     has_held_item_ = true;
                 }
                 else {
-                    player_.AddToInventory(foundItem);
+                    // Mikstura itp.
+                    player_.AddToInventory(item);
                 }
-                world_items_[i].isAlive = false;
+
+                // Oznacz jako zebrany
+                wItem.isAlive = false;
+
+                // Opcjonalnie: Dźwięk podniesienia
+                // ma_sound_start(&sfx_pickup_); 
                 break;
             }
         }
 
-        // --- Atak (SPACE) ---
+        // D. WALKA (ATAK PODSTAWOWY)
         if (atk && !atk_was_down_) {
             Entity* target = GetEnemyInFront(player_);
+
+            // Animacja startuje zawsze, nawet jak nie trafisz (machnięcie w powietrze)
             attack_anim_timer_ = kAttackDuration_;
 
-            // Jeśli mamy AP, inicjujemy sekwencję walki
+            // Jeśli jest cel i mamy AP
             if (player_.ActionPoints > 0) {
                 if (target) {
-                    // START SEKWENCJI WALKI
+                    // Inicjacja sekwencji walki
                     combat_lock_ = true;
                     combat_timer_ = 1.0f;
                     enemy_riposte_pending_ = true;
                     current_combat_target_ = target;
 
-                    // Zadaj obrażenia (Twoja tura)
+                    // Obliczanie obrażeń
+                    int dmg = player_.base_damage;
+
+                    // Backstab bonus
                     int pYaw = (player_.yaw % 360 + 360) % 360;
                     int eYaw = (target->yaw % 360 + 360) % 360;
-                    bool backstab = (pYaw == eYaw);
+                    if (pYaw == eYaw) dmg *= 2;
 
-                    int dmg = player_.base_damage;
-                    if (backstab) dmg *= 2;
-
+                    // Zadaj obrażenia i obróć wroga
                     target->TakeDamage(dmg);
                     target->UpdateOrientation((player_.yaw + 180) % 360);
-                }
 
-                // Zużyj AP (nawet jak nie trafisz)
+                    // Dźwięk uderzenia
+                    // ma_sound_start(&sfx_hit_);
+                }
+                // Koszt ataku
                 player_.UseActionPoints(1);
             }
         }
 
-        // --- Skille ---
+        // E. SKILLE (1, 2, 3)
         if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
         if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
         if (k3 && !k3_was_down_) player_.UseSkill(2, ResolveSkillTarget(player_, player_.skills[2]));
 
-        // --- Zapamiętanie stanów ---
+        // ------------------------------------------------------------
+        // 5. ZAPAMIĘTANIE STANU KLAWISZY (Na następną klatkę)
+        // ------------------------------------------------------------
         left_was_down_ = left;
         right_was_down_ = right;
         up_was_down_ = up;
         atk_was_down_ = atk;
         k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
-        m_was_down_ = m;
+        // esc_was_down_ jest aktualizowane wyżej, przy obsłudze pauzy
 
-        // --- Koniec tury Gracza ---
-        // Wywołujemy turę wrogów TYLKO jeśli nie ma blokady walki
+        // ------------------------------------------------------------
+        // 6. ZARZĄDZANIE TURAMI
+        // ------------------------------------------------------------
+        // Jeśli gracz zużył wszystkie punkty akcji -> Tura wrogów
         if (!combat_lock_ && player_.ActionPoints <= 0) {
             EnemiesTurn();
             player_.ResetActionPoints(2);
         }
-
-        // USUNIĘTO: Tutaj był kod resetujący grę przy śmierci. 
-        // Teraz śmierć obsługuje update_combat i pętla run.
     }
 
-void App::EnemiesTurn() {
-    for (Enemy* enemy : enemies_) {
-        if (!enemy->IsAlive()) continue;
+    void App::EnemiesTurn() {
+        for (Enemy* enemy : enemies_) {
+            if (!enemy->IsAlive()) continue;
 
-        // --- TO JEST KLUCZOWE ---
-        enemy->ResetActionPoints(1); // Odnów siły wroga na nową turę
-        // -------------------------
+            enemy->ResetActionPoints(1);
 
-        enemy->TakeTurn(&player_, level_);
+            // 1. Zapamiętaj gdzie wróg stał PRZED ruchem
+            int oldX = enemy->GameX;
+            int oldY = enemy->GameY;
+
+            // 2. Wykonaj logikę (AI zmienia GameX/GameY)
+            enemy->TakeTurn(&player_, level_);
+
+            // 3. Sprawdź czy się ruszył
+            if (enemy->GameX != oldX || enemy->GameY != oldY) {
+                // Jeśli tak, odpal animację
+                enemy->StartMoveAnimation(oldX, oldY, enemy->GameX, enemy->GameY);
+            }
+        }
     }
-}
 
     // ZMIANA: Cała funkcja build_world_mesh podmieniona na wersję z drugiego kodu (ładowanie modeli)
     void App::build_world_mesh() {
@@ -942,108 +1011,139 @@ void App::EnemiesTurn() {
 
     // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
     void App::frame_render() {
-
         update_exploration();
 
         float dt = ImGui::GetIO().DeltaTime;
+
+        // --- UPDATE LOGIKI (Wstrząsy i Animacje) ---
+        if (trauma_ > 0.0f) {
+            trauma_ -= dt;
+            if (trauma_ < 0.0f) trauma_ = 0.0f;
+        }
+
+        float yaw = (float)player_.yaw;
+
+        // 1. LOGIKA ANIMACJI RUCHU (LERP + HEADBOB)
+        if (is_moving_) {
+            move_timer_ += dt;
+            float t = move_timer_ / kMoveDuration_;
+
+            if (t >= 1.0f) {
+                t = 1.0f;
+                is_moving_ = false;
+                player_.RenderPosition = move_target_pos_;
+            }
+            else {
+                player_.RenderPosition = move_start_pos_ + (move_target_pos_ - move_start_pos_) * t;
+                // Head Bob
+                float headBob = std::sin(t * 3.14159f) * 0.08f;
+                player_.RenderPosition.y = headBob;
+            }
+        }
+
+        // 2. LOGIKA ANIMACJI ATAKU
         if (attack_anim_timer_ > 0.0f) {
             attack_anim_timer_ -= dt;
             if (attack_anim_timer_ < 0.0f) attack_anim_timer_ = 0.0f;
         }
 
-        float px = static_cast<float>(player_.GameX) + 0.5f;
-        float pz = static_cast<float>(player_.GameY) + 0.5f;
-
-        glm::vec3 forward;
-        int dx = 0;
-        int dz = 0;
-
-        int yaw = ((player_.yaw % 360) + 360) % 360;
-
-        switch (yaw) {
-        case 0:   forward = { 0.0f, 0.0f, -1.0f }; dx = 0;  dz = -1; break;
-        case 180: forward = { 0.0f, 0.0f,  1.0f }; dx = 0;  dz = 1; break;
-        case 270: forward = { -1.0f, 0.0f,  0.0f }; dx = -1; dz = 0; break;
-        case 90:  forward = { 1.0f, 0.0f,  0.0f }; dx = 1;  dz = 0; break;
-        default:  forward = { 0.0f, 0.0f, -1.0f }; dx = 0;  dz = -1; break;
-        }
-
+        // --- 3. USTAWIENIE KAMERY ---
         glm::vec3 cam_pos;
-        glm::vec3 cam_target;
+        glm::vec3 center;
+        glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-        if (camera_mode_ == CameraMode::FirstPerson) {
-            glm::vec3 eye(px, 0.9f, pz);
-            cam_pos = eye - forward * 0.05f;
-            cam_target = eye + forward * 1.2f;
+        // Sprawdzamy czy jesteśmy w menu (wtedy kamera orbituje)
+        if (state_ == GameState::MainMenu || state_ == GameState::Credits || state_ == GameState::Options) {
+            float radius = 6.0f; // Trochę dalej
+            float camX = std::sin(menu_timer_ * 0.2f) * radius + (level_.w / 2.0f);
+            float camZ = std::cos(menu_timer_ * 0.2f) * radius + (level_.h / 2.0f);
+
+            cam_pos = glm::vec3(camX, 5.0f, camZ); // Wysoko
+            center = glm::vec3(level_.w / 2.0f, 0.0f, level_.h / 2.0f);
         }
         else {
-            int bx = player_.GameX - dx;
-            int by = player_.GameY - dz;
-            bool behind_is_blocked = !can_move_to(bx, by);
+            // TRYB GRY (FPP / TPP)
 
-            cam_target = glm::vec3(px, 0.7f, pz) + forward * 0.35f;
+            // Obliczamy forward na bazie yaw gracza
+            float rad = glm::radians(yaw);
+            glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
 
-            float cam_distance = behind_is_blocked ? 0.35f : 1.0f;
-            float cam_height = 0.9f;
+            cam_pos = player_.RenderPosition;
+            cam_pos += glm::vec3(0.5f, 0.0f, 0.5f); // Centrowanie
 
-            cam_pos = cam_target - forward * cam_distance
-                + glm::vec3(0.0f, cam_height, 0.0f);
+            // Screen Shake (Trzęsienie ziemi)
+            if (trauma_ > 0.0f) {
+                float shake = trauma_ * trauma_;
+                cam_pos.x += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
+                cam_pos.y += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
+                cam_pos.z += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
+            }
+
+            if (camera_mode_ == CameraMode::FirstPerson) {
+                cam_pos.y += 0.9f;
+                cam_pos += forward * 0.1f;
+            }
+            else {
+                // TPP - Znad ramienia
+                cam_pos.y += 0.95f;
+                cam_pos -= forward * 0.3f;
+                glm::vec3 rightv = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
+                cam_pos += rightv * 0.15f;
+            }
+            center = cam_pos + forward;
         }
 
-        view_ = glm::lookAt(cam_pos, cam_target, glm::vec3(0.0f, 1.0f, 0.0f));
+        view_ = glm::lookAt(cam_pos, center, up);
 
+        // --- USTAWIENIA SHADERA ---
         world_shader_.use();
-        world_shader_.setMat4("uProj", &proj_[0][0]);
+        // Tutaj używam nazw z Twojego kodu (uProj, uView, uCamPos)
+        world_shader_.setMat4("uProj", &proj_[0][0]); // Upewnij się czy masz proj_ czy projection_ w App.hpp
         world_shader_.setMat4("uView", &view_[0][0]);
         world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
         world_shader_.setFloat("uTime", (float)glfwGetTime());
+
+        // Światło (Pochodnia)
+        world_shader_.setVec3("uLightPos", cam_pos.x, cam_pos.y, cam_pos.z);
+
         glm::mat4 I(1.0f);
         world_shader_.setMat4("uModel", &I[0][0]);
         world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
-        // WAŻNE: Włączamy teksturowanie dla nowego shadera
-        world_shader_.setInt("uUseTex", 1);
+        // --- RYSOWANIE ŚWIATA ---
 
-        // PODŁOGA
+        // 1. PODŁOGA
+        world_shader_.setInt("uUseTex", 1);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, floor_texture_);
         world_shader_.setInt("uTex", 0);
-
         if (floor_vertex_count_ > 0) {
             glBindVertexArray(floor_vao_);
             glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
         }
 
-        // ŚCIANY
-        glActiveTexture(GL_TEXTURE0);
+        // 2. ŚCIANY
         glBindTexture(GL_TEXTURE_2D, wall_texture_);
-        world_shader_.setInt("uTex", 0);
-
         if (wall_vertex_count_ > 0) {
             glBindVertexArray(wall_vao_);
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
-        // --- RYSOWANIE PORTALI / WYJŚĆ ---
-        world_shader_.setInt("uUseTex", 0); // Wyłączamy tekstury, używamy kolorów
-        glBindVertexArray(cube_vao_);       // Używamy kostki
-
+        // 3. PORTALE / WYJŚCIA
+        world_shader_.setInt("uUseTex", 0);
+        glBindVertexArray(cube_vao_);
         for (int y = 0; y < level_.h; ++y) {
             for (int x = 0; x < level_.w; ++x) {
                 auto cell = level_.cells[y * level_.w + x];
-
                 if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
-
                     if (cell == io::Cell::NextLevel)
-                        world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f); // Niebieski, półprzeźroczysty
+                        world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
                     else
-                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f); // Złoty, półprzeźroczysty
+                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
 
                     glm::mat4 M(1.0f);
-                    // Ustawiamy w przejściu, trochę wyższy niż podłoga
                     M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
-                    M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f)); // Trochę węższy niż kratka
-
+                    M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f));
                     world_shader_.setMat4("uModel", &M[0][0]);
                     glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
                 }
@@ -1051,19 +1151,15 @@ void App::EnemiesTurn() {
         }
         glBindVertexArray(0);
 
-        // --- ENEMIES ---
-        // Uwaga: Nie bindujemy na sztywno cube_vao_, bo mamy teraz model!
-
+        // --- RYSOWANIE WROGÓW ---
         for (auto* enemy : enemies_) {
-            float dt = ImGui::GetIO().DeltaTime;
             enemy->UpdateDeath(dt);
+            enemy->UpdateAnimation(dt);
 
             if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
 
-            // 1. Logika Koloru i Tekstury
+            // Tekstura vs Kolor
             world_shader_.use();
-
-            // Jeśli mamy teksturę wroga, używamy jej
             if (enemy_texture_ != 0) {
                 world_shader_.setInt("uUseTex", 1);
                 glActiveTexture(GL_TEXTURE0);
@@ -1071,84 +1167,68 @@ void App::EnemiesTurn() {
                 world_shader_.setInt("uTex", 0);
             }
             else {
-                world_shader_.setInt("uUseTex", 0); // Brak tekstury = kolor
+                world_shader_.setInt("uUseTex", 0);
             }
 
-            float y_offset = 0.55f; // Model zazwyczaj stoi na 0.0, a nie lewituje jak kostka
+            float y_offset = 0.55f;
 
+            // Kolorowanie (Damage / Death / Type)
             if (!enemy->IsAlive()) {
-                // ŚMIERĆ: Zanikanie
                 float alpha = 1.0f - enemy->deathTimer;
                 if (alpha < 0.0f) alpha = 0.0f;
-                y_offset -= (enemy->deathTimer * 0.5f); // Zapadanie się
-
-                // Mnożnik koloru (szary + alpha)
-                // Dzięki zmianie w shaderze, tekstura stanie się ciemna i przezroczysta!
+                y_offset -= (enemy->deathTimer * 0.5f);
                 world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, alpha);
             }
             else if (enemy->IsHurt()) {
-                // BŁYSK: Czerwony tint
-                // Tekstura * Czerwony = "Krwisty" model
-                world_shader_.setVec4("uColor", 1.0f, 0.5f, 0.5f, 1.0f);
+                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f); // Błysk
             }
             else {
-                // NORMALNIE: Biały (1,1,1,1) oznacza "oryginalne kolory tekstury"
-                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
+                if (enemy->name == "Zombie") world_shader_.setVec4("uColor", 0.6f, 1.0f, 0.6f, 1.0f);
+                else world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
             }
 
-            // 2. Pozycja
-            float x = static_cast<float>(enemy->GameX) + 0.5f; // Środek kafelka
-            float z = static_cast<float>(enemy->GameY) + 0.5f;
+            // Pozycja (Lerp)
+            float x = enemy->VisualPos.x;
+            float z = enemy->VisualPos.z;
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, glm::vec3(x, y_offset, z));
-
-            // Obrót (Yaw)
             M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
 
-            // Obrót przy śmierci (przewrócenie)
+            // Śmierć (Obrót)
             if (!enemy->IsAlive()) {
                 float deathAngle = -90.0f * enemy->deathTimer;
                 if (deathAngle < -90.0f) deathAngle = -90.0f;
                 M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
             }
 
-            // --- SKALOWANIE WROGA ---
-            // Podobnie jak przy mieczu, musisz to dopasować do modelu!
             float enemyScale = 1.0f;
             M = glm::scale(M, glm::vec3(enemyScale));
-
             world_shader_.setMat4("uModel", &M[0][0]);
 
-            // 3. Rysowanie (Model lub Sześcian)
+            // Draw Enemy
             if (enemy_vertex_count_ > 0) {
                 glBindVertexArray(enemy_vao_);
                 glDrawArrays(GL_TRIANGLES, 0, enemy_vertex_count_);
             }
             else {
-                // Fallback (jeśli nie udało się wczytać modelu)
                 glBindVertexArray(cube_vao_);
-                world_shader_.setInt("uUseTex", 0); // Kostka nie ma UV dla tekstury modelu
-                world_shader_.setVec4("uColor", 1.0f, 0.0f, 0.0f, 1.0f); // Czerwony
+                world_shader_.setInt("uUseTex", 0);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }
 
-            // 4. Pasek HP (bez zmian - kopiuj/wklej ze starego kodu jeśli usunąłeś)
+            // Pasek HP
             if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
-                glBindVertexArray(cube_vao_); // Pasek HP to zawsze kostka
+                glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
-
-                // ... (Twoja logika paska HP) ...
-                // TŁO
+                // Tło
                 world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
                 glm::mat4 M_bg(1.0f);
-                // Podnieś pasek wyżej (np. y + 1.8), bo model może być wysoki
                 M_bg = glm::translate(M_bg, glm::vec3(x, 1.8f, z));
                 M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
                 world_shader_.setMat4("uModel", &M_bg[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-
-                // PASEK ZIELONY
+                // HP
                 float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
                 world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
                 glm::mat4 M_hp(1.0f);
@@ -1161,21 +1241,13 @@ void App::EnemiesTurn() {
         }
         glBindVertexArray(0);
 
-        // --- ITEMS ---
+        // --- ITEMY NA ZIEMI ---
         world_shader_.setInt("uUseTex", 0);
-        world_shader_.setVec4("uColor", 0.4f, 0.8f, 0.8f, 1.0f); // Szary kolor
-
         glBindVertexArray(cube_vao_);
         for (const auto& wItem : world_items_) {
-            if (!wItem.isAlive) continue; // Nie rysuj zebranych
-
-            // Opcjonalnie: Różne kolory dla różnych typów
-            if (wItem.itemData->type == ItemType::Weapon) {
-                world_shader_.setVec4("uColor", 0.0f, 0.5f, 0.5f, 1.0f); // Pomarańczowy dla broni
-            }
-            else {
-                world_shader_.setVec4("uColor", 0.2f, 0.2f, 1.0f, 1.0f); // Niebieski dla mikstur
-            }
+            if (!wItem.isAlive) continue;
+            if (wItem.itemData->type == ItemType::Weapon) world_shader_.setVec4("uColor", 0.0f, 0.5f, 0.5f, 1.0f);
+            else world_shader_.setVec4("uColor", 0.2f, 0.2f, 1.0f, 1.0f);
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, wItem.position);
@@ -1185,22 +1257,20 @@ void App::EnemiesTurn() {
         }
         glBindVertexArray(0);
 
-        // --- HELD ITEM (Z ANIMACJĄ) ---
-        if (has_held_item_) {
+        // --- HELD ITEM (TYLKO W FPP I PODCZAS GRY) ---
+        // Naprawiona linijka if oraz obliczanie forward
+        if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
 
-            // Pozif (has_held_item_) {
+            // Musimy obliczyć forward tutaj, bo wewnątrz bloku if(MainMenu) go nie ma
+            float rad = glm::radians((float)player_.yaw);
+            glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
             glm::vec3 up(0.0f, 1.0f, 0.0f);
             glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
 
-            // --- POZYCJONOWANIE BRONI ---
-            // Tu będziesz musiał poeksperymentować! Modele z neta mają różne skale i środki.
-            // Zacznij od tych wartości i zmieniaj je, jeśli miecz jest za duży/mały/daleko.
-            glm::vec3 item_pos = cam_pos
-                + forward * 0.4f    // Jak daleko przed kamerą
-                + rightv * 0.2f     // Jak bardzo w prawo
-                + up * -0.3f;      // Jak nisko
+            // Pozycjonowanie
+            glm::vec3 item_pos = cam_pos + forward * 0.4f + rightv * 0.2f + up * -0.3f;
 
-            // --- OBLICZANIE ANIMACJI (Bez zmian - działa super) ---
+            // Animacje
             float animOffset = 0.0f;
             float animTilt = 0.0f;
 
@@ -1210,15 +1280,17 @@ void App::EnemiesTurn() {
                 animOffset = wave * 0.5f;
                 animTilt = wave * 45.0f;
             }
+            else {
+                float time = (float)glfwGetTime();
+                float breath = std::sin(time * 2.0f) * 0.02f;
+                item_pos.y += breath;
+            }
 
-            // Aplikujemy animację
             item_pos += forward * animOffset;
-            item_pos += up * (-animOffset * 0.2f); // Mniejszy opad
+            item_pos += up * (-animOffset * 0.2f);
 
-            // --- RYSOWANIE ---
+            // Renderowanie
             world_shader_.use();
-
-            // Włącz tekstury, jeśli miecz ma teksturę
             if (weapon_texture_ != 0) {
                 world_shader_.setInt("uUseTex", 1);
                 glActiveTexture(GL_TEXTURE0);
@@ -1227,43 +1299,31 @@ void App::EnemiesTurn() {
             }
             else {
                 world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 1.0f); // Srebrny kolor bez tekstury
+                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 1.0f);
             }
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, item_pos);
+            // Obracamy miecz tak, by pasował do gracza
+            M = glm::rotate(M, glm::radians((float)player_.yaw), glm::vec3(0, 1, 0));
+            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Korekta modelu
+            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0)); // Atak
 
-            // 1. Obrót gracza (żeby miecz zawsze był przed kamerą)
-            // Używamy ujemnego 'yaw', bo GLM rotate działa odwrotnie niż nasz system kątów
-            M = glm::rotate(M, glm::radians((float)yaw), glm::vec3(0, 1, 0));
-
-            // 2. Obrót korekcyjny modelu (Bardzo ważne!)
-            // Modele .obj często leżą na płasko albo są obrócone.
-            // Tutaj obracamy go tak, żeby "stał" i celował do przodu.
-            // Często trzeba obrócić o 180 lub 90 stopni w Y.
-            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
-
-            // 3. Animacja ataku (Cięcie)
-            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0)); // Oś X lokalna
-
-            // 4. Skala (Najważniejsze - modele bywają gigantyczne!)
-            // Zmniejsz to np. do 0.01f jeśli miecz zasłania cały ekran!
-            float scale = 0.0015f;
+            float scale = 0.0015f; // Dopasuj skalę!
             M = glm::scale(M, glm::vec3(scale));
 
             world_shader_.setMat4("uModel", &M[0][0]);
 
-            // Rysujemy nowy model
             if (weapon_vertex_count_ > 0) {
                 glBindVertexArray(weapon_vao_);
                 glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
                 glBindVertexArray(0);
             }
 
-            // Reset macierzy (dla bezpieczeństwa)
+            // Reset modelu
+            glm::mat4 I(1.0f);
             world_shader_.setMat4("uModel", &I[0][0]);
         }
-
     }
 
     void App::frame_ui() {
@@ -1339,16 +1399,24 @@ void App::EnemiesTurn() {
         for (const auto* enemy : enemies_) {
             if (!enemy->IsAlive()) continue;
 
+            // --- POPRAWKA: ZABEZPIECZENIE PRZED CRASHEM ---
+            // Jeśli wróg jest poza tablicą (np. błąd spawnu), nie rysuj go
+            if (enemy->GameX < 0 || enemy->GameX >= level_.w ||
+                enemy->GameY < 0 || enemy->GameY >= level_.h) {
+                continue;
+            }
+            // ---------------------------------------------
+
             int dx = enemy->GameX - player_.GameX;
             int dy = enemy->GameY - player_.GameY;
 
             if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
                 int idx = enemy->GameY * level_.w + enemy->GameX;
-                // Rysuj wroga tylko jeśli stoi na odkrytym terenie
+
+                // Teraz to jest bezpieczne
                 if (!visited_cells_.empty() && visited_cells_[idx]) {
                     float sx = p.x + (dx + viewRange) * tileSize;
                     float sy = p.y + (dy + viewRange) * tileSize;
-                    // Czerwona kropka
                     drawList->AddRectFilled(ImVec2(sx + 2, sy + 2), ImVec2(sx + tileSize - 2, sy + tileSize - 2), IM_COL32(255, 0, 0, 255));
                 }
             }
@@ -1449,141 +1517,161 @@ void App::EnemiesTurn() {
     }
 
     void App::render_main_menu() {
-        // Rozmiar okna ImGui (stały, ale możesz potem zmienić)
-        ImVec2 window_size(520, 320);
+        ImGuiIO& io = ImGui::GetIO();
 
-        // Wyśrodkowanie okna względem aktualnej rozdzielczości
-        ImVec2 display_size = ImGui::GetIO().DisplaySize;
-        ImVec2 window_pos(
-            (display_size.x - window_size.x) * 0.5f,
-            (display_size.y - window_size.y) * 0.5f
-        );
+        // Ustawiamy okno na cały ekran, ale przezroczyste, żeby widzieć tło 3D
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(io.DisplaySize);
+        ImGui::SetNextWindowBgAlpha(0.0f); // Całkowicie przezroczyste tło okna
 
-        ImGui::SetNextWindowSize(window_size, ImGuiCond_Always);
-        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always);
+        ImGui::Begin("MainMenuOverlay", nullptr,
+            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-        // Trochę ładniejszy styl okna
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(24.0f, 24.0f));
+        // --- TYTUŁ GRY (Efekt cienia) ---
+        float titleScale = 4.0f;
+        std::string titleText = "DUNGEON CRAWLER";
 
-        // Bez tytułu, bez resize/drag
-        ImGui::Begin("##MainMenu", nullptr,
-            ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoCollapse);
+        // Oblicz szerokość tekstu żeby wyśrodkować
+        ImGui::SetWindowFontScale(titleScale);
+        float titleW = ImGui::CalcTextSize(titleText.c_str()).x;
+        float titleX = (io.DisplaySize.x - titleW) * 0.5f;
+        float titleY = io.DisplaySize.y * 0.15f;
 
-        // Tytuł gry – wycentrowany
-        ImGui::PushFont(nullptr); // jeśli kiedyś dodasz większą czcionkę, użyjesz jej tutaj
-        const char* title = "Dungeon Crawler Prototype";
-        ImVec2 title_size = ImGui::CalcTextSize(title);
-        float title_x = (window_size.x - title_size.x) * 0.5f;
-        ImGui::SetCursorPosX(title_x);
-        ImGui::TextUnformatted(title);
-        ImGui::PopFont();
+        // Cień (Czarny, przesunięty)
+        ImGui::SetCursorPos(ImVec2(titleX + 5, titleY + 5));
+        ImGui::TextColored(ImVec4(0, 0, 0, 1), titleText.c_str());
 
-        ImGui::Separator();
-        ImGui::Dummy(ImVec2(0.0f, 20.0f)); // odstęp pod tytułem
+        // Właściwy tekst (Złoty/Żółty jak w Minecraft)
+        ImGui::SetCursorPos(ImVec2(titleX, titleY));
+        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), titleText.c_str());
 
-        // Przyciski – szerokie, wycentrowane
-        const ImVec2 button_size(260.0f, 48.0f);
-        float button_x = (window_size.x - button_size.x) * 0.5f;
+        // Reset skali czcionki dla przycisków
+        ImGui::SetWindowFontScale(1.5f);
 
-        // Start Gry
-        ImGui::SetCursorPosX(button_x);
-        if (ImGui::Button("Start Gry", button_size)) {
+        // --- PRZYCISKI (Styl Retro) ---
+        push_retro_style(); // Włączamy styl kamienia
+
+        float btnW = 300.0f;
+        float btnH = 50.0f;
+        float startY = io.DisplaySize.y * 0.4f;
+        float spacing = 20.0f;
+        float centerX = (io.DisplaySize.x - btnW) * 0.5f;
+
+        ImGui::SetCursorPos(ImVec2(centerX, startY));
+        if (ImGui::Button("GRAJ", ImVec2(btnW, btnH))) {
             state_ = GameState::Playing;
         }
 
-        ImGui::Dummy(ImVec2(0.0f, 8.0f));
-
-        // Opcje
-        ImGui::SetCursorPosX(button_x);
-        if (ImGui::Button("Opcje", button_size)) {
+        ImGui::SetCursorPos(ImVec2(centerX, startY + (btnH + spacing) * 1));
+        if (ImGui::Button("OPCJE", ImVec2(btnW, btnH))) {
+            previous_state_ = GameState::MainMenu;
             state_ = GameState::Options;
         }
 
-        ImGui::Dummy(ImVec2(0.0f, 8.0f));
+        ImGui::SetCursorPos(ImVec2(centerX, startY + (btnH + spacing) * 2));
+        if (ImGui::Button("AUTORZY (CREDITS)", ImVec2(btnW, btnH))) {
+            state_ = GameState::Credits;
+        }
 
-        // Wyjście
-        ImGui::SetCursorPosX(button_x);
-        if (ImGui::Button("Wyjscie", button_size)) {
+        ImGui::SetCursorPos(ImVec2(centerX, startY + (btnH + spacing) * 3));
+        if (ImGui::Button("WYJSCIE", ImVec2(btnW, btnH))) {
             glfwSetWindowShouldClose(window_, 1);
         }
 
+        pop_retro_style(); // Wyłączamy styl kamienia
+
         ImGui::End();
-        ImGui::PopStyleVar(3); // WindowRounding, FrameRounding, WindowPadding
     }
 
     void App::render_options_menu() {
+        // ... (ustawienia okna jak wcześniej) ...
 
-        ImGui::SetNextWindowSize(ImVec2(420, 300), ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowPos(
-            ImVec2(cfg_.width / 2 - 210, cfg_.height / 2 - 150),
-            ImGuiCond_FirstUseEver
-        );
+        ImGui::Begin("Opcje", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-        ImGui::Begin("Opcje", nullptr,
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoCollapse);
-
-        ImGui::Text("Ustawienia obrazu:");
+        ImGui::Text("Dzwiek:");
         ImGui::Separator();
 
-        // 1280 x 720 - normalne okno z ramką
-        if (ImGui::Button("1280 x 720 (okno)", ImVec2(250, 30))) {
-            glfwSetWindowMonitor(window_, nullptr, 100, 100, 1280, 720, 0);
-            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_TRUE);
-            on_resize(1280, 720);
+        // --- SUWAK GŁOŚNOŚCI ---
+        if (ImGui::SliderFloat("Glosnosc", &master_volume_, 0.0f, 1.0f)) {
+            // Aktualizacja miniaudio w czasie rzeczywistym
+            ma_engine_set_volume(&audio_engine_, master_volume_);
         }
 
-        // 1600 x 900 - większe okno z ramką
-        if (ImGui::Button("1600 x 900 (okno)", ImVec2(250, 30))) {
-            glfwSetWindowMonitor(window_, nullptr, 100, 100, 1600, 900, 0);
-            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_TRUE);
-            on_resize(1600, 900);
-        }
+        ImGui::Dummy(ImVec2(0, 20)); // Odstęp
 
-        // Borderless fullscreen (okno bez ramek, na cały ekran)
-        if (ImGui::Button("Borderless fullscreen", ImVec2(250, 30))) {
-            GLFWmonitor* mon = glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(mon);
+        ImGui::Text("Kamera:");
+        ImGui::Separator();
 
-            // okno jako zwykłe (monitor = nullptr), ale rozciągnięte na cały ekran i bez ramek
-            glfwSetWindowMonitor(window_, nullptr, 0, 0, mode->width, mode->height, 0);
-            glfwSetWindowAttrib(window_, GLFW_DECORATED, GLFW_FALSE);
+        // --- WYBÓR KAMERY ---
+        int mode = (camera_mode_ == CameraMode::FirstPerson) ? 0 : 1;
+        if (ImGui::RadioButton("First-person (FPP)", mode == 0)) mode = 0;
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Third-person (TPP)", mode == 1)) mode = 1;
+        camera_mode_ = (mode == 0) ? CameraMode::FirstPerson : CameraMode::ThirdPerson;
 
-            on_resize(mode->width, mode->height);
-        }
+        ImGui::Dummy(ImVec2(0, 20));
 
-        // Pelny ekran ekskluzywny (GLFW fullscreen na monitorze)
-        if (ImGui::Button("Pelny ekran (exclusive)", ImVec2(250, 30))) {
-            GLFWmonitor* mon = glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(mon);
-
-            glfwSetWindowMonitor(window_, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
-
-            on_resize(mode->width, mode->height);
-        }
+        ImGui::Text("Grafika:");
+        ImGui::Separator();
+        // ... (Twoje przyciski rozdzielczości - zostaw je tutaj) ...
 
         ImGui::Separator();
-        ImGui::Text("Dźwięk:");
-        static float volume = 0.5f;
-        ImGui::SliderFloat("Glosnosc", &volume, 0.0f, 1.0f);
-
-        ImGui::Separator();
-        if (ImGui::Button("Wroc", ImVec2(200, 40))) {
-            state_ = GameState::MainMenu;
+        if (ImGui::Button("Wroc", ImVec2(100, 40))) {
+            // Prosta logika powrotu:
+            // Jeśli gra ma wczytany poziom (np. player żyje), wracamy do pauzy/gry?
+            // Najbezpieczniej: Wracamy do MainMenu (jeśli przyszliśmy z MainMenu).
+            // Ale jak jesteśmy w grze?
+            // Dodaj zmienną pomocniczą w App.hpp: GameState previous_state_;
+            // Ustawiaj ją przed wejściem w Opcje.
+            // Na razie dla testu:
+            state_ = previous_state_;
         }
 
         ImGui::End();
+    }
+
+    void App::init_audio() {
+        ma_result result;
+
+        // 1. Inicjalizacja silnika
+        result = ma_engine_init(NULL, &audio_engine_);
+        if (result != MA_SUCCESS) {
+            printf("Błąd: Nie udalo sie zainicjowac audio engine.\n");
+            return;
+        }
+
+        // 2. Ładowanie MUZYKI (Globalna, zapętlona)
+        // MA_SOUND_FLAG_STREAM - dobre dla długiej muzyki (nie ładuje całej do RAMu)
+        result = ma_sound_init_from_file(&audio_engine_, "assets/audio/music.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &bg_music_);
+        if (result == MA_SUCCESS) {
+            ma_sound_set_looping(&bg_music_, MA_TRUE); // Zapętlamy
+            ma_sound_set_volume(&bg_music_, 0.3f);     // Cicha muzyka (30%)
+            ma_sound_start(&bg_music_);                // Start od razu
+        }
+        else {
+            printf("Blad: Brak pliku assets/audio/music.mp3\n");
+        }
+
+        // 3. Ładowanie POCHODNI (Tylko w grze, zapętlona)
+        result = ma_sound_init_from_file(&audio_engine_, "assets/audio/torch.mp3", 0, NULL, NULL, &sfx_torch_);
+        if (result == MA_SUCCESS) {
+            ma_sound_set_looping(&sfx_torch_, MA_TRUE); // Zapętlamy
+            ma_sound_set_volume(&sfx_torch_, 0.6f);     // Ogień głośniejszy niż muzyka
+            // NIE STARTUJEMY TUTAJ! (Startujemy tylko w grze)
+        }
+        else {
+            printf("Blad: Brak pliku assets/audio/torch.mp3\n");
+        }
     }
 
     void App::run() {
         while (!glfwWindowShouldClose(window_)) {
             frame_begin();
+            update_audio_state();
+            float dt = ImGui::GetIO().DeltaTime;
+            if (state_ == GameState::MainMenu || state_ == GameState::Credits) {
+                menu_timer_ += dt;
+            }
 
             if (state_ == GameState::Playing && combat_lock_) {
                 update_combat();
@@ -1591,7 +1679,13 @@ void App::EnemiesTurn() {
 
             switch (state_) {
             case GameState::MainMenu:
+                frame_render();  
                 render_main_menu();
+                break;
+
+            case GameState::Credits:
+                frame_render();    
+                render_credits();
                 break;
 
             case GameState::Options:
@@ -1607,6 +1701,16 @@ void App::EnemiesTurn() {
                 frame_render();
                 render_game_over();
                 break;
+
+            case GameState::Victory:
+                frame_render();
+                render_victory_screen();
+                break;
+
+            case GameState::Paused:
+                frame_render();      // Rysujemy grę w tle (zamrożoną)
+                render_pause_menu(); // Rysujemy menu na wierzchu
+                break;
             }
 
             frame_end();
@@ -1614,31 +1718,38 @@ void App::EnemiesTurn() {
     }
 
     void App::reset_game() {
-        // 1. Reset statystyk gracza
-        player_.maxHealth = 100;
-        player_.health = player_.maxHealth;
-        player_.ActionPoints = 2;
-        player_.base_damage = 10;
+        // 1. Reset zmiennych aplikacji
+        has_held_item_ = false;        // <--- TEGO BRAKOWAŁO! Zabieramy miecz wizualnie
+        attack_anim_timer_ = 0.0f;     // Resetujemy animację ataku
 
-        // 2. Czyścimy ekwipunek (Totalny reset)
-        player_.inventory.clear();
-        player_.equippedWeapon = nullptr;
-        player_.equippedArmor = nullptr;
+        is_moving_ = false;
+        move_timer_ = 0.0f;
 
-        // 3. Reset pozycji (startowa z mapy)
-        load_level(); // Przeładuj mapę od zera (to zresetuje pozycje spawnu)
+        // 2. Reset statystyk gracza (bo to nowa gra, więc musi mieć pełne HP)
+        player_.health = player_.maxHealth; // Pełne życie
+        player_.ResetActionPoints(2);       // Pełne punkty akcji
+        // Jeśli masz w klasie Player pole ekwipunku, też je tu wyczyść, np.:
+        // player_.hasSword = false; 
 
-        // 4. Respawn świata
-        spawn_entities_from_level(); // Tworzy wrogów i itemy na nowo
+        // 3. Ładowanie mapy (startowej)
+        // Upewniamy się, że wracamy na start
+        current_level_idx_ = 0;
+        current_map_name_ = map_list_[0];
 
-        // Upewnij się, że pozycja gracza jest zsynchronizowana
-        player_.GameX = level_.player_x;
-        player_.GameY = level_.player_y;
-        player_.RenderPosition = glm::vec3(player_.GameX, 0.0f, player_.GameY);
+        // Przeładowanie zasobów
+        if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
+        if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
+        if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
+        if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
+        floor_vao_ = 0; floor_vbo_ = 0; wall_vao_ = 0; wall_vbo_ = 0;
 
-        // Reset stanów walki
-        combat_lock_ = false;
-        player_.IsAlive(); // Tylko check, health już ustawione
+        load_level();
+        build_world_mesh();
+        spawn_entities_from_level();
+
+        // 4. Reset mgły wojny
+        visited_cells_.assign(level_.w * level_.h, false);
+        update_exploration();
     }
 
     void App::render_game_over() {
@@ -1673,12 +1784,11 @@ void App::EnemiesTurn() {
         // --- POŁOWA SEKWENCJI (0.5s): WRÓG ODDAJE ---
         if (combat_timer_ <= 0.5f && enemy_riposte_pending_) {
             if (current_combat_target_ && current_combat_target_->IsAlive()) {
-                // Wróg atakuje gracza (bez zużywania swoich AP, to jest riposta!)
                 int dmg = current_combat_target_->base_damage;
                 player_.TakeDamage(dmg);
-                // To wywoła IsHurt() i czerwony błysk ekranu w frame_ui
+                trauma_ = 0.5f; // Ustaw siłę wstrząsu (max 1.0)
             }
-            enemy_riposte_pending_ = false; // Już oddał
+            enemy_riposte_pending_ = false;
         }
 
         // --- KONIEC SEKWENCJI (0.0s): ODBLOKOWANIE ---
@@ -1788,6 +1898,264 @@ void App::EnemiesTurn() {
                 }
             }
         }
+    }
+
+    void App::load_next_level() {
+        current_level_idx_++;
+
+        // Sprawdź czy mamy jeszcze mapy na liście
+        if (current_level_idx_ < map_list_.size()) {
+            std::cout << "Loading Level: " << map_list_[current_level_idx_] << std::endl;
+
+            // 1. Ustaw nazwę nowej mapy
+            current_map_name_ = map_list_[current_level_idx_];
+
+            // 2. Zachowaj statystyki gracza, ale zresetuj AP
+            player_.ResetActionPoints(2);
+
+            // 3. Przeładuj wszystko
+            // Usuń stare bufory (ważne, żeby nie było wycieków pamięci w GPU)
+            if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
+            if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
+            if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
+            if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
+            floor_vao_ = 0; floor_vbo_ = 0; wall_vao_ = 0; wall_vbo_ = 0;
+
+            // Wczytaj dane
+            load_level();
+            build_world_mesh();
+            spawn_entities_from_level();
+
+            // Reset mgły wojny (nowa mapa jest czarna)
+            visited_cells_.assign(level_.w * level_.h, false);
+            update_exploration();
+        }
+        else {
+            // Brak map = Koniec gry
+            state_ = GameState::Victory;
+        }
+    }
+
+    void App::render_victory_screen() {
+        ImGuiIO& io = ImGui::GetIO();
+        // Wyśrodkowanie okna
+        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+
+        if (ImGui::Begin("Victory", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize)) {
+            // Złoty napis
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.8f, 0.0f, 1.0f));
+            ImGui::SetWindowFontScale(2.0f);
+            ImGui::Text("ZWYCIESTWO!");
+            ImGui::SetWindowFontScale(1.0f);
+            ImGui::PopStyleColor();
+
+            ImGui::Text("Ukonczyles loch i znalazles wyjscie.");
+            ImGui::Separator();
+            ImGui::Dummy(ImVec2(0, 10));
+
+            if (ImGui::Button("Wroc do Menu Glownego", ImVec2(200, 50))) {
+                state_ = GameState::MainMenu;
+                current_level_idx_ = 0; // Reset postępu
+                current_map_name_ = map_list_[0]; // Reset do mapy 1
+                reset_game();
+            }
+        }
+        ImGui::End();
+    }
+
+    void App::update_audio_state() {
+        // Sprawdzamy stan gry
+        if (state_ == GameState::Playing) {
+            // Jeśli gra trwa, a ogień nie gra -> Włącz
+            if (!ma_sound_is_playing(&sfx_torch_)) {
+                ma_sound_start(&sfx_torch_);
+            }
+        }
+        else {
+            // Jeśli Menu/Victory/GameOver, a ogień gra -> Wyłącz
+            if (ma_sound_is_playing(&sfx_torch_)) {
+                ma_sound_stop(&sfx_torch_);
+            }
+        }
+    }
+
+    void App::render_pause_menu() {
+        // Styl taki sam jak Main Menu
+        ImVec2 window_size(300, 300); // Mniejsze, zgrabne
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::SetNextWindowPos(ImVec2((io.DisplaySize.x - window_size.x) * 0.5f, (io.DisplaySize.y - window_size.y) * 0.5f));
+        ImGui::SetNextWindowSize(window_size);
+
+        // Przeźroczyste tło (żeby widzieć grę pod spodem)
+        ImGui::SetNextWindowBgAlpha(0.7f);
+
+        ImGui::Begin("PauseMenu", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+
+        // Wyśrodkowanie przycisków
+        float contentW = ImGui::GetContentRegionAvail().x;
+        float btnW = 200.0f;
+        float centerX = (contentW - btnW) * 0.5f;
+
+        ImGui::SetCursorPosX(centerX);
+        ImGui::Text("PAUZA");
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0, 20));
+
+        ImGui::SetCursorPosX(centerX);
+        if (ImGui::Button("Wznow (Resume)", ImVec2(btnW, 40))) {
+            state_ = GameState::Playing;
+        }
+
+        ImGui::Dummy(ImVec2(0, 10));
+        ImGui::SetCursorPosX(centerX);
+        if (ImGui::Button("Opcje", ImVec2(btnW, 40))) {
+            previous_state_ = GameState::Paused;
+            state_ = GameState::Options;
+            // Tu przydałoby się zapisać previous_state_ = GameState::Paused;
+        }
+
+        ImGui::Dummy(ImVec2(0, 10));
+        ImGui::SetCursorPosX(centerX);
+        if (ImGui::Button("Menu Glowne", ImVec2(btnW, 40))) {
+            state_ = GameState::MainMenu;
+            // Opcjonalnie: reset_game() tutaj, jeśli chcesz wyjść całkowicie
+        }
+
+        ImGui::Dummy(ImVec2(0, 10));
+        ImGui::SetCursorPosX(centerX);
+        if (ImGui::Button("Wyjscie z gry", ImVec2(btnW, 40))) {
+            glfwSetWindowShouldClose(window_, 1);
+        }
+
+        ImGui::End();
+    }
+
+    void App::render_loading_screen() {
+        // PĘTLA RYSOWANIA (Rysujemy 3 razy, żeby wypełnić Back Buffer i Front Buffer)
+        // Dzięki temu mamy pewność, że obraz trafi na ekran przed zamrożeniem.
+        for (int i = 0; i < 3; i++) {
+
+            // 1. Rozmiar i Viewport
+            int w, h;
+            glfwGetFramebufferSize(window_, &w, &h);
+            glViewport(0, 0, w, h);
+
+            // 2. TŁO (Ciemnoszare - dla testu, czy OpenGL działa)
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            // 3. Start ImGui
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            // Ręczny rozmiar dla pewności
+            ImGuiIO& io = ImGui::GetIO();
+            io.DisplaySize = ImVec2((float)w, (float)h);
+
+            // 4. Okno z napisem
+            ImVec2 center = ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f);
+            ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+
+            if (ImGui::Begin("Loading", nullptr,
+                ImGuiWindowFlags_NoDecoration |
+                ImGuiWindowFlags_AlwaysAutoResize |
+                ImGuiWindowFlags_NoBackground))
+            {
+                ImGui::SetWindowFontScale(3.0f);
+                ImGui::TextColored(ImVec4(1, 1, 1, 1), "LADOWANIE...");
+            }
+            ImGui::End();
+
+            // 5. Render
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            // 6. Swap
+            glfwSwapBuffers(window_);
+
+            // 7. Ważne: Przetwórz eventy, żeby okno "odżyło"
+            glfwPollEvents();
+        }
+
+        // Czekamy chwilkę, żeby upewnić się, że GPU skończyło
+        glFinish();
+    }
+
+    void App::push_retro_style() {
+        // 1. Kolory (Szary kamień)
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.4f, 0.4f, 0.4f, 1.0f)); // Zwykły
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 0.5f, 1.0f)); // Najechany (jaśniejszy)
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f)); // Wciśnięty (ciemniejszy)
+
+        ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.1f, 0.1f, 0.1f, 1.0f)); // Czarne ramki
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)); // Biały tekst
+
+        // 2. Kształty (Kanciaste jak piksele)
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);  // Zero zaokrągleń
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0f); // Gruba ramka
+    }
+
+    void App::pop_retro_style() {
+        ImGui::PopStyleVar(2);
+        ImGui::PopStyleColor(5);
+    }
+
+    void App::render_credits() {
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(io.DisplaySize);
+        ImGui::SetNextWindowBgAlpha(0.7f); // Półprzezroczyste czarne tło
+
+        ImGui::Begin("Credits", nullptr, ImGuiWindowFlags_NoDecoration);
+
+        // Tytuł
+        ImGui::SetWindowFontScale(2.5f);
+        std::string title = "TWORCY";
+        float titleW = ImGui::CalcTextSize(title.c_str()).x;
+        ImGui::SetCursorPosX((io.DisplaySize.x - titleW) * 0.5f);
+        ImGui::SetCursorPosY(50);
+        ImGui::TextColored(ImVec4(1, 0.8f, 0.2f, 1), title.c_str());
+
+        ImGui::Dummy(ImVec2(0, 50));
+
+        // Lista (Edytuj tutaj!)
+        ImGui::SetWindowFontScale(1.5f);
+        const char* names[] = {
+            "PROGRAMOWANIE GLOWNE",
+            "Jan Kantor",
+            "Kacper Szkutnik",
+            "Wiktor Dzik",
+            "",
+            "POMOC I DESIGN",
+            "Gemini (Google)",
+            "",
+            "SILNIK DZWIEKU",
+            "miniaudio",
+            "",
+            "GRAFIKA GUI",
+            "ImGui",
+        };
+
+        for (const char* line : names) {
+            float w = ImGui::CalcTextSize(line).x;
+            ImGui::SetCursorPosX((io.DisplaySize.x - w) * 0.5f);
+
+            // Jeśli linia jest pusta, robimy odstęp, jeśli nie - rysujemy
+            if (strlen(line) == 0) ImGui::Dummy(ImVec2(0, 20));
+            else ImGui::Text("%s", line);
+        }
+
+        // Przycisk powrotu na dole
+        push_retro_style();
+        float btnW = 200;
+        ImGui::SetCursorPos(ImVec2((io.DisplaySize.x - btnW) * 0.5f, io.DisplaySize.y - 100));
+        if (ImGui::Button("WROC", ImVec2(btnW, 50))) {
+            state_ = GameState::MainMenu;
+        }
+        pop_retro_style();
+
+        ImGui::End();
     }
 
 } // namespace dungeon

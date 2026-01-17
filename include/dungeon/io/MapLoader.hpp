@@ -16,7 +16,7 @@ namespace dungeon::io {
     // Nowa struktura: Trzyma pozycjê ORAZ typ wroga (np. 'S', 'Z')
     struct EnemySpawn {
         int x, y;
-        char type;
+        char type; 
     };
 
     struct Level {
@@ -26,7 +26,8 @@ namespace dungeon::io {
         int player_x = 1;
         int player_y = 1;
 
-        // Zmieniono z vector<ivec2> na vector<EnemySpawn>
+        float player_start_yaw = 180.0f; // <--- NOWE: Domyœlny k¹t startowy
+
         std::vector<EnemySpawn> enemy_spawns;
         std::vector<glm::ivec2> item_spawns;
     };

@@ -15,6 +15,7 @@
 #include "game/clases/Player.h"
 #include "game/clases/Enemy.h"
 #include "game/clases/Skill.h"
+#include "miniaudio.h"
 
 
 namespace dungeon {
@@ -33,8 +34,11 @@ namespace dungeon {
     enum class GameState {
         MainMenu,
         Options,
+        Credits,
         Playing,
-        GameOver
+        GameOver,
+        Victory,
+        Paused
     };
 
     // Struktura reprezentująca przedmiot leżący na ziemi w świecie 3D
@@ -93,6 +97,15 @@ namespace dungeon {
         void build_weapon_mesh();
         void build_enemy_mesh();
 
+        std::vector<std::string> map_list_ = {
+        "assets/maps/test.map",   // Poziom 1
+        "assets/maps/test2.map"  // Poziom 2
+        };
+        int current_level_idx_ = 0;
+
+        void load_next_level();
+        void render_victory_screen();
+
 
     private:
         AppConfig   cfg_;
@@ -133,7 +146,7 @@ namespace dungeon {
         bool left_was_down_ = false;
         bool right_was_down_ = false;
         bool up_was_down_ = false;
-        bool m_was_down_ = false;
+        bool esc_was_down_ = false;
         bool atk_was_down_ = false;
         bool k1_was_down_  = false;
         bool k2_was_down_  = false;
@@ -155,6 +168,38 @@ namespace dungeon {
         float combat_timer_ = 0.0f;      // Licznik czasu sekwencji (1.0s -> 0.0s)
         bool enemy_riposte_pending_ = false; // Czy wróg ma nam oddać w połowie sekwencji?
         Entity* current_combat_target_ = nullptr; // Kogo bijemy (żeby wiedział kto oddaje)
+
+        bool is_moving_ = false;          // Czy gracz jest w trakcie kroku?
+        glm::vec3 move_start_pos_;        // Skąd wyruszyliśmy (wizualnie)
+        glm::vec3 move_target_pos_;       // Dokąd idziemy (wizualnie)
+        float move_timer_ = 0.0f;         // Licznik czasu
+        const float kMoveDuration_ = 0.25f; // Czas trwania kroku (0.25s jest idealne)
+
+        float trauma_ = 0.1f; // Poziom trzęsienia ekranu (od 0.0 do 1.0)
+
+        // --- AUDIO ---
+        ma_engine audio_engine_; // Silnik dźwiękowy
+        ma_sound bg_music_;      // Muzyka w tle
+        ma_sound sfx_torch_;     // Dźwięk pochodni
+
+        void init_audio();       // Funkcja inicjalizująca
+        void update_audio_state(); // Funkcja sprawdzająca czy włączyć/wyłączyć ogień
+
+        // --- AUDIO & SETTINGS ---
+        float master_volume_ = 0.5f; // Domyślna głośność 50%
+
+        // --- FUNKCJE RENDERUJĄCE ---
+        void render_pause_menu();    // Nowe menu pod ESC
+        GameState previous_state_ = GameState::MainMenu;
+
+        void render_loading_screen();
+
+        float menu_timer_ = 0.0f; // Do obracania kamery w menu
+        void render_credits();    // Funkcja rysująca ekran autorów
+
+        // Funkcja pomocnicza do stylu przycisków
+        void push_retro_style();
+        void pop_retro_style();
 
     };
 
