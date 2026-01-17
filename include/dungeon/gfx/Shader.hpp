@@ -1,6 +1,13 @@
 #pragma once
 #include <string>
 
+#include <glad/glad.h>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <glm/glm.hpp>
+
 namespace dungeon::gfx {
 
 	class Shader {
@@ -19,6 +26,9 @@ namespace dungeon::gfx {
 		void setVec3(const char* name, float x, float y, float z) const;
 		void setInt(const char* name, int v) const;
 		void setVec4(const char* name, float x, float y, float z, float w) const;
+		void setFloat(const std::string& name, float value) const {
+			glUniform1f(glGetUniformLocation(program_, name.c_str()), value);
+		}
 
 
 	private:

@@ -87,6 +87,13 @@ namespace dungeon {
         void render_game_over(); // Rysuje ekran śmierci
         void update_combat();    // Obsługuje sekwencję 1-sekundową
 
+        std::vector<bool> visited_cells_;
+        void update_exploration();
+        bool check_los(int x1, int y1, int x2, int y2) const;
+        void build_weapon_mesh();
+        void build_enemy_mesh();
+
+
     private:
         AppConfig   cfg_;
         GLFWwindow* window_ = nullptr;
@@ -104,6 +111,16 @@ namespace dungeon {
         GLuint wall_vbo_ = 0;
         int    floor_vertex_count_ = 0;
         int    wall_vertex_count_ = 0;
+
+        GLuint weapon_vao_ = 0;
+        GLuint weapon_vbo_ = 0;
+        GLuint weapon_texture_ = 0;
+        int weapon_vertex_count_ = 0;
+
+        GLuint enemy_vao_ = 0;
+        GLuint enemy_vbo_ = 0;
+        GLuint enemy_texture_ = 0;
+        int enemy_vertex_count_ = 0;
 
         GLuint wall_texture_ = 0;
         GLuint floor_texture_ = 0;

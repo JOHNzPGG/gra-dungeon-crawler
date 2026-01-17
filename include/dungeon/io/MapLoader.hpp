@@ -5,7 +5,19 @@
 
 namespace dungeon::io {
 
-    enum class Cell : unsigned char { Wall = 1, Floor = 0 };
+    // Dodano NextLevel i Exit
+    enum class Cell : unsigned char {
+        Floor = 0,
+        Wall = 1,
+        NextLevel = 2,
+        Exit = 3
+    };
+
+    // Nowa struktura: Trzyma pozycjê ORAZ typ wroga (np. 'S', 'Z')
+    struct EnemySpawn {
+        int x, y;
+        char type;
+    };
 
     struct Level {
         int w = 0;
@@ -14,7 +26,8 @@ namespace dungeon::io {
         int player_x = 1;
         int player_y = 1;
 
-        std::vector<glm::ivec2> enemy_spawns;
+        // Zmieniono z vector<ivec2> na vector<EnemySpawn>
+        std::vector<EnemySpawn> enemy_spawns;
         std::vector<glm::ivec2> item_spawns;
     };
 

@@ -29,19 +29,23 @@ static void glfw_error_cb(int code, const char* desc) {
     std::fprintf(stderr, "GLFW error %d: %s\n", code, desc);
 }
 
-// Vertex shader – pozycja + UV (Bez zmian)
 static const char* kWorldVS = R"(#version 330 core
 layout(location=0) in vec3 aPos;
 layout(location=1) in vec2 aTexCoord;
 
 out vec2 vTexCoord;
+out vec3 vFragPos; // NOWE: Pozycja punktu w świecie 3D
 
 uniform mat4 uProj;
 uniform mat4 uView;
 uniform mat4 uModel;
 
 void main() {
-  gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
+  // Obliczamy pozycję w świecie (World Space)
+  vec4 worldPos = uModel * vec4(aPos, 1.0);
+  vFragPos = vec3(worldPos);
+
+  gl_Position = uProj * uView * worldPos;
   vTexCoord = aTexCoord;
 }
 )";
@@ -49,18 +53,53 @@ void main() {
 // Fragment shader – ZMIENIONY NA WERSJĘ Z KODU DRUGIEGO (obsługa uUseTex)
 static const char* kWorldFS = R"(#version 330 core
 out vec4 FragColor;
+
 in vec2 vTexCoord;
+in vec3 vFragPos;
 
 uniform sampler2D uTex; 
-uniform int uUseTex;    // 1 = użyj tekstury, 0 = użyj koloru
-uniform vec4 uColor;    // Kolor obiektu (jeśli uUseTex == 0)
+uniform int uUseTex;
+uniform vec4 uColor;
+uniform vec3 uCamPos; 
+uniform float uTime; // NOWE: Czas gry do animacji
 
 void main() {
+    vec4 baseColor;
+
     if (uUseTex == 1) {
-        FragColor = texture(uTex, vTexCoord);
+        baseColor = texture(uTex, vTexCoord) * uColor;
     } else {
-        FragColor = uColor;
+        baseColor = uColor;
     }
+    
+    if(baseColor.a < 0.1) discard;
+
+    // --- OBLICZANIE POCHODNI ---
+    float dist = distance(vFragPos, uCamPos);
+
+    // 1. Efekt Migotania (Flicker)
+    // Łączymy dwa sinusy o różnych prędkościach, żeby ruch był nieregularny
+    float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
+    
+    // Dodajemy migotanie do zasięgu światła
+    float lightStart = 2.5 + flicker; 
+    float lightEnd = 8.0 + flicker * 2.0;
+
+    float lightFactor = (lightEnd - dist) / (lightEnd - lightStart);
+    lightFactor = clamp(lightFactor, 0.0, 1.0);
+
+    // 2. Kolor Światła (Ciepły Pomarańcz)
+    // Zamiast białego (1.0, 1.0, 1.0) dajemy ogień
+    vec3 torchColor = vec3(1.0, 0.85, 0.6); 
+
+    // Ambient (światło otoczenia) - lekko niebieskawy dla kontrastu
+    vec3 ambient = vec3(0.05, 0.05, 0.1); 
+
+    // Łączymy światło pochodni z ambientem
+    vec3 finalLight = (torchColor * lightFactor) + ambient;
+
+    // 3. Wynik
+    FragColor = vec4(baseColor.rgb * finalLight, baseColor.a);
 }
 )";
 
@@ -76,6 +115,8 @@ namespace dungeon {
         load_level();
         build_world_mesh(); 
         build_cube_mesh();
+        build_weapon_mesh();
+        build_enemy_mesh();
         spawn_entities_from_level();
         // Dodaj to, żeby gracz miał czym walczyć!
         // Skill(nazwa, koszt AP, obrażenia)
@@ -98,6 +139,10 @@ namespace dungeon {
         if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
         if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
         if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
+        if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
+        if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
+        if (enemy_vao_) glDeleteVertexArrays(1, &enemy_vao_);
+        if (enemy_vbo_) glDeleteBuffers(1, &enemy_vbo_);
 
         if (window_) {
             glfwDestroyWindow(window_);
@@ -203,6 +248,7 @@ namespace dungeon {
         }
 
         level_ = io::load_map_ascii(path);
+        visited_cells_.assign(level_.w * level_.h, false);
 
         // startowa pozycja z mapy
         player_.GameX = level_.player_x;
@@ -220,14 +266,28 @@ namespace dungeon {
         world_items_.clear();
 
         for (const auto& p : level_.enemy_spawns) {
-            // Tworzymy przeciwnika w miejscu p.x, p.y
-            // Parametry: x, y, yaw, hp, maxHp, ap, damage, name
-            //Enemy* newEnemy = new Enemy(p.x, p.y, 180, 20, 20, 2, 5, "Skeleton");
+            Enemy* newEnemy = nullptr;
 
-            // HP: 80 (wytrzyma ok. 4 zwykłe ataki po 20 dmg, lub 2 potężne backstaby)
-            // DMG: 35 (Gracz ma 100 HP, więc 35 to ok. 1/3 życia - 3 hity i giniemy!)
-            Enemy* newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
-            enemies_.push_back(newEnemy);
+            if (p.type == 'Z') {
+                // ZOMBIE: Wolny (1 AP), dużo życia (150), mocno bije (40)
+                // Możesz tu w przyszłości dać inny model/teksturę
+                newEnemy = new Enemy(p.x, p.y, 180, 150, 150, 1, 40, "Zombie");
+            }
+            else {
+                // SZKIELET (S): Standardowy
+                // Tworzymy przeciwnika w miejscu p.x, p.y
+                // Parametry: x, y, yaw, hp, maxHp, ap, damage, name
+                //Enemy* newEnemy = new Enemy(p.x, p.y, 180, 20, 20, 2, 5, "Skeleton");
+
+                // HP: 80 (wytrzyma ok. 4 zwykłe ataki po 20 dmg, lub 2 potężne backstaby)
+                // DMG: 35 (Gracz ma 100 HP, więc 35 to ok. 1/3 życia - 3 hity i giniemy!)
+                Enemy* newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
+                newEnemy = new Enemy(p.x, p.y, 180, 80, 80, 2, 35, "Skeleton Warrior");
+            }
+
+            if (newEnemy) {
+                enemies_.push_back(newEnemy);
+            }
         }
 
         int counter = 0;
@@ -337,13 +397,46 @@ namespace dungeon {
         // --- Ruch ---
         if (up && !up_was_down_) {
             glm::ivec2 target = player_.GetForwardTile();
+
+            // 1. Sprawdź czy to nie ściana (istniejące)
             if (can_move_to(target.x, target.y)) {
-                if (player_.UseActionPoints(1)) {
-                    player_.GameX = target.x;
-                    player_.GameY = target.y;
-                    player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+
+                // 2. NOWOŚĆ: Sprawdź, czy na polu docelowym nie stoi wróg!
+                // Jeśli GetEnemyInFront zwróci cokolwiek innego niż nullptr, to znaczy że ktoś tam stoi.
+                if (GetEnemyInFront(player_) == nullptr) {
+
+                    // 3. Dopiero teraz sprawdzamy AP i ruszamy
+                    if (player_.UseActionPoints(1)) {
+                        player_.GameX = target.x;
+                        player_.GameY = target.y;
+                        player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+                    }
+                }
+                else {
+                    std::cout << "Blokada: Przeciwnik na drodze!" << std::endl;
+                    // Opcjonalnie: Możesz tu dodać dźwięk "bump" w przyszłości
                 }
             }
+
+            if (player_.UseActionPoints(1)) {
+                player_.GameX = target.x;
+                player_.GameY = target.y;
+                player_.RenderPosition = glm::vec3(target.x, 0.f, target.y);
+
+                // --- NOWE: SPRAWDZANIE PÓL SPECJALNYCH ---
+                int idx = target.y * level_.w + target.x;
+                auto cellType = level_.cells[idx];
+
+                if (cellType == io::Cell::NextLevel) {
+                    std::cout << "Przechodze do nastepnego poziomu!" << std::endl;
+                    //load_next_level(); // Funkcja którą dodałeś wcześniej
+                }
+                else if (cellType == io::Cell::Exit) {
+                    std::cout << "Zwyciestwo!" << std::endl;
+                    //state_ = GameState::Victory; // Stan zwycięstwa
+                }
+            }
+
         }
 
         // --- Podnoszenie Przedmiotów (Item Pickup) ---
@@ -713,6 +806,127 @@ void App::EnemiesTurn() {
         glBindVertexArray(0);
     }
 
+    void App::build_weapon_mesh() {
+        // 1. Ustawienia
+        std::string modelPath = "assets/models/sword3obj.obj"; // Upewnij się, że nazwa pliku .obj jest poprawna!
+        std::string baseDir = "assets/models/";
+
+        // Używamy Speculara jako koloru, żeby miecz był srebrno-złoty
+        std::string textureFilename = "Excalibur_specularGlossiness.png";
+
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string err;
+
+        // 2. Ładowanie modelu
+        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, modelPath.c_str(), baseDir.c_str());
+
+        if (!err.empty()) printf("[WEAPON LOAD INFO]: %s\n", err.c_str());
+        if (!ret) return;
+
+        // 3. RĘCZNE ŁADOWANIE TEKSTURY (Tu używamy Twojej zmiennej)
+        std::string texPath = baseDir + textureFilename;
+        weapon_texture_ = load_texture(texPath.c_str());
+
+        if (weapon_texture_ == 0) {
+            printf("UWAGA: Nie udalo sie zaladowac tekstury miecza: %s\n", texPath.c_str());
+        }
+
+        // 4. Przetwarzanie wierzchołków
+        std::vector<float> vertices;
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                // Pozycja
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                // UV
+                if (index.texcoord_index >= 0) {
+                    vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+
+                    // TU MOŻE BYĆ POTRZEBNA KOREKTA (1.0f - ...)
+                    // Jeśli tekstura wygląda dziwnie, usuń "1.0f - "
+                    vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                }
+                else {
+                    vertices.push_back(0.0f); vertices.push_back(0.0f);
+                }
+            }
+        }
+
+        weapon_vertex_count_ = (int)(vertices.size() / 5);
+
+        // 5. Przesyłanie do GPU (Standard)
+        glGenVertexArrays(1, &weapon_vao_);
+        glGenBuffers(1, &weapon_vbo_);
+        glBindVertexArray(weapon_vao_);
+        glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
+    }
+
+    void App::build_enemy_mesh() {
+        // ZMIEŃ NAZWĘ PLIKU NA SWOJĄ!
+        std::string modelPath = "assets/models/skeleton2.obj";
+        std::string baseDir = "assets/models/";
+
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string err;
+
+        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, modelPath.c_str(), baseDir.c_str());
+
+        if (!err.empty()) printf("[ENEMY LOAD INFO]: %s\n", err.c_str());
+        if (!ret) return;
+
+        // Tekstura
+        if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+            std::string texPath = baseDir + materials[0].diffuse_texname;
+            enemy_texture_ = load_texture(texPath.c_str());
+        }
+        else {
+            // Fallback texture (opcjonalnie)
+            // enemy_texture_ = load_texture("assets/models/skeleton.png");
+        }
+
+        std::vector<float> vertices;
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                if (index.texcoord_index >= 0) {
+                    vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                    vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                }
+                else {
+                    vertices.push_back(0.0f); vertices.push_back(0.0f);
+                }
+            }
+        }
+
+        enemy_vertex_count_ = (int)(vertices.size() / 5);
+
+        glGenVertexArrays(1, &enemy_vao_);
+        glGenBuffers(1, &enemy_vbo_);
+        glBindVertexArray(enemy_vao_);
+        glBindBuffer(GL_ARRAY_BUFFER, enemy_vbo_);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
+    }
 
     void App::frame_begin() {
         glfwPollEvents();
@@ -728,6 +942,8 @@ void App::EnemiesTurn() {
 
     // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
     void App::frame_render() {
+
+        update_exploration();
 
         float dt = ImGui::GetIO().DeltaTime;
         if (attack_anim_timer_ > 0.0f) {
@@ -779,9 +995,11 @@ void App::EnemiesTurn() {
         world_shader_.use();
         world_shader_.setMat4("uProj", &proj_[0][0]);
         world_shader_.setMat4("uView", &view_[0][0]);
+        world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
+        world_shader_.setFloat("uTime", (float)glfwGetTime());
         glm::mat4 I(1.0f);
         world_shader_.setMat4("uModel", &I[0][0]);
-
+        world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
         // WAŻNE: Włączamy teksturowanie dla nowego shadera
         world_shader_.setInt("uUseTex", 1);
@@ -806,90 +1024,136 @@ void App::EnemiesTurn() {
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
+        // --- RYSOWANIE PORTALI / WYJŚĆ ---
+        world_shader_.setInt("uUseTex", 0); // Wyłączamy tekstury, używamy kolorów
+        glBindVertexArray(cube_vao_);       // Używamy kostki
+
+        for (int y = 0; y < level_.h; ++y) {
+            for (int x = 0; x < level_.w; ++x) {
+                auto cell = level_.cells[y * level_.w + x];
+
+                if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
+
+                    if (cell == io::Cell::NextLevel)
+                        world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f); // Niebieski, półprzeźroczysty
+                    else
+                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f); // Złoty, półprzeźroczysty
+
+                    glm::mat4 M(1.0f);
+                    // Ustawiamy w przejściu, trochę wyższy niż podłoga
+                    M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
+                    M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f)); // Trochę węższy niż kratka
+
+                    world_shader_.setMat4("uModel", &M[0][0]);
+                    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+                }
+            }
+        }
+        glBindVertexArray(0);
+
         // --- ENEMIES ---
-        glBindVertexArray(cube_vao_);
+        // Uwaga: Nie bindujemy na sztywno cube_vao_, bo mamy teraz model!
 
         for (auto* enemy : enemies_) {
-
-            // 1. Aktualizacja czasu śmierci (delta time z ImGui)
             float dt = ImGui::GetIO().DeltaTime;
             enemy->UpdateDeath(dt);
 
-            // 2. Warunek rysowania:
-            // Rysujemy jeśli żyje LUB jeśli umiera (animacja trwa).
-            // Jeśli już umarł całkowicie (animacja finished), pomijamy.
             if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
 
-            float alpha = 1.0f;
-            float y_offset = 0.75f; // Standardowa wysokość
+            // 1. Logika Koloru i Tekstury
+            world_shader_.use();
 
-            // 3. Logika kolorów i animacji
-            if (!enemy->IsAlive()) {
-                // --- ANIMACJA ŚMIERCI ---
-                // Alpha maleje od 1.0 do 0.0 w ciągu 1 sekundy
-                alpha = 1.0f - enemy->deathTimer;
-                if (alpha < 0.0f) alpha = 0.0f;
-
-                // Opadanie: Powoli w dół (z 0.75 do 0.25)
-                y_offset -= (enemy->deathTimer * 0.5f);
-
-                // Kolor: Ciemniejący szary + Alpha
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, alpha);
-            }
-            else if (enemy->IsHurt()) {
-                // Błysk od obrażeń
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f);
+            // Jeśli mamy teksturę wroga, używamy jej
+            if (enemy_texture_ != 0) {
+                world_shader_.setInt("uUseTex", 1);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, enemy_texture_);
+                world_shader_.setInt("uTex", 0);
             }
             else {
-                // Normalny kolor (Fioletowy)
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.6f, 0.0f, 1.0f, 1.0f);
+                world_shader_.setInt("uUseTex", 0); // Brak tekstury = kolor
             }
 
-            // 4. Obliczanie macierzy modelu
-            float x = static_cast<float>(enemy->GameX) + 0.5f;
+            float y_offset = 0.55f; // Model zazwyczaj stoi na 0.0, a nie lewituje jak kostka
+
+            if (!enemy->IsAlive()) {
+                // ŚMIERĆ: Zanikanie
+                float alpha = 1.0f - enemy->deathTimer;
+                if (alpha < 0.0f) alpha = 0.0f;
+                y_offset -= (enemy->deathTimer * 0.5f); // Zapadanie się
+
+                // Mnożnik koloru (szary + alpha)
+                // Dzięki zmianie w shaderze, tekstura stanie się ciemna i przezroczysta!
+                world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, alpha);
+            }
+            else if (enemy->IsHurt()) {
+                // BŁYSK: Czerwony tint
+                // Tekstura * Czerwony = "Krwisty" model
+                world_shader_.setVec4("uColor", 1.0f, 0.5f, 0.5f, 1.0f);
+            }
+            else {
+                // NORMALNIE: Biały (1,1,1,1) oznacza "oryginalne kolory tekstury"
+                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
+            }
+
+            // 2. Pozycja
+            float x = static_cast<float>(enemy->GameX) + 0.5f; // Środek kafelka
             float z = static_cast<float>(enemy->GameY) + 0.5f;
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, glm::vec3(x, y_offset, z));
 
-            // Obrót i ewentualne "przewrócenie się" przy śmierci
+            // Obrót (Yaw)
             M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
 
-            // Opcjonalnie: Przechylenie w tył przy śmierci
+            // Obrót przy śmierci (przewrócenie)
             if (!enemy->IsAlive()) {
-                // Przechylaj się w tył (oś X) w miarę upływu czasu
                 float deathAngle = -90.0f * enemy->deathTimer;
                 if (deathAngle < -90.0f) deathAngle = -90.0f;
                 M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
             }
 
-            M = glm::scale(M, glm::vec3(0.5f));
+            // --- SKALOWANIE WROGA ---
+            // Podobnie jak przy mieczu, musisz to dopasować do modelu!
+            float enemyScale = 1.0f;
+            M = glm::scale(M, glm::vec3(enemyScale));
 
             world_shader_.setMat4("uModel", &M[0][0]);
-            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
 
-            // 5. Rysowanie paska HP (tylko jeśli żyje!)
+            // 3. Rysowanie (Model lub Sześcian)
+            if (enemy_vertex_count_ > 0) {
+                glBindVertexArray(enemy_vao_);
+                glDrawArrays(GL_TRIANGLES, 0, enemy_vertex_count_);
+            }
+            else {
+                // Fallback (jeśli nie udało się wczytać modelu)
+                glBindVertexArray(cube_vao_);
+                world_shader_.setInt("uUseTex", 0); // Kostka nie ma UV dla tekstury modelu
+                world_shader_.setVec4("uColor", 1.0f, 0.0f, 0.0f, 1.0f); // Czerwony
+                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            }
+
+            // 4. Pasek HP (bez zmian - kopiuj/wklej ze starego kodu jeśli usunąłeś)
             if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
-                // ... (Tutaj wklej swój kod paska HP, który już masz) ...
-                // Pamiętaj, żeby nie rysować paska dla trupa!
+                glBindVertexArray(cube_vao_); // Pasek HP to zawsze kostka
+                world_shader_.setInt("uUseTex", 0);
 
+                // ... (Twoja logika paska HP) ...
                 // TŁO
                 world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
                 glm::mat4 M_bg(1.0f);
-                M_bg = glm::translate(M_bg, glm::vec3(x, 0.75f + 0.8f, z)); // używamy stałego Y
+                // Podnieś pasek wyżej (np. y + 1.8), bo model może być wysoki
+                M_bg = glm::translate(M_bg, glm::vec3(x, 1.8f, z));
                 M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
                 world_shader_.setMat4("uModel", &M_bg[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
 
-                // PASEK
+                // PASEK ZIELONY
                 float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
                 world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
                 glm::mat4 M_hp(1.0f);
                 float offset = (1.0f - hpPercent) * 0.3f;
-                M_hp = glm::translate(M_hp, glm::vec3(x - offset, 0.75f + 0.8f, z + 0.01f));
+                M_hp = glm::translate(M_hp, glm::vec3(x - offset, 1.8f, z + 0.01f));
                 M_hp = glm::scale(M_hp, glm::vec3(0.6f * hpPercent, 0.05f, 0.05f));
                 world_shader_.setMat4("uModel", &M_hp[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
@@ -923,66 +1187,80 @@ void App::EnemiesTurn() {
 
         // --- HELD ITEM (Z ANIMACJĄ) ---
         if (has_held_item_) {
+
+            // Pozif (has_held_item_) {
             glm::vec3 up(0.0f, 1.0f, 0.0f);
             glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
 
-            // Pozycja bazowa (przy kamerze)
+            // --- POZYCJONOWANIE BRONI ---
+            // Tu będziesz musiał poeksperymentować! Modele z neta mają różne skale i środki.
+            // Zacznij od tych wartości i zmieniaj je, jeśli miecz jest za duży/mały/daleko.
             glm::vec3 item_pos = cam_pos
-                + forward * 0.55f
-                + rightv * 0.25f
-                + up * -0.20f;
+                + forward * 0.4f    // Jak daleko przed kamerą
+                + rightv * 0.2f     // Jak bardzo w prawo
+                + up * -0.3f;      // Jak nisko
 
-            // --- OBLICZANIE ANIMACJI ---
+            // --- OBLICZANIE ANIMACJI (Bez zmian - działa super) ---
             float animOffset = 0.0f;
             float animTilt = 0.0f;
 
             if (attack_anim_timer_ > 0.0f) {
-                // Postęp animacji od 0.0 do 1.0
                 float progress = 1.0f - (attack_anim_timer_ / kAttackDuration_);
-
-                // Używamy funkcji sinus (0 -> 1 -> 0), żeby broń wróciła na miejsce
-                // sin(PI * progress) daje ładny łuk
                 float wave = std::sin(progress * 3.14159f);
-
-                animOffset = wave * 0.5f;  // Wysunięcie do przodu o 0.5m
-                animTilt = wave * 45.0f; // Przechylenie w dół o 45 stopni
+                animOffset = wave * 0.5f;
+                animTilt = wave * 45.0f;
             }
-            // ---------------------------
 
-            // Aplikujemy przesunięcie animacji do pozycji
+            // Aplikujemy animację
             item_pos += forward * animOffset;
-            item_pos += up * (-animOffset * 0.5f); // Lekko w dół przy ataku
+            item_pos += up * (-animOffset * 0.2f); // Mniejszy opad
 
-            float t = (float)glfwGetTime();
+            // --- RYSOWANIE ---
+            world_shader_.use();
 
-            world_shader_.setInt("uUseTex", 0);
-
-            // Kolor broni zależny od tego co trzymamy (opcjonalne)
-            if (player_.equippedWeapon)
-                world_shader_.setVec4("uColor", 0.6f, 0.6f, 0.7f, 1.0f); // Stalowy
-            else
-                world_shader_.setVec4("uColor", 0.15f, 0.15f, 0.15f, 1.0f); // Domyślny
+            // Włącz tekstury, jeśli miecz ma teksturę
+            if (weapon_texture_ != 0) {
+                world_shader_.setInt("uUseTex", 1);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, weapon_texture_);
+                world_shader_.setInt("uTex", 0);
+            }
+            else {
+                world_shader_.setInt("uUseTex", 0);
+                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 1.0f); // Srebrny kolor bez tekstury
+            }
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, item_pos);
 
-            // 1. Obrót "Idle" (lekkie kołysanie)
-            M = glm::rotate(M, t * 2.0f, glm::vec3(0, 1, 0));
+            // 1. Obrót gracza (żeby miecz zawsze był przed kamerą)
+            // Używamy ujemnego 'yaw', bo GLM rotate działa odwrotnie niż nasz system kątów
+            M = glm::rotate(M, glm::radians((float)yaw), glm::vec3(0, 1, 0));
 
-            // 2. Obrót ataku (Ciach!)
-            // Obracamy wokół lokalnej osi X (prawo), żeby pochylić miecz w dół
-            // Musimy uwzględnić obrót gracza (yaw), żeby oś obrotu była poprawna
-            glm::vec3 tiltAxis = rightv;
-            M = glm::rotate(M, glm::radians(animTilt), tiltAxis);
+            // 2. Obrót korekcyjny modelu (Bardzo ważne!)
+            // Modele .obj często leżą na płasko albo są obrócone.
+            // Tutaj obracamy go tak, żeby "stał" i celował do przodu.
+            // Często trzeba obrócić o 180 lub 90 stopni w Y.
+            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
 
-            M = glm::scale(M, glm::vec3(0.18f, 0.18f, 0.40f));
+            // 3. Animacja ataku (Cięcie)
+            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0)); // Oś X lokalna
+
+            // 4. Skala (Najważniejsze - modele bywają gigantyczne!)
+            // Zmniejsz to np. do 0.01f jeśli miecz zasłania cały ekran!
+            float scale = 0.0015f;
+            M = glm::scale(M, glm::vec3(scale));
 
             world_shader_.setMat4("uModel", &M[0][0]);
 
-            glBindVertexArray(cube_vao_);
-            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            glBindVertexArray(0);
+            // Rysujemy nowy model
+            if (weapon_vertex_count_ > 0) {
+                glBindVertexArray(weapon_vao_);
+                glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
+                glBindVertexArray(0);
+            }
 
+            // Reset macierzy (dla bezpieczeństwa)
             world_shader_.setMat4("uModel", &I[0][0]);
         }
 
@@ -994,19 +1272,18 @@ void App::EnemiesTurn() {
         hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
         hud.log += "\nItem: ";
         hud.log += (has_held_item_ ? "TAK" : "NIE");
-        
+
         dungeon::ui::draw_hud(hud);
 
         // --- NOWY PANEL (Prawy Górny Róg) ---
 
         ImGuiIO& io = ImGui::GetIO();
         float panelWidth = 200.0f;
-        float panelHeight = 400.0f; // lub io.DisplaySize.y dla paska na całą wysokość
+        float panelHeight = 400.0f;
         float padding = 10.0f;
 
-        // Ustawiamy pozycję w prawym górnym rogu
         ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));
-        ImGui::SetNextWindowSize(ImVec2(panelWidth, 0)); // Wysokość auto (0)
+        ImGui::SetNextWindowSize(ImVec2(panelWidth, 0));
 
         ImGui::Begin("SidePanel", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -1014,23 +1291,84 @@ void App::EnemiesTurn() {
             ImGuiWindowFlags_NoMove |
             ImGuiWindowFlags_NoCollapse);
 
-        // A. PLACEHOLDER NA MINIMAPĘ
+        // A. MINIMAPA (Fog of War)
         ImGui::Text("Minimap");
-        // Pobieramy listę do rysowania w tym oknie
+
+        // --- POCZĄTEK RYSOWANIA MINIMAPY ---
         ImDrawList* drawList = ImGui::GetWindowDrawList();
-        ImVec2 p = ImGui::GetCursorScreenPos();
+        ImVec2 p = ImGui::GetCursorScreenPos(); // Lewy górny róg
 
-        // Rysujemy czarny kwadrat z ramką
-        float mapSize = 180.0f;
-        drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255)); // Tło
-        drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255)); // Ramka
+        float mapSize = 180.0f;      // Rozmiar okienka
+        int   viewRange = 5;         // Zasięg widoku (5 kratek w każdą stronę)
+        float tileSize = mapSize / (float)(viewRange * 2 + 1);
 
-        // Rezerwujemy miejsce w layoutcie ImGui, żeby tekst nie wszedł na mapę
+        // 1. Tło minimapy (Czarne - obszar nieodkryty)
+        drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255));
+
+        // 2. Rysowanie kafelków (Ściany i Podłoga)
+        for (int dy = -viewRange; dy <= viewRange; ++dy) {
+            for (int dx = -viewRange; dx <= viewRange; ++dx) {
+                int wx = player_.GameX + dx;
+                int wy = player_.GameY + dy;
+
+                // Pozycja na ekranie
+                float sx = p.x + (dx + viewRange) * tileSize;
+                float sy = p.y + (dy + viewRange) * tileSize;
+
+                if (wx >= 0 && wx < level_.w && wy >= 0 && wy < level_.h) {
+                    int idx = wy * level_.w + wx;
+
+                    // Rysujemy TYLKO jeśli odwiedziliśmy to pole!
+                    // UWAGA: Upewnij się, że visited_cells_ jest zainicjalizowane w App.cpp (load_level)
+                    if (!visited_cells_.empty() && visited_cells_[idx]) {
+                        auto cell = level_.cells[idx];
+                        ImU32 color;
+
+                        if (cell == io::Cell::Wall)
+                            color = IM_COL32(100, 100, 100, 255); // Szara ściana
+                        else
+                            color = IM_COL32(200, 200, 200, 255); // Jasna podłoga
+
+                        drawList->AddRectFilled(ImVec2(sx, sy), ImVec2(sx + tileSize, sy + tileSize), color);
+                    }
+                }
+            }
+        }
+
+        // 3. Rysowanie Wrogów (Czerwone kropki)
+        for (const auto* enemy : enemies_) {
+            if (!enemy->IsAlive()) continue;
+
+            int dx = enemy->GameX - player_.GameX;
+            int dy = enemy->GameY - player_.GameY;
+
+            if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
+                int idx = enemy->GameY * level_.w + enemy->GameX;
+                // Rysuj wroga tylko jeśli stoi na odkrytym terenie
+                if (!visited_cells_.empty() && visited_cells_[idx]) {
+                    float sx = p.x + (dx + viewRange) * tileSize;
+                    float sy = p.y + (dy + viewRange) * tileSize;
+                    // Czerwona kropka
+                    drawList->AddRectFilled(ImVec2(sx + 2, sy + 2), ImVec2(sx + tileSize - 2, sy + tileSize - 2), IM_COL32(255, 0, 0, 255));
+                }
+            }
+        }
+
+        // 4. Gracz (Zielona kropka na środku)
+        float cx = p.x + viewRange * tileSize;
+        float cy = p.y + viewRange * tileSize;
+        drawList->AddRectFilled(ImVec2(cx + 3, cy + 3), ImVec2(cx + tileSize - 3, cy + tileSize - 3), IM_COL32(0, 255, 0, 255));
+
+        // Ramka dookoła minimapy
+        drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255));
+
+        // Rezerwujemy miejsce w layoutcie ImGui (żeby kolejne teksty były POD mapą)
         ImGui::Dummy(ImVec2(mapSize, mapSize + 10.0f));
+        // --- KONIEC MINIMAPY ---
 
         ImGui::Separator();
 
-        // B. EKWIPUNEK (Equipped)
+        // B. EKWIPUNEK
         ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Equipped:");
         if (player_.equippedWeapon) {
             ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
@@ -1045,14 +1383,13 @@ void App::EnemiesTurn() {
 
         ImGui::Separator();
 
-        // C. PLECAK (Inventory)
+        // C. PLECAK
         ImGui::TextColored(ImVec4(0, 0.8f, 1, 1), "Backpack:");
         if (player_.inventory.empty()) {
             ImGui::TextDisabled(" (Empty)");
         }
         else {
             for (auto* item : player_.inventory) {
-                // Wyświetlamy nazwę i ewentualnie statystyki
                 if (item->type == ItemType::Consumable) {
                     ImGui::BulletText("%s (Heal: %d)", item->name.c_str(), item->stats.health);
                 }
@@ -1064,6 +1401,7 @@ void App::EnemiesTurn() {
 
         ImGui::End();
 
+        // --- MENU (bez zmian) ---
         if (show_menu_) {
             ImGui::SetNextWindowSize(ImVec2(260, 140), ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowPos(ImVec2(200, 50), ImGuiCond_FirstUseEver);
@@ -1079,10 +1417,7 @@ void App::EnemiesTurn() {
                 if (ImGui::RadioButton("Third-person (TPP)", mode == 1)) {
                     mode = 1;
                 }
-
-                camera_mode_ = (mode == 0)
-                    ? CameraMode::FirstPerson
-                    : CameraMode::ThirdPerson;
+                camera_mode_ = (mode == 0) ? CameraMode::FirstPerson : CameraMode::ThirdPerson;
 
                 ImGui::Separator();
                 ImGui::Text("M - zamknij menu");
@@ -1090,17 +1425,11 @@ void App::EnemiesTurn() {
             ImGui::End();
         }
 
-        // --- EFEKT OBRYWANIA (DAMAGE FLASH) ---
+        // --- DAMAGE FLASH ---
         if (player_.IsHurt()) {
-            // Pobieramy rozmiar ekranu
-            ImGuiIO& io = ImGui::GetIO();
-
-            // Ustawiamy kursor na 0,0 (lewy górny róg)
             ImGui::SetNextWindowPos(ImVec2(0, 0));
             ImGui::SetNextWindowSize(io.DisplaySize);
-
-            // Tworzymy okno bez tła, bez inputu, zawsze na wierzchu
-            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f)); // Czerwony, 40% przezroczystości
+            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f));
             ImGui::Begin("##DamageFlash", nullptr,
                 ImGuiWindowFlags_NoDecoration |
                 ImGuiWindowFlags_NoInputs |
@@ -1108,7 +1437,6 @@ void App::EnemiesTurn() {
                 ImGuiWindowFlags_NoSavedSettings |
                 ImGuiWindowFlags_NoFocusOnAppearing |
                 ImGuiWindowFlags_NoNav);
-
             ImGui::End();
             ImGui::PopStyleColor();
         }
@@ -1394,6 +1722,72 @@ void App::EnemiesTurn() {
 
         stbi_image_free(data);
         return tex;
+    }
+
+    bool App::check_los(int x1, int y1, int x2, int y2) const {
+        // Jeśli to ten sam punkt, to widać
+        if (x1 == x2 && y1 == y2) return true;
+
+        float dist = std::sqrt(std::pow(x2 - x1, 2) + std::pow(y2 - y1, 2));
+        if (dist < 0.5f) return true;
+
+        // Dzielimy odcinek na małe kroki
+        float stepX = (x2 - x1) / dist;
+        float stepY = (y2 - y1) / dist;
+
+        float cx = (float)x1 + 0.5f; // startujemy ze środka kafelka
+        float cy = (float)y1 + 0.5f;
+
+        // Idziemy po promieniu
+        for (float t = 0.0f; t < dist - 0.1f; t += 0.5f) { // krok co 0.5 kafelka
+            cx += stepX * 0.5f;
+            cy += stepY * 0.5f;
+
+            int ix = (int)cx;
+            int iy = (int)cy;
+
+            // POPRAWKA 1: Używamy level_ (zmiennej klasy), a nie level (nieistniejącego argumentu)
+            // Jeśli wyszliśmy poza mapę -> blokada
+            if (ix < 0 || iy < 0 || ix >= level_.w || iy >= level_.h) return false;
+
+            // Jeśli trafiliśmy na ścianę (która nie jest celem), to blokujemy widok
+            if (level_.cells[iy * level_.w + ix] == io::Cell::Wall) {
+                // Jeśli to jest właśnie ten kafelek, na który patrzymy, to OK (widzimy ścianę)
+                if (ix == x2 && iy == y2) return true;
+                // Jeśli to inna ściana po drodze -> zasłania widok
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void App::update_exploration() {
+        // Promień wzroku
+        int radius = 5;
+
+        int px = player_.GameX;
+        int py = player_.GameY;
+
+        for (int y = -radius; y <= radius; ++y) {
+            for (int x = -radius; x <= radius; ++x) {
+                // 1. Sprawdzamy dystans (koło)
+                if (x * x + y * y > radius * radius) continue;
+
+                int tx = px + x;
+                int ty = py + y;
+
+                // Sprawdź granice mapy (ponownie używamy level_)
+                if (tx >= 0 && tx < level_.w && ty >= 0 && ty < level_.h) {
+
+                    // 2. Raycast
+                    // POPRAWKA 2: Wywołujemy bez przekazywania level_, bo funkcja ma do niego dostęp
+                    if (check_los(px, py, tx, ty)) {
+                        // Oznacz jako odwiedzone
+                        visited_cells_[ty * level_.w + tx] = true;
+                    }
+                }
+            }
+        }
     }
 
 } // namespace dungeon
