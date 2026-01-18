@@ -160,6 +160,9 @@ namespace dungeon {
         if (cube_vbo_) glDeleteBuffers(1, &cube_vbo_);
         if (cube_vao_) glDeleteVertexArrays(1, &cube_vao_);
 
+        if (potion_vao_) glDeleteVertexArrays(1, &potion_vao_);
+        if (potion_vbo_) glDeleteBuffers(1, &potion_vbo_);
+
         ma_sound_uninit(&bg_music_);
         ma_sound_uninit(&sfx_torch_);
         ma_engine_uninit(&audio_engine_);
@@ -254,7 +257,7 @@ namespace dungeon {
 
         // Zabezpieczenie na pustą nazwę mapy
         if (current_map_name_.empty()) {
-            current_map_name_ = "assets/maps/test.map";
+            current_map_name_ = map_list_[0];
         }
 
         std::string path = current_map_name_;
@@ -300,56 +303,60 @@ namespace dungeon {
         for (const auto& spawn : level_.enemy_spawns) {
             Enemy* newEnemy = nullptr;
 
+            if (spawn.type == 'Z') {
+                newEnemy = new Enemy(spawn.x, spawn.y, 180, 140, 140, 1, 25, "Zombie");
+            }
+            else if (spawn.type == 'S') { // Np. S dla Szkieleta
+                newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
+            }
+            else {
+                // Domyślny (jeśli np. wpisałeś E)
+                newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
+            }
+
             if (newEnemy) {
                 newEnemy->yaw = 0.0f;
-
-                // --- NOWE: Inicjalizacja wizualna ---
-                // Ustawiamy VisualPos tam gdzie stoi logicznie
                 float vx = (float)newEnemy->GameX + 0.5f;
                 float vz = (float)newEnemy->GameY + 0.5f;
                 newEnemy->VisualPos = glm::vec3(vx, 0.0f, vz);
-                // ------------------------------------
-
-                enemies_.push_back(newEnemy);
-            }
-
-            if (spawn.type == 'Z') {
-                newEnemy = new Enemy(spawn.x, spawn.y, 180, 150, 150, 1, 45, "Zombie");
-            }
-            else {
-                newEnemy = new Enemy(spawn.x, spawn.y, 180, 80, 80, 2, 35, "Skeleton");
-            }
-
-            if (newEnemy) {
-                // USUNĄŁEM IFY SPRAWDZAJĄCE ŚCIANY. 
-                // Ustawiamy sztywno 0 (lub 180, zależnie jak wolisz).
-                // Jeśli model "patrzy" tyłem, zmień to 0 na 180.
-                newEnemy->yaw = 0.0f;
-
                 enemies_.push_back(newEnemy);
             }
         }
 
-        // 2. ITEMY (Bez zmian)
-        int counter = 0;
-        for (const auto& p : level_.item_spawns) {
-            float x = static_cast<float>(p.x) + 0.5f;
-            float z = static_cast<float>(p.y) + 0.5f;
+        // 2. PRZEDMIOTY (Nowa logika oparta na znakach mapy)
+        for (const auto& spawn : level_.item_spawns) {
+            float x = static_cast<float>(spawn.x) + 0.5f;
+            float z = static_cast<float>(spawn.y) + 0.5f;
 
             Item* newItem = nullptr;
-            if (counter == 0) {
-                ItemStats stats; stats.damage = 100;
+
+            // --- SPRAWDZAMY ZNAK Z MAPY ---
+            char t = spawn.type; // Upewnij się, że MapLoader to wczytał!
+
+            if (t == 'P') {
+                // P = POTION
+                ItemStats stats; stats.health = 40;
+                newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
+            }
+            else if (t == 'M') {
+                // M = MIECZ (Sword), I = Domyślny Item
+                ItemStats stats; stats.damage = 35;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
             }
+            else if (t == 'I') {
+                //I = Domyślny Item
+                ItemStats stats; stats.damage = 100;
+                newItem = new Item("SOMETHING", ItemType::Weapon, false, stats);
+            }
             else {
-                ItemStats stats; stats.health = 50;
-                newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
+                // Nieznany typ? Dajmy miksturę jako fallback, albo nic.
+                // printf("Nieznany item na mapie: %c\n", t);
             }
 
             if (newItem) {
+                // Y = 0.7f (startowa wysokość, i tak jest nadpisywana w frame_render przez animację)
                 world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
             }
-            counter++;
         }
     }
 
@@ -414,6 +421,8 @@ namespace dungeon {
         bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
         bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
         bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
+
+        bool keyH = glfwGetKey(window_, GLFW_KEY_H) == GLFW_PRESS;
 
         // ------------------------------------------------------------
         // 3. PAUZA I MENU (ESC)
@@ -565,6 +574,50 @@ namespace dungeon {
         if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
         if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
         if (k3 && !k3_was_down_) player_.UseSkill(2, ResolveSkillTarget(player_, player_.skills[2]));
+
+        if (keyH && !h_was_down_) {
+            // 1. Przeszukaj ekwipunek
+            for (auto it = player_.inventory.begin(); it != player_.inventory.end(); ++it) {
+                Item* item = *it;
+
+                // Szukamy przedmiotu jadalnego (Consumable)
+                if (item->type == ItemType::Consumable) {
+
+                    // 2. Sprawdź czy jest sens pić (czy mamy niepełne HP)
+                    if (player_.health < player_.maxHealth) {
+
+                        // 3. Leczenie
+                        int healAmount = item->stats.health;
+                        player_.health += healAmount;
+
+                        // Nie przekraczaj max HP
+                        if (player_.health > player_.maxHealth) {
+                            player_.health = player_.maxHealth;
+                        }
+
+                        // 4. Usuń przedmiot
+                        // Najpierw usuwamy z wektora
+                        player_.inventory.erase(it);
+                        // Potem zwalniamy pamięć (bo item był stworzony przez new)
+                        delete item;
+
+                        printf("Wypito miksture! Przywrocono %d HP.\n", healAmount);
+
+                        // Opcjonalnie: Dźwięk
+                        // ma_sound_start(&sfx_drink_); 
+
+                        // Przerywamy pętlę (pijemy tylko jedną na kliknięcie!)
+                        break;
+                    }
+                    else {
+                        printf("Masz pelne zdrowie!\n");
+                        // Jeśli chcesz, żeby mimo to zużyło miksturę, usuń 'else' i 'break' przenieś wyżej.
+                        break;
+                    }
+                }
+            }
+        }
+        h_was_down_ = keyH;
 
         // ------------------------------------------------------------
         // 5. ZAPAMIĘTANIE STANU KLAWISZY (Na następną klatkę)
@@ -880,69 +933,136 @@ namespace dungeon {
     }
 
     void App::build_weapon_mesh() {
-        // 1. Ustawienia
-        std::string modelPath = "assets/models/sword3obj.obj"; // Upewnij się, że nazwa pliku .obj jest poprawna!
-        std::string baseDir = "assets/models/";
-
-        // Używamy Speculara jako koloru, żeby miecz był srebrno-złoty
-        std::string textureFilename = "Excalibur_specularGlossiness.png";
-
+        // Zmienne pomocnicze - deklarujemy je RAZ na całą funkcję
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string err;
+        std::string baseDir = "assets/models/";
 
-        // 2. Ładowanie modelu
-        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, modelPath.c_str(), baseDir.c_str());
+        // =========================================================
+        // 1. ŁADOWANIE MIECZA (SWORD)
+        // =========================================================
 
-        if (!err.empty()) printf("[WEAPON LOAD INFO]: %s\n", err.c_str());
-        if (!ret) return;
+        // UWAGA: Tu wpisz nazwę swojego modelu Low Poly!
+        std::string swordPath = baseDir + "sword2.obj";
 
-        // 3. RĘCZNE ŁADOWANIE TEKSTURY (Tu używamy Twojej zmiennej)
-        std::string texPath = baseDir + textureFilename;
-        weapon_texture_ = load_texture(texPath.c_str());
+        bool retSword = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, swordPath.c_str(), baseDir.c_str());
 
-        if (weapon_texture_ == 0) {
-            printf("UWAGA: Nie udalo sie zaladowac tekstury miecza: %s\n", texPath.c_str());
-        }
+        if (!err.empty()) printf("[SWORD LOAD INFO]: %s\n", err.c_str());
 
-        // 4. Przetwarzanie wierzchołków
-        std::vector<float> vertices;
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
-                // Pozycja
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+        if (retSword) {
+            // --- LOGIKA TEKSTURY / KOLORU ---
+            weapon_texture_ = 0; // Reset
 
-                // UV
-                if (index.texcoord_index >= 0) {
-                    vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-
-                    // TU MOŻE BYĆ POTRZEBNA KOREKTA (1.0f - ...)
-                    // Jeśli tekstura wygląda dziwnie, usuń "1.0f - "
-                    vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+            // Sprawdzamy czy model ma jakikolwiek materiał
+            if (!materials.empty()) {
+                // Opcja A: Materiał ma plik z teksturą (diffuse_texname)
+                if (!materials[0].diffuse_texname.empty()) {
+                    std::string texPath = baseDir + materials[0].diffuse_texname;
+                    weapon_texture_ = load_texture(texPath.c_str());
+                    printf("Zaladowano teksture miecza z pliku: %s\n", texPath.c_str());
                 }
+                // Opcja B: Materiał ma tylko kolor (diffuse RGB)
                 else {
-                    vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    float r = materials[0].diffuse[0];
+                    float g = materials[0].diffuse[1];
+                    float b = materials[0].diffuse[2];
+                    weapon_texture_ = create_texture_from_color(r, g, b);
+                    printf("Stworzono teksture miecza z koloru MTL: [%.2f, %.2f, %.2f]\n", r, g, b);
                 }
             }
+
+            // Opcja C: Brak materiałów - dajemy domyślny szary
+            if (weapon_texture_ == 0) {
+                weapon_texture_ = create_texture_from_color(0.6f, 0.6f, 0.7f); // Szaro-niebieski
+                printf("Brak materialu, uzyto domyslnego koloru.\n");
+            }
+
+            // --- TWORZENIE GEOMETRII (Bez zmian) ---
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        // Ważne: Low Poly z kolorami często nie ma UV, albo ma dziwne.
+                        // Jeśli model jest cały czarny, spróbuj usunąć "1.0f - "
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        // Jeśli brak UV w pliku, dajemy 0,0 (dla tekstury 1x1 to bez znaczenia)
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
+                }
+            }
+            weapon_vertex_count_ = (int)(vertices.size() / 5);
+
+            if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
+            if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
+
+            glGenVertexArrays(1, &weapon_vao_);
+            glGenBuffers(1, &weapon_vbo_);
+            glBindVertexArray(weapon_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
+            glBindVertexArray(0);
         }
 
-        weapon_vertex_count_ = (int)(vertices.size() / 5);
+        // =========================================================
+        // 2. ŁADOWANIE MIKSTURY (POTION)
+        // =========================================================
 
-        // 5. Przesyłanie do GPU (Standard)
-        glGenVertexArrays(1, &weapon_vao_);
-        glGenBuffers(1, &weapon_vbo_);
-        glBindVertexArray(weapon_vao_);
-        glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+        // WAŻNE: Czyścimy zmienne zamiast je deklarować od nowa (to naprawia błędy C2086)
+        attrib.vertices.clear(); attrib.texcoords.clear();
+        shapes.clear(); materials.clear(); err.clear();
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        glBindVertexArray(0);
+        std::string potionPath = baseDir + "potion.obj"; // Upewnij się, że masz ten plik!
+        bool retPotion = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, potionPath.c_str(), baseDir.c_str());
+
+        if (!err.empty()) printf("[POTION LOAD INFO]: %s\n", err.c_str());
+
+        if (retPotion) {
+            // Tekstura Mikstury (z pliku .mtl lub fallback)
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                potion_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+            }
+            else {
+                // potion_texture_ = load_texture("assets/models/potion_red.png"); // Opcjonalnie
+            }
+
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
+                }
+            }
+            potion_vertex_count_ = (int)(vertices.size() / 5);
+
+            glGenVertexArrays(1, &potion_vao_);
+            glGenBuffers(1, &potion_vbo_);
+            glBindVertexArray(potion_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, potion_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
+            glBindVertexArray(0);
+        }
     }
 
     void App::build_enemy_mesh() {
@@ -1201,7 +1321,6 @@ namespace dungeon {
         glBindVertexArray(0);
 
         // --- RYSOWANIE WROGÓW ---
-        // --- RYSOWANIE WROGÓW ---
         for (auto* enemy : enemies_) {
             enemy->UpdateDeath(dt);
             enemy->UpdateAnimation(dt);
@@ -1314,18 +1433,94 @@ namespace dungeon {
         glBindVertexArray(0);
 
         // --- ITEMY NA ZIEMI ---
-        world_shader_.setInt("uUseTex", 0);
-        glBindVertexArray(cube_vao_);
+        world_shader_.use();
+        world_shader_.setInt("uUseTex", 1); // Włączamy tekstury
+
         for (const auto& wItem : world_items_) {
             if (!wItem.isAlive) continue;
-            if (wItem.itemData->type == ItemType::Weapon) world_shader_.setVec4("uColor", 0.0f, 0.5f, 0.5f, 1.0f);
-            else world_shader_.setVec4("uColor", 0.2f, 0.2f, 1.0f, 1.0f);
 
             glm::mat4 M(1.0f);
-            M = glm::translate(M, wItem.position);
-            M = glm::scale(M, glm::vec3(0.25f));
-            world_shader_.setMat4("uModel", &M[0][0]);
-            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+
+            // A. MIECZ (Wbity w ziemię)
+            if (wItem.itemData->type == ItemType::Weapon) {
+
+                glm::vec3 pos = wItem.position;
+                pos.y = 1.0f; // Podnieś go wyżej na testy!
+
+                glm::mat4 M(1.0f);
+                M = glm::translate(M, pos);
+                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0)); // Rękojeść w górę
+                M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));  // Krzywo
+                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Obrót Y
+
+                float scale = 0.5f;
+                M = glm::scale(M, glm::vec3(scale));
+
+                world_shader_.setMat4("uModel", &M[0][0]);
+                // Dajemy mu też efekt "Ghost" żeby pasował do tego w ręce
+                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f);
+
+                world_shader_.setInt("uUseTex", 1);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, weapon_texture_);
+                world_shader_.setInt("uTex", 0);
+
+                if (weapon_vertex_count_ > 0) {
+                    glDepthMask(GL_FALSE); // Przezroczystość
+                    glBindVertexArray(weapon_vao_);
+                    glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
+                    glDepthMask(GL_TRUE);
+                }
+            }
+            // B. MIKSTURA (CONSUMABLE)
+            else {
+                float time = (float)glfwGetTime();
+
+                // 1. Pozycja + Lewitacja
+                // float floatY = sin(time * 2.0f) * 0.1f + 0.3f; // Unosi się na 0.3 i buja +/- 0.1
+                // Jeśli model jest dziwny (jak miecz), dostosuj tą stałą 0.3f!
+                float floatY = 0.55f + sin(time * 3.0f) * 0.03f;
+
+                glm::vec3 pos = wItem.position;
+                pos.y = floatY; // Nadpisujemy Y
+
+                M = glm::translate(M, pos);
+
+                // 2. Ciągły obrót (żeby wyglądała jak znajdźka)
+                M = glm::rotate(M, time, glm::vec3(0, 1, 0));
+
+                // 3. Skala (Miksturki zazwyczaj są małe)
+                M = glm::scale(M, glm::vec3(0.5f));
+
+                world_shader_.setMat4("uModel", &M[0][0]);
+                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f); // Biały, jeśli mamy teksturę
+
+                // Tekstura
+                glActiveTexture(GL_TEXTURE0);
+                if (potion_texture_ != 0) {
+                    glBindTexture(GL_TEXTURE_2D, potion_texture_);
+                    world_shader_.setInt("uUseTex", 1);
+                }
+                else {
+                    // Brak tekstury -> Czerwony kolor (Health Potion)
+                    world_shader_.setInt("uUseTex", 0);
+                    world_shader_.setVec4("uColor", 1.0f, 0.2f, 0.2f, 1.0f);
+                }
+                world_shader_.setInt("uTex", 0);
+
+                // Rysowanie
+                if (potion_vertex_count_ > 0) {
+                    glBindVertexArray(potion_vao_);
+                    glDrawArrays(GL_TRIANGLES, 0, potion_vertex_count_);
+                }
+                else {
+                    // Fallback (Niebieska Kostka jeśli model nie załadował się)
+                    world_shader_.setInt("uUseTex", 0);
+                    world_shader_.setVec4("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
+                    glBindVertexArray(cube_vao_);
+                    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+                }
+            }
         }
         glBindVertexArray(0);
 
@@ -1371,7 +1566,7 @@ namespace dungeon {
             }
             else {
                 world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 1.0f);
+                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 0.6f);
             }
 
             glm::mat4 M(1.0f);
@@ -1381,7 +1576,7 @@ namespace dungeon {
             M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Korekta modelu
             M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0)); // Atak
 
-            float scale = 0.0015f; // Dopasuj skalę!
+            float scale = 0.4f; // Dopasuj skalę!
             M = glm::scale(M, glm::vec3(scale));
 
             world_shader_.setMat4("uModel", &M[0][0]);
@@ -1399,93 +1594,115 @@ namespace dungeon {
     }
 
     void App::frame_ui() {
+        ImGuiIO& io = ImGui::GetIO(); // Deklaracja raz na górze
+
         dungeon::ui::HudState hud;
-        hud.log = "Starter uruchomiony\nMapa: " + current_map_name_ + "\nWidok: ";
+        hud.log = "Mapa: " + current_map_name_ + "\nWidok: ";
         hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
-        hud.log += "\nItem: ";
-        hud.log += (has_held_item_ ? "TAK" : "NIE");
 
         dungeon::ui::draw_hud(hud);
 
-        // --- NOWY PANEL (Prawy Górny Róg) ---
+        // --- PASEK ŻYCIA (Lewy Górny) ---
+        ImGui::SetNextWindowPos(ImVec2(130, 10));
+        ImGui::SetNextWindowSize(ImVec2(220, 0));
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
+        ImGui::Begin("HealthBar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
-        ImGuiIO& io = ImGui::GetIO();
+        float hpFraction = (float)player_.health / (float)player_.maxHealth;
+        ImVec4 hpColor = ImVec4(0.0f, 0.8f, 0.0f, 1.0f);
+        if (hpFraction < 0.5f) hpColor = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
+        if (hpFraction < 0.25f) hpColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+
+        ImGui::Text("ZDROWIE:");
+        ImGui::SameLine();
+        ImGui::TextColored(hpColor, "%d / %d", player_.health, player_.maxHealth);
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hpColor);
+        ImGui::ProgressBar(hpFraction, ImVec2(-1, 15.0f), "");
+        ImGui::PopStyleColor();
+        ImGui::End();
+        ImGui::PopStyleColor();
+
+        // --- PANEL BOCZNY (MINIMAPA) ---
         float panelWidth = 200.0f;
-        float panelHeight = 400.0f;
         float padding = 10.0f;
-
         ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));
         ImGui::SetNextWindowSize(ImVec2(panelWidth, 0));
 
-        ImGui::Begin("SidePanel", nullptr,
-            ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoCollapse);
+        ImGui::Begin("SidePanel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
-        // A. MINIMAPA (Fog of War)
         ImGui::Text("Minimap");
 
-        // --- POCZĄTEK RYSOWANIA MINIMAPY ---
+        // --- RYSOWANIE MINIMAPY ---
         ImDrawList* drawList = ImGui::GetWindowDrawList();
-        ImVec2 p = ImGui::GetCursorScreenPos(); // Lewy górny róg
+        ImVec2 p = ImGui::GetCursorScreenPos();
 
-        float mapSize = 180.0f;      // Rozmiar okienka
-        int   viewRange = 5;         // Zasięg widoku (5 kratek w każdą stronę)
+        float mapSize = 180.0f;
+        int   viewRange = 5;
         float tileSize = mapSize / (float)(viewRange * 2 + 1);
 
-        // 1. Tło minimapy (Czarne - obszar nieodkryty)
+        // 1. Tło
         drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255));
 
-        // 2. Rysowanie kafelków (Ściany i Podłoga)
+        // 2. Kafelki (Ściany/Podłoga)
         for (int dy = -viewRange; dy <= viewRange; ++dy) {
             for (int dx = -viewRange; dx <= viewRange; ++dx) {
                 int wx = player_.GameX + dx;
                 int wy = player_.GameY + dy;
-
-                // Pozycja na ekranie
                 float sx = p.x + (dx + viewRange) * tileSize;
                 float sy = p.y + (dy + viewRange) * tileSize;
 
                 if (wx >= 0 && wx < level_.w && wy >= 0 && wy < level_.h) {
                     int idx = wy * level_.w + wx;
-
-                    // Rysujemy TYLKO jeśli odwiedziliśmy to pole!
-                    // UWAGA: Upewnij się, że visited_cells_ jest zainicjalizowane w App.cpp (load_level)
                     if (!visited_cells_.empty() && visited_cells_[idx]) {
                         auto cell = level_.cells[idx];
-                        ImU32 color;
-
-                        if (cell == io::Cell::Wall)
-                            color = IM_COL32(100, 100, 100, 255); // Szara ściana
-                        else
-                            color = IM_COL32(200, 200, 200, 255); // Jasna podłoga
-
+                        ImU32 color = (cell == io::Cell::Wall) ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255);
+                        if (cell == io::Cell::Exit) color = IM_COL32(255, 215, 0, 255); // Złote wyjście
                         drawList->AddRectFilled(ImVec2(sx, sy), ImVec2(sx + tileSize, sy + tileSize), color);
                     }
                 }
             }
         }
 
-        // 3. Rysowanie Wrogów (Czerwone kropki)
+        // 3. PRZEDMIOTY (Literki P i M)
+        for (const auto& wItem : world_items_) {
+            if (!wItem.isAlive) continue;
+
+            // Obliczamy pozycję względem gracza
+            int dx = (int)wItem.position.x - player_.GameX;
+            int dy = (int)wItem.position.z - player_.GameY; // Uwaga: wItem.position.z to GameY
+
+            // Jeśli jest w zasięgu minimapy
+            if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
+                int idx = (int)wItem.position.z * level_.w + (int)wItem.position.x;
+
+                // Rysujemy tylko jeśli pole jest odkryte (Fog of War)
+                if (!visited_cells_.empty() && visited_cells_[idx]) {
+                    float sx = p.x + (dx + viewRange) * tileSize;
+                    float sy = p.y + (dy + viewRange) * tileSize;
+
+                    // Centrowanie tekstu w kratce
+                    float textOffsetX = tileSize * 0.25f;
+                    float textOffsetY = tileSize * 0.1f;
+
+                    if (wItem.itemData->type == ItemType::Weapon) {
+                        // M - Miecz (Sword) / Weapon
+                        drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 165, 0, 255), "M");
+                    }
+                    else {
+                        // P - Potion
+                        drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 50, 255, 255), "P");
+                    }
+                }
+            }
+        }
+
+        // 4. Wrogowie (Czerwone kropki)
         for (const auto* enemy : enemies_) {
             if (!enemy->IsAlive()) continue;
-
-            // --- POPRAWKA: ZABEZPIECZENIE PRZED CRASHEM ---
-            // Jeśli wróg jest poza tablicą (np. błąd spawnu), nie rysuj go
-            if (enemy->GameX < 0 || enemy->GameX >= level_.w ||
-                enemy->GameY < 0 || enemy->GameY >= level_.h) {
-                continue;
-            }
-            // ---------------------------------------------
-
             int dx = enemy->GameX - player_.GameX;
             int dy = enemy->GameY - player_.GameY;
-
             if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
                 int idx = enemy->GameY * level_.w + enemy->GameX;
-
-                // Teraz to jest bezpieczne
                 if (!visited_cells_.empty() && visited_cells_[idx]) {
                     float sx = p.x + (dx + viewRange) * tileSize;
                     float sy = p.y + (dy + viewRange) * tileSize;
@@ -1494,89 +1711,59 @@ namespace dungeon {
             }
         }
 
-        // 4. Gracz (Zielona kropka na środku)
+        // 5. Gracz (Zielona kropka)
         float cx = p.x + viewRange * tileSize;
         float cy = p.y + viewRange * tileSize;
         drawList->AddRectFilled(ImVec2(cx + 3, cy + 3), ImVec2(cx + tileSize - 3, cy + tileSize - 3), IM_COL32(0, 255, 0, 255));
 
-        // Ramka dookoła minimapy
+        // Ramka
         drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255));
-
-        // Rezerwujemy miejsce w layoutcie ImGui (żeby kolejne teksty były POD mapą)
         ImGui::Dummy(ImVec2(mapSize, mapSize + 10.0f));
-        // --- KONIEC MINIMAPY ---
 
+        // EKWIPUNEK I PLECAK
         ImGui::Separator();
-
-        // B. EKWIPUNEK
         ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Equipped:");
-        if (player_.equippedWeapon) {
-            ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
-        }
-        else {
-            ImGui::TextDisabled(" [No Weapon]");
-        }
-
-        if (player_.equippedArmor) {
-            ImGui::BulletText("%s (HP: %d)", player_.equippedArmor->name.c_str(), player_.equippedArmor->stats.maxHealth);
-        }
+        if (player_.equippedWeapon) ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
+        else ImGui::TextDisabled(" [No Weapon]");
 
         ImGui::Separator();
-
-        // C. PLECAK
         ImGui::TextColored(ImVec4(0, 0.8f, 1, 1), "Backpack:");
-        if (player_.inventory.empty()) {
-            ImGui::TextDisabled(" (Empty)");
+        if (!player_.inventory.empty()) {
+            ImGui::SameLine();
+            ImGui::TextDisabled("([H] to use Potion)");
         }
+        if (player_.inventory.empty()) ImGui::TextDisabled(" (Empty)");
         else {
             for (auto* item : player_.inventory) {
-                if (item->type == ItemType::Consumable) {
-                    ImGui::BulletText("%s (Heal: %d)", item->name.c_str(), item->stats.health);
-                }
-                else {
-                    ImGui::BulletText("%s", item->name.c_str());
-                }
+                if (item->type == ItemType::Consumable) ImGui::BulletText("%s (Heal: %d)", item->name.c_str(), item->stats.health);
+                else ImGui::BulletText("%s", item->name.c_str());
             }
         }
-
         ImGui::End();
 
         // --- MENU (bez zmian) ---
         if (show_menu_) {
             ImGui::SetNextWindowSize(ImVec2(260, 140), ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowPos(ImVec2(200, 50), ImGuiCond_FirstUseEver);
-
             if (ImGui::Begin("Menu", &show_menu_)) {
                 ImGui::Text("Ustawienia widoku");
                 ImGui::Separator();
-
                 int mode = (camera_mode_ == CameraMode::FirstPerson) ? 0 : 1;
-                if (ImGui::RadioButton("First-person (FPP)", mode == 0)) {
-                    mode = 0;
-                }
-                if (ImGui::RadioButton("Third-person (TPP)", mode == 1)) {
-                    mode = 1;
-                }
+                if (ImGui::RadioButton("First-person (FPP)", mode == 0)) mode = 0;
+                if (ImGui::RadioButton("Third-person (TPP)", mode == 1)) mode = 1;
                 camera_mode_ = (mode == 0) ? CameraMode::FirstPerson : CameraMode::ThirdPerson;
-
                 ImGui::Separator();
                 ImGui::Text("M - zamknij menu");
             }
             ImGui::End();
         }
 
-        // --- DAMAGE FLASH ---
+        // --- DAMAGE FLASH (bez zmian) ---
         if (player_.IsHurt()) {
             ImGui::SetNextWindowPos(ImVec2(0, 0));
             ImGui::SetNextWindowSize(io.DisplaySize);
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f));
-            ImGui::Begin("##DamageFlash", nullptr,
-                ImGuiWindowFlags_NoDecoration |
-                ImGuiWindowFlags_NoInputs |
-                ImGuiWindowFlags_NoMove |
-                ImGuiWindowFlags_NoSavedSettings |
-                ImGuiWindowFlags_NoFocusOnAppearing |
-                ImGuiWindowFlags_NoNav);
+            ImGui::Begin("##DamageFlash", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
             ImGui::End();
             ImGui::PopStyleColor();
         }
@@ -2228,6 +2415,29 @@ namespace dungeon {
         pop_retro_style();
 
         ImGui::End();
+    }
+
+    GLuint App::create_texture_from_color(float r, float g, float b) {
+        GLuint tex;
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_2D, tex);
+
+        // Konwertujemy float (0.0-1.0) na byte (0-255)
+        unsigned char data[3];
+        data[0] = (unsigned char)(r * 255.0f);
+        data[1] = (unsigned char)(g * 255.0f);
+        data[2] = (unsigned char)(b * 255.0f);
+
+        // Tworzymy obrazek 1x1 piksel
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        // Ustawienia (ważne, żeby nie było artefaktów)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        return tex;
     }
 
 } // namespace dungeon

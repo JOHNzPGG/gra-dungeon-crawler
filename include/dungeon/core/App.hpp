@@ -98,8 +98,11 @@ namespace dungeon {
         void build_enemy_mesh();
 
         std::vector<std::string> map_list_ = {
-        "assets/maps/test.map",   // Poziom 1
-        "assets/maps/test2.map"  // Poziom 2
+            "assets/maps/level1.map",
+            "assets/maps/level2.map",
+            "assets/maps/level3.map",
+            "assets/maps/level4.map",
+            "assets/maps/level5.map"
         };
         int current_level_idx_ = 0;
 
@@ -142,7 +145,13 @@ namespace dungeon {
         GLuint skeleton_texture_ = 0;
         int skeleton_vertex_count_ = 0;
 
-        //INNE
+        //POTION
+
+        GLuint potion_vao_ = 0;
+        GLuint potion_vbo_ = 0;
+        GLuint potion_texture_ = 0;
+        int potion_vertex_count_ = 0;
+        bool h_was_down_ = false; // Do picia mikstur
 
         GLuint wall_texture_ = 0;
         GLuint floor_texture_ = 0;
@@ -209,6 +218,8 @@ namespace dungeon {
         // Funkcja pomocnicza do stylu przycisków
         void push_retro_style();
         void pop_retro_style();
+
+        GLuint create_texture_from_color(float r, float g, float b);
 
     };
 

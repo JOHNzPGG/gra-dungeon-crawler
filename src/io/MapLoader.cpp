@@ -73,7 +73,13 @@ namespace dungeon::io {
                     L.enemy_spawns.push_back({ x, y, 'Z' });
                 }
                 else if (c == 'I') {
-                    L.item_spawns.push_back(glm::ivec2(x, y));
+                    L.item_spawns.push_back({ x, y, 'I' });  // Przedmiot -> item_spawns!
+                }
+                else if (c == 'P') {
+                    L.item_spawns.push_back({ x, y, 'P' });  // Przedmiot -> item_spawns!
+                }
+                else if (c == 'M') {
+                    L.item_spawns.push_back({ x, y, 'M' });  // Miecz -> item_spawns!
                 }
             }
         }

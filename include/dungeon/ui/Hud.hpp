@@ -4,9 +4,9 @@
 namespace dungeon::ui {
 
 	struct HudState {
-		int hp = 10;
+		int hp = 100;
 		int ap = 2;
-		bool in_turn = false;
+		bool in_turn = true;
 		std::string log;
 	};
 
