@@ -130,10 +130,19 @@ namespace dungeon {
         GLuint weapon_texture_ = 0;
         int weapon_vertex_count_ = 0;
 
-        GLuint enemy_vao_ = 0;
-        GLuint enemy_vbo_ = 0;
-        GLuint enemy_texture_ = 0;
-        int enemy_vertex_count_ = 0;
+        // ZOMBIE
+        GLuint zombie_vao_ = 0;
+        GLuint zombie_vbo_ = 0;
+        GLuint zombie_texture_ = 0;
+        int zombie_vertex_count_ = 0;
+
+        // SZKIELET
+        GLuint skeleton_vao_ = 0;
+        GLuint skeleton_vbo_ = 0;
+        GLuint skeleton_texture_ = 0;
+        int skeleton_vertex_count_ = 0;
+
+        //INNE
 
         GLuint wall_texture_ = 0;
         GLuint floor_texture_ = 0;

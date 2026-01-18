@@ -146,8 +146,12 @@ namespace dungeon {
         if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
         if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
         if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
-        if (enemy_vao_) glDeleteVertexArrays(1, &enemy_vao_);
-        if (enemy_vbo_) glDeleteBuffers(1, &enemy_vbo_);
+
+        if (zombie_vao_) glDeleteVertexArrays(1, &zombie_vao_);
+        if (zombie_vbo_) glDeleteBuffers(1, &zombie_vbo_);
+
+        if (skeleton_vao_) glDeleteVertexArrays(1, &skeleton_vao_);
+        if (skeleton_vbo_) glDeleteBuffers(1, &skeleton_vbo_);
 
         if (window_) {
             glfwDestroyWindow(window_);
@@ -942,58 +946,103 @@ namespace dungeon {
     }
 
     void App::build_enemy_mesh() {
-        // ZMIEŃ NAZWĘ PLIKU NA SWOJĄ!
-        std::string modelPath = "assets/models/skeleton2.obj";
-        std::string baseDir = "assets/models/";
-
+        // Zmienne pomocnicze (użyjemy ich dwukrotnie)
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string err;
+        std::string baseDir = "assets/models/";
 
-        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, modelPath.c_str(), baseDir.c_str());
+        // ==========================================
+        // 1. ŁADOWANIE ZOMBIE
+        // ==========================================
+        std::string zombiePath = baseDir + "zombie.obj";
+        bool retZ = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, zombiePath.c_str(), baseDir.c_str());
 
-        if (!err.empty()) printf("[ENEMY LOAD INFO]: %s\n", err.c_str());
-        if (!ret) return;
+        if (retZ) {
+            // Tekstura Zombie
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                zombie_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+            }
+            else {
+                zombie_texture_ = load_texture("assets/models/zombie.png"); // Fallback
+            }
 
-        // Tekstura
-        if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-            std::string texPath = baseDir + materials[0].diffuse_texname;
-            enemy_texture_ = load_texture(texPath.c_str());
-        }
-        else {
-            // Fallback texture (opcjonalnie)
-            // enemy_texture_ = load_texture("assets/models/skeleton.png");
-        }
+            // Dane wierzchołków
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
 
-        std::vector<float> vertices;
-        for (const auto& shape : shapes) {
-            for (const auto& index : shape.mesh.indices) {
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                if (index.texcoord_index >= 0) {
-                    vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                    vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                }
-                else {
-                    vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
                 }
             }
+            zombie_vertex_count_ = (int)(vertices.size() / 5);
+
+            // Bufory Zombie
+            glGenVertexArrays(1, &zombie_vao_);
+            glGenBuffers(1, &zombie_vbo_);
+            glBindVertexArray(zombie_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, zombie_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
         }
 
-        enemy_vertex_count_ = (int)(vertices.size() / 5);
+        // ==========================================
+        // 2. ŁADOWANIE SZKIELETA (Resetujemy zmienne tinyobj)
+        // ==========================================
+        attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
 
-        glGenVertexArrays(1, &enemy_vao_);
-        glGenBuffers(1, &enemy_vbo_);
-        glBindVertexArray(enemy_vao_);
-        glBindBuffer(GL_ARRAY_BUFFER, enemy_vbo_);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
+        std::string skeletonPath = baseDir + "skeleton.obj"; // UPEWNIJ SIĘ ŻE MASZ TEN PLIK!
+        bool retS = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, skeletonPath.c_str(), baseDir.c_str());
+
+        if (retS) {
+            // Tekstura Szkieleta
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                skeleton_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+            }
+            else {
+                skeleton_texture_ = load_texture("assets/models/skeleton.png"); // Fallback
+            }
+
+            // Dane wierzchołków
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
+                }
+            }
+            skeleton_vertex_count_ = (int)(vertices.size() / 5);
+
+            // Bufory Szkieleta
+            glGenVertexArrays(1, &skeleton_vao_);
+            glGenBuffers(1, &skeleton_vbo_);
+            glBindVertexArray(skeleton_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
+        }
+
         glBindVertexArray(0);
     }
 
@@ -1152,27 +1201,47 @@ namespace dungeon {
         glBindVertexArray(0);
 
         // --- RYSOWANIE WROGÓW ---
+        // --- RYSOWANIE WROGÓW ---
         for (auto* enemy : enemies_) {
             enemy->UpdateDeath(dt);
             enemy->UpdateAnimation(dt);
 
             if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
 
-            // Tekstura vs Kolor
             world_shader_.use();
-            if (enemy_texture_ != 0) {
-                world_shader_.setInt("uUseTex", 1);
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, enemy_texture_);
-                world_shader_.setInt("uTex", 0);
+            world_shader_.setInt("uUseTex", 1);
+            glActiveTexture(GL_TEXTURE0);
+
+            // --- WYBÓR MODELU ---
+            GLuint currentVAO = 0;
+            int currentCount = 0;
+            float scale = 1.0f;
+
+            if (enemy->name == "Zombie") {
+                glBindTexture(GL_TEXTURE_2D, zombie_texture_);
+                currentVAO = zombie_vao_;
+                currentCount = zombie_vertex_count_;
+                scale = 0.40f; // Skala dla Zombie
+            }
+            else if (enemy->name == "Skeleton") {
+                glBindTexture(GL_TEXTURE_2D, skeleton_texture_);
+                currentVAO = skeleton_vao_;
+                currentCount = skeleton_vertex_count_;
+                scale = 0.14f; // Skala dla Szkieleta (może być inna!)
             }
             else {
-                world_shader_.setInt("uUseTex", 0);
+                // Fallback (np. Zombie)
+                glBindTexture(GL_TEXTURE_2D, zombie_texture_);
+                currentVAO = zombie_vao_;
+                currentCount = zombie_vertex_count_;
+                scale = 0.3f;
             }
+
+            world_shader_.setInt("uTex", 0);
 
             float y_offset = 0.55f;
 
-            // Kolorowanie (Damage / Death / Type)
+            // Kolorowanie (Damage / Death / Normal)
             if (!enemy->IsAlive()) {
                 float alpha = 1.0f - enemy->deathTimer;
                 if (alpha < 0.0f) alpha = 0.0f;
@@ -1183,11 +1252,11 @@ namespace dungeon {
                 world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f); // Błysk
             }
             else {
-                if (enemy->name == "Zombie") world_shader_.setVec4("uColor", 0.6f, 1.0f, 0.6f, 1.0f);
-                else world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
+                // Normalny kolor (biały, żeby nie zmieniać barwy tekstury)
+                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
             }
 
-            // Pozycja (Lerp)
+            // Pozycja i Obrót
             float x = enemy->VisualPos.x;
             float z = enemy->VisualPos.z;
 
@@ -1195,29 +1264,32 @@ namespace dungeon {
             M = glm::translate(M, glm::vec3(x, y_offset, z));
             M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
 
-            // Śmierć (Obrót)
+            //if (enemy->name == "Zombie") {
+            //    M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
+            //}
+
             if (!enemy->IsAlive()) {
                 float deathAngle = -90.0f * enemy->deathTimer;
                 if (deathAngle < -90.0f) deathAngle = -90.0f;
                 M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
             }
 
-            float enemyScale = 1.0f;
-            M = glm::scale(M, glm::vec3(enemyScale));
+            M = glm::scale(M, glm::vec3(scale));
             world_shader_.setMat4("uModel", &M[0][0]);
 
-            // Draw Enemy
-            if (enemy_vertex_count_ > 0) {
-                glBindVertexArray(enemy_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, enemy_vertex_count_);
+            // Faktyczne Rysowanie
+            if (currentCount > 0) {
+                glBindVertexArray(currentVAO);
+                glDrawArrays(GL_TRIANGLES, 0, currentCount);
             }
             else {
+                // Fallback do kostki jeśli model się nie załadował
                 glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }
 
-            // Pasek HP
+            // Pasek HP (bez zmian, kopiuj-wklej ze starego kodu jeśli zniknął, albo zostaw ten poniżej)
             if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
                 glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
