@@ -78,7 +78,7 @@ namespace dungeon {
         void load_level();
         bool can_move_to(int x, int y) const;
 
-        void check_sequence_step(int x, int y);
+        //void check_sequence_step(int x, int y);
 
         void build_world_mesh();
         void handle_input();
@@ -93,7 +93,7 @@ namespace dungeon {
 
         void update_puzzles();
 
-        void update_step_puzzle();
+        //void update_step_puzzle();
 
         void frame_begin();
         void frame_render();
@@ -123,6 +123,7 @@ namespace dungeon {
         void build_enemy_mesh();
 
         std::vector<std::string> map_list_ = {
+            "assets/maps/levelPuzzle1.map",
             "assets/maps/level1.map",
             "assets/maps/level2.map",
             "assets/maps/level3.map",
@@ -182,6 +183,13 @@ namespace dungeon {
         GLuint potion_texture_ = 0;
         int potion_vertex_count_ = 0;
         bool h_was_down_ = false; // Do picia mikstur
+
+        //TORCH
+
+        GLuint torch_vao_ = 0;
+        GLuint torch_vbo_ = 0;
+        GLuint torch_texture_ = 0;
+        int torch_vertex_count_ = 0;
 
         GLuint wall_texture_ = 0;
         GLuint floor_texture_ = 0;

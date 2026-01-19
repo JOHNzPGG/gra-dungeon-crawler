@@ -216,6 +216,9 @@ namespace dungeon {
         if (potion_vao_) glDeleteVertexArrays(1, &potion_vao_);
         if (potion_vbo_) glDeleteBuffers(1, &potion_vbo_);
 
+        if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
+        if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
+
         ma_sound_uninit(&bg_music_);
         ma_sound_uninit(&sfx_torch_);
         ma_engine_uninit(&audio_engine_);
@@ -1249,6 +1252,56 @@ namespace dungeon {
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
             glBindVertexArray(0);
         }
+
+        // =========================================================
+        // 3. ŁADOWANIE POCHODNI (TORCH)
+        // =========================================================
+
+        // Czyścimy zmienne loadera (zapobiega błędom redefinicji)
+        attrib.vertices.clear(); attrib.texcoords.clear();
+        shapes.clear(); materials.clear(); err.clear();
+
+        // Upewnij się, że masz plik assets/models/torch.obj !
+        std::string torchPath = baseDir + "torch.obj";
+        bool retTorch = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, torchPath.c_str(), baseDir.c_str());
+
+        if (retTorch) {
+            // Tekstura
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                torch_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+            }
+
+            // Geometria
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else {
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
+                }
+            }
+            torch_vertex_count_ = (int)(vertices.size() / 5);
+
+            if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
+            if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
+
+            glGenVertexArrays(1, &torch_vao_);
+            glGenBuffers(1, &torch_vbo_);
+            glBindVertexArray(torch_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, torch_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
+            glBindVertexArray(0);
+        }
     }
 
     void App::build_enemy_mesh() {
@@ -1366,23 +1419,21 @@ namespace dungeon {
 
     // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
     void App::frame_render() {
+        // --- 1. LOGIKA ROZGRYWKI ---
         update_exploration();
+        update_puzzles(); // Obsługa zagadki z płytami
 
         float dt = ImGui::GetIO().DeltaTime;
 
-        // --- UPDATE LOGIKI (Wstrząsy i Animacje) ---
         if (trauma_ > 0.0f) {
             trauma_ -= dt;
             if (trauma_ < 0.0f) trauma_ = 0.0f;
         }
 
-        float yaw = (float)player_.yaw;
-
-        // 1. LOGIKA ANIMACJI RUCHU (LERP + HEADBOB)
+        // Animacja ruchu gracza
         if (is_moving_) {
             move_timer_ += dt;
             float t = move_timer_ / kMoveDuration_;
-
             if (t >= 1.0f) {
                 t = 1.0f;
                 is_moving_ = false;
@@ -1390,43 +1441,39 @@ namespace dungeon {
             }
             else {
                 player_.RenderPosition = move_start_pos_ + (move_target_pos_ - move_start_pos_) * t;
-                // Head Bob
                 float headBob = std::sin(t * 3.14159f) * 0.08f;
                 player_.RenderPosition.y = headBob;
             }
         }
 
-        // 2. LOGIKA ANIMACJI ATAKU
+        // Animacja ataku gracza
         if (attack_anim_timer_ > 0.0f) {
             attack_anim_timer_ -= dt;
             if (attack_anim_timer_ < 0.0f) attack_anim_timer_ = 0.0f;
         }
 
-        // --- 3. USTAWIENIE KAMERY ---
+        // --- 2. KAMERA ---
+        float yaw = (float)player_.yaw;
         glm::vec3 cam_pos;
         glm::vec3 center;
         glm::vec3 up(0.0f, 1.0f, 0.0f);
 
-        // Sprawdzamy czy jesteśmy w menu (wtedy kamera orbituje)
         if (state_ == GameState::MainMenu || state_ == GameState::Credits || state_ == GameState::Options) {
-            float radius = 6.0f; // Trochę dalej
+            // Kamera orbitująca w menu
+            float radius = 6.0f;
             float camX = std::sin(menu_timer_ * 0.2f) * radius + (level_.w / 2.0f);
             float camZ = std::cos(menu_timer_ * 0.2f) * radius + (level_.h / 2.0f);
-
-            cam_pos = glm::vec3(camX, 5.0f, camZ); // Wysoko
+            cam_pos = glm::vec3(camX, 5.0f, camZ);
             center = glm::vec3(level_.w / 2.0f, 0.0f, level_.h / 2.0f);
         }
         else {
-            // TRYB GRY (FPP / TPP)
-
-            // Obliczamy forward na bazie yaw gracza
+            // Kamera gracza
             float rad = glm::radians(yaw);
             glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
-
             cam_pos = player_.RenderPosition;
-            cam_pos += glm::vec3(0.5f, 0.0f, 0.5f); // Centrowanie
+            cam_pos += glm::vec3(0.5f, 0.0f, 0.5f);
 
-            // Screen Shake (Trzęsienie ziemi)
+            // Screen Shake (Wstrząsy)
             if (trauma_ > 0.0f) {
                 float shake = trauma_ * trauma_;
                 cam_pos.x += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
@@ -1439,7 +1486,6 @@ namespace dungeon {
                 cam_pos += forward * 0.1f;
             }
             else {
-                // TPP - Znad ramienia
                 cam_pos.y += 0.95f;
                 cam_pos -= forward * 0.3f;
                 glm::vec3 rightv = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
@@ -1447,27 +1493,41 @@ namespace dungeon {
             }
             center = cam_pos + forward;
         }
-
         view_ = glm::lookAt(cam_pos, center, up);
 
-        // --- USTAWIENIA SHADERA ---
+        // --- 3. KONFIGURACJA SHADERA I OŚWIETLENIA ---
         world_shader_.use();
-        // Tutaj używam nazw z Twojego kodu (uProj, uView, uCamPos)
-        world_shader_.setMat4("uProj", &proj_[0][0]); // Upewnij się czy masz proj_ czy projection_ w App.hpp
+        world_shader_.setMat4("uProj", &proj_[0][0]);
         world_shader_.setMat4("uView", &view_[0][0]);
         world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
         world_shader_.setFloat("uTime", (float)glfwGetTime());
 
-        // Światło (Pochodnia)
-        world_shader_.setVec3("uLightPos", cam_pos.x, cam_pos.y, cam_pos.z);
+        // === ETAP 1: Przesyłanie danych o światłach (NIE RYSUJEMY TU JESZCZE) ===
+        // To odpowiada za to, że ściany i podłoga będą oświetlone przez pochodnie
+        int activeLights = 0;
+        for (const auto& torch : puzzle_torches_) {
+            if (torch.is_lit) {
+                // Tworzymy nazwę zmiennej w shaderze: uPuzzleLights[0], uPuzzleLights[1]...
+                std::string name = "uPuzzleLights[" + std::to_string(activeLights) + "]";
 
+                // POPRAWKA: Używamy .c_str() i wysyłamy pozycję światła
+                world_shader_.setVec3(name.c_str(), torch.x + 0.5f, 1.5f, torch.y + 0.5f);
+
+                activeLights++;
+                if (activeLights >= 16) break; // Limit tablicy w shaderze
+            }
+        }
+        world_shader_.setInt("uActivePuzzleLights", activeLights);
+        // ======================================================================
+
+        // Resetowanie modelu i koloru przed rysowaniem świata
         glm::mat4 I(1.0f);
         world_shader_.setMat4("uModel", &I[0][0]);
         world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
-        // --- RYSOWANIE ŚWIATA ---
+        // --- 4. RYSOWANIE ŚWIATA ---
 
-        // 1. PODŁOGA
+        // PODŁOGA
         world_shader_.setInt("uUseTex", 1);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, floor_texture_);
@@ -1477,24 +1537,22 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
         }
 
-        // 2. ŚCIANY
+        // ŚCIANY
         glBindTexture(GL_TEXTURE_2D, wall_texture_);
         if (wall_vertex_count_ > 0) {
             glBindVertexArray(wall_vao_);
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
-        // 3. PORTALE / WYJŚCIA
+        // PORTALE / WYJŚCIA
         world_shader_.setInt("uUseTex", 0);
         glBindVertexArray(cube_vao_);
         for (int y = 0; y < level_.h; ++y) {
             for (int x = 0; x < level_.w; ++x) {
                 auto cell = level_.cells[y * level_.w + x];
                 if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
-                    if (cell == io::Cell::NextLevel)
-                        world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
-                    else
-                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
+                    if (cell == io::Cell::NextLevel) world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
+                    else world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
 
                     glm::mat4 M(1.0f);
                     M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
@@ -1504,49 +1562,108 @@ namespace dungeon {
                 }
             }
         }
+
+        // === ETAP 2: RYSOWANIE FIZYCZNYCH POCHODNI 3D (ZAGADKA 1) ===
+        // Tutaj rysujemy sam model pochodni (lub belkę, jeśli brak modelu)
+
+        for (const auto& torch : puzzle_torches_) {
+
+            {
+                world_shader_.setInt("uUseTex", 0); // Wyłączamy tekstury
+                world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f); // RÓŻOWY (MAGENTA)
+
+                glm::mat4 M_debug(1.0f);
+                // Ustawiamy słup na środku kafelka
+                M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
+                // Rozciągamy go w górę (wysokość 4 metry, cienki)
+                M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
+
+                world_shader_.setMat4("uModel", &M_debug[0][0]);
+                glBindVertexArray(cube_vao_);
+                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            }
+
+            // Ustawiamy kolor: Jasny (ogień) lub Ciemny (zgaszona)
+            if (torch.is_lit)
+                world_shader_.setVec4("uColor", 1.5f, 1.2f, 0.8f, 1.0f);
+            else
+                world_shader_.setVec4("uColor", 0.3f, 0.3f, 0.3f, 1.0f);
+
+            glm::mat4 M(1.0f);
+            // Pozycja na ścianie (wysokość 1.5)
+            M = glm::translate(M, glm::vec3(torch.x + 0.5f, 0.95f, torch.y + 1.0f));
+            M = glm::rotate(M, glm::radians(30.0f), glm::vec3(1, 0, 0));
+
+            if (torch_vertex_count_ > 0) {
+                // Rysujemy MODEL 3D
+                float scale = 1.5f;
+                M = glm::scale(M, glm::vec3(scale));
+                world_shader_.setMat4("uModel", &M[0][0]);
+
+                world_shader_.setInt("uUseTex", 1);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, torch_texture_); // Jeśli masz teksturę pochodni
+                world_shader_.setInt("uTex", 0);
+
+                glBindVertexArray(torch_vao_);
+                glDrawArrays(GL_TRIANGLES, 0, torch_vertex_count_);
+            }
+            else {
+                // FALLBACK: Rysujemy belkę z sześcianu
+                M = glm::scale(M, glm::vec3(0.15f, 0.6f, 0.15f));
+                world_shader_.setMat4("uModel", &M[0][0]);
+                world_shader_.setInt("uUseTex", 0);
+                glBindVertexArray(cube_vao_);
+                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            }
+        }
+        // ============================================================
+
+        // --- RYSOWANIE PŁYTEK (ZAGADKA 2) ---
+        world_shader_.setInt("uUseTex", 0);
+        glBindVertexArray(cube_vao_);
+        for (const auto& plate : pressure_plates_) {
+            world_shader_.setVec4("uColor", 0.0f, 0.8f, 0.8f, 1.0f); // Turkusowy
+
+            glm::mat4 M(1.0f);
+            M = glm::translate(M, glm::vec3(plate.x + 0.5f, 0.02f, plate.y + 0.5f)); // Płasko na ziemi
+            M = glm::scale(M, glm::vec3(0.7f, 0.05f, 0.7f));
+
+            world_shader_.setMat4("uModel", &M[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+        }
         glBindVertexArray(0);
 
-        // --- RYSOWANIE WROGÓW ---
+        // --- 5. RYSOWANIE WROGÓW ---
         for (auto* enemy : enemies_) {
             enemy->UpdateDeath(dt);
             enemy->UpdateAnimation(dt);
-
             if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
 
             world_shader_.use();
             world_shader_.setInt("uUseTex", 1);
             glActiveTexture(GL_TEXTURE0);
 
-            // --- WYBÓR MODELU ---
             GLuint currentVAO = 0;
             int currentCount = 0;
             float scale = 1.0f;
 
             if (enemy->name == "Zombie") {
                 glBindTexture(GL_TEXTURE_2D, zombie_texture_);
-                currentVAO = zombie_vao_;
-                currentCount = zombie_vertex_count_;
-                scale = 0.40f; // Skala dla Zombie
+                currentVAO = zombie_vao_; currentCount = zombie_vertex_count_; scale = 0.40f;
             }
             else if (enemy->name == "Skeleton") {
                 glBindTexture(GL_TEXTURE_2D, skeleton_texture_);
-                currentVAO = skeleton_vao_;
-                currentCount = skeleton_vertex_count_;
-                scale = 0.14f; // Skala dla Szkieleta (może być inna!)
+                currentVAO = skeleton_vao_; currentCount = skeleton_vertex_count_; scale = 0.14f;
             }
             else {
-                // Fallback (np. Zombie)
                 glBindTexture(GL_TEXTURE_2D, zombie_texture_);
-                currentVAO = zombie_vao_;
-                currentCount = zombie_vertex_count_;
-                scale = 0.3f;
+                currentVAO = zombie_vao_; currentCount = zombie_vertex_count_; scale = 0.3f;
             }
 
             world_shader_.setInt("uTex", 0);
-
             float y_offset = 0.55f;
 
-            // Kolorowanie (Damage / Death / Normal)
             if (!enemy->IsAlive()) {
                 float alpha = 1.0f - enemy->deathTimer;
                 if (alpha < 0.0f) alpha = 0.0f;
@@ -1554,58 +1671,46 @@ namespace dungeon {
                 world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, alpha);
             }
             else if (enemy->IsHurt()) {
-                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f); // Błysk
+                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f);
             }
             else {
-                // Normalny kolor (biały, żeby nie zmieniać barwy tekstury)
                 world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
             }
 
-            // Pozycja i Obrót
             float x = enemy->VisualPos.x;
             float z = enemy->VisualPos.z;
-
             glm::mat4 M(1.0f);
             M = glm::translate(M, glm::vec3(x, y_offset, z));
             M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
-
-            //if (enemy->name == "Zombie") {
-            //    M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
-            //}
-
             if (!enemy->IsAlive()) {
                 float deathAngle = -90.0f * enemy->deathTimer;
                 if (deathAngle < -90.0f) deathAngle = -90.0f;
                 M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
             }
-
             M = glm::scale(M, glm::vec3(scale));
             world_shader_.setMat4("uModel", &M[0][0]);
 
-            // Faktyczne Rysowanie
             if (currentCount > 0) {
                 glBindVertexArray(currentVAO);
                 glDrawArrays(GL_TRIANGLES, 0, currentCount);
             }
             else {
-                // Fallback do kostki jeśli model się nie załadował
                 glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }
 
-            // Pasek HP (bez zmian, kopiuj-wklej ze starego kodu jeśli zniknął, albo zostaw ten poniżej)
+            // Pasek HP Wroga
             if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
                 glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
-                // Tło
                 world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
                 glm::mat4 M_bg(1.0f);
                 M_bg = glm::translate(M_bg, glm::vec3(x, 1.8f, z));
                 M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
                 world_shader_.setMat4("uModel", &M_bg[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-                // HP
+
                 float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
                 world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
                 glm::mat4 M_hp(1.0f);
@@ -1618,33 +1723,26 @@ namespace dungeon {
         }
         glBindVertexArray(0);
 
-        // --- ITEMY NA ZIEMI ---
+        // --- 6. ITEMY NA ZIEMI ---
         world_shader_.use();
-        world_shader_.setInt("uUseTex", 1); // Włączamy tekstury
+        world_shader_.setInt("uUseTex", 1);
 
         for (const auto& wItem : world_items_) {
             if (!wItem.isAlive) continue;
-
             glm::mat4 M(1.0f);
 
-            // A. MIECZ (Wbity w ziemię)
             if (wItem.itemData->type == ItemType::Weapon) {
-
                 glm::vec3 pos = wItem.position;
-                pos.y = 1.0f; // Podnieś go wyżej na testy!
-
-                glm::mat4 M(1.0f);
+                pos.y = 0.5f; // Wysokość miecza
                 M = glm::translate(M, pos);
-                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0)); // Rękojeść w górę
-                M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));  // Krzywo
-                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Obrót Y
-
+                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0));
+                M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));
+                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
                 float scale = 0.5f;
                 M = glm::scale(M, glm::vec3(scale));
 
                 world_shader_.setMat4("uModel", &M[0][0]);
-                // Dajemy mu też efekt "Ghost" żeby pasował do tego w ręce
-                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f);
+                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f); // Ghost effect
 
                 world_shader_.setInt("uUseTex", 1);
                 glActiveTexture(GL_TEXTURE0);
@@ -1652,55 +1750,41 @@ namespace dungeon {
                 world_shader_.setInt("uTex", 0);
 
                 if (weapon_vertex_count_ > 0) {
-                    glDepthMask(GL_FALSE); // Przezroczystość
+                    glDepthMask(GL_FALSE);
                     glBindVertexArray(weapon_vao_);
                     glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
                     glDepthMask(GL_TRUE);
                 }
             }
-            // B. MIKSTURA (CONSUMABLE)
             else {
+                // Mikstura
                 float time = (float)glfwGetTime();
-
-                // 1. Pozycja + Lewitacja
-                // float floatY = sin(time * 2.0f) * 0.1f + 0.3f; // Unosi się na 0.3 i buja +/- 0.1
-                // Jeśli model jest dziwny (jak miecz), dostosuj tą stałą 0.3f!
                 float floatY = 0.55f + sin(time * 3.0f) * 0.03f;
-
                 glm::vec3 pos = wItem.position;
-                pos.y = floatY; // Nadpisujemy Y
-
+                pos.y = floatY;
                 M = glm::translate(M, pos);
-
-                // 2. Ciągły obrót (żeby wyglądała jak znajdźka)
                 M = glm::rotate(M, time, glm::vec3(0, 1, 0));
-
-                // 3. Skala (Miksturki zazwyczaj są małe)
                 M = glm::scale(M, glm::vec3(0.5f));
 
                 world_shader_.setMat4("uModel", &M[0][0]);
-                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f); // Biały, jeśli mamy teksturę
+                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
-                // Tekstura
                 glActiveTexture(GL_TEXTURE0);
                 if (potion_texture_ != 0) {
                     glBindTexture(GL_TEXTURE_2D, potion_texture_);
                     world_shader_.setInt("uUseTex", 1);
                 }
                 else {
-                    // Brak tekstury -> Czerwony kolor (Health Potion)
                     world_shader_.setInt("uUseTex", 0);
                     world_shader_.setVec4("uColor", 1.0f, 0.2f, 0.2f, 1.0f);
                 }
                 world_shader_.setInt("uTex", 0);
 
-                // Rysowanie
                 if (potion_vertex_count_ > 0) {
                     glBindVertexArray(potion_vao_);
                     glDrawArrays(GL_TRIANGLES, 0, potion_vertex_count_);
                 }
                 else {
-                    // Fallback (Niebieska Kostka jeśli model nie załadował się)
                     world_shader_.setInt("uUseTex", 0);
                     world_shader_.setVec4("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
                     glBindVertexArray(cube_vao_);
@@ -1710,23 +1794,16 @@ namespace dungeon {
         }
         glBindVertexArray(0);
 
-        // --- HELD ITEM (TYLKO W FPP I PODCZAS GRY) ---
-        // Naprawiona linijka if oraz obliczanie forward
+        // --- 7. HELD ITEM (TYLKO W FPP I PODCZAS GRY) ---
         if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
-
-            // Musimy obliczyć forward tutaj, bo wewnątrz bloku if(MainMenu) go nie ma
             float rad = glm::radians((float)player_.yaw);
             glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
             glm::vec3 up(0.0f, 1.0f, 0.0f);
             glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
-
-            // Pozycjonowanie
             glm::vec3 item_pos = cam_pos + forward * 0.4f + rightv * 0.2f + up * -0.3f;
 
-            // Animacje
             float animOffset = 0.0f;
             float animTilt = 0.0f;
-
             if (attack_anim_timer_ > 0.0f) {
                 float progress = 1.0f - (attack_anim_timer_ / kAttackDuration_);
                 float wave = std::sin(progress * 3.14159f);
@@ -1735,36 +1812,25 @@ namespace dungeon {
             }
             else {
                 float time = (float)glfwGetTime();
-                float breath = std::sin(time * 2.0f) * 0.02f;
-                item_pos.y += breath;
+                item_pos.y += std::sin(time * 2.0f) * 0.02f;
             }
-
             item_pos += forward * animOffset;
             item_pos += up * (-animOffset * 0.2f);
 
-            // Renderowanie
             world_shader_.use();
-            if (weapon_texture_ != 0) {
-                world_shader_.setInt("uUseTex", 1);
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, weapon_texture_);
-                world_shader_.setInt("uTex", 0);
-            }
-            else {
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 0.6f);
-            }
+            world_shader_.setInt("uUseTex", 1);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, weapon_texture_);
+            world_shader_.setInt("uTex", 0);
+            world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 0.6f);
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, item_pos);
-            // Obracamy miecz tak, by pasował do gracza
             M = glm::rotate(M, glm::radians((float)player_.yaw), glm::vec3(0, 1, 0));
-            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0)); // Korekta modelu
-            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0)); // Atak
-
-            float scale = 0.4f; // Dopasuj skalę!
+            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
+            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0));
+            float scale = 0.4f;
             M = glm::scale(M, glm::vec3(scale));
-
             world_shader_.setMat4("uModel", &M[0][0]);
 
             if (weapon_vertex_count_ > 0) {

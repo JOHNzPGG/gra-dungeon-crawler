@@ -13,13 +13,13 @@
     "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
+    "\\include\\dungeon\\io",
+    "\\include\\dungeon\\ui",
     "\\src",
-    "\\src\\game",
-    "\\src\\game\\clases",
-    "\\src\\gfx",
+    "\\src\\core",
     "\\src\\io"
   ],
-  "SelectedNode": "\\external",
+  "SelectedNode": "\\assets\\maps\\levelPuzzle1.map",
   "PreviewInSolutionExplorer": false
 }
