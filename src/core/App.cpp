@@ -52,9 +52,9 @@ void main() {
   vTexCoord = aTexCoord;
 }
 )";
-
+//STARY SHADER DOCELOWO WYWALIĆ
 // Fragment shader – ZMIENIONY NA WERSJĘ Z KODU DRUGIEGO (obsługa uUseTex)
-static const char* kWorldFS = R"(#version 330 core
+ /*static const char* kWorldFS = R"(#version 330 core
 out vec4 FragColor;
 
 in vec2 vTexCoord;
@@ -74,7 +74,7 @@ void main() {
     } else {
         baseColor = uColor;
     }
-    
+
     if(baseColor.a < 0.1) discard;
 
     // --- OBLICZANIE POCHODNI ---
@@ -83,9 +83,9 @@ void main() {
     // 1. Efekt Migotania (Flicker)
     // Łączymy dwa sinusy o różnych prędkościach, żeby ruch był nieregularny
     float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
-    
+
     // Dodajemy migotanie do zasięgu światła
-    float lightStart = 2.5 + flicker; 
+    float lightStart = 2.5 + flicker;
     float lightEnd = 8.0 + flicker * 2.0;
 
     float lightFactor = (lightEnd - dist) / (lightEnd - lightStart);
@@ -93,15 +93,68 @@ void main() {
 
     // 2. Kolor Światła (Ciepły Pomarańcz)
     // Zamiast białego (1.0, 1.0, 1.0) dajemy ogień
-    vec3 torchColor = vec3(1.0, 0.85, 0.6); 
+    vec3 torchColor = vec3(1.0, 0.85, 0.6);
 
     // Ambient (światło otoczenia) - lekko niebieskawy dla kontrastu
-    vec3 ambient = vec3(0.05, 0.05, 0.1); 
+    vec3 ambient = vec3(0.05, 0.05, 0.1);
 
     // Łączymy światło pochodni z ambientem
     vec3 finalLight = (torchColor * lightFactor) + ambient;
 
     // 3. Wynik
+    FragColor = vec4(baseColor.rgb * finalLight, baseColor.a);
+}
+)"; */
+
+static const char* kWorldFS = R"(#version 330 core
+out vec4 FragColor;
+
+in vec2 vTexCoord;
+in vec3 vFragPos;
+
+uniform sampler2D uTex;
+uniform int uUseTex;
+uniform vec4 uColor;
+uniform vec3 uCamPos;
+uniform float uTime;
+
+// --- DANE ZAGADKI ---
+uniform vec3 uPuzzleLights[16];
+uniform int uActivePuzzleLights;
+
+void main() {
+    vec4 baseColor;
+    if (uUseTex == 1) {
+        baseColor = texture(uTex, vTexCoord) * uColor;
+    } else {
+        baseColor = uColor;
+    }
+    if(baseColor.a < 0.1) discard;
+
+    // 1. POCHODNIA GRACZA (Twoja logika)
+    float dist = distance(vFragPos, uCamPos);
+    float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
+    float lightStart = 2.5 + flicker;
+    float lightEnd = 8.0 + flicker * 2.0;
+    float playerLight = clamp((lightEnd - dist) / (lightEnd - lightStart), 0.0, 1.0);
+
+    // 2. POCHODNIE Z ZAGADKI (Logika Lights Out)
+    float puzzleLightTotal = 0.0;
+    for(int i = 0; i < uActivePuzzleLights; i++) {
+        float d = distance(vFragPos, uPuzzleLights[i]);
+        // Każda pochodnia ma lekko przesunięte migotanie (uTime + i)
+        float pFlicker = sin(uTime * 12.0 + float(i)) * 0.05;
+        float pLight = clamp((4.5 + pFlicker - d) / (4.5 + pFlicker - 0.5), 0.0, 1.0);
+        puzzleLightTotal = max(puzzleLightTotal, pLight);
+    }
+
+    vec3 torchColor = vec3(1.0, 0.85, 0.6);
+    vec3 ambient = vec3(0.05, 0.05, 0.1);
+
+    // Łączymy oba źródła światła
+    float combinedLight = max(playerLight, puzzleLightTotal);
+    vec3 finalLight = (torchColor * combinedLight) + ambient;
+
     FragColor = vec4(baseColor.rgb * finalLight, baseColor.a);
 }
 )";
@@ -299,6 +352,11 @@ namespace dungeon {
         enemies_.clear();
         world_items_.clear();
 
+        // --- NOWE: Czyszczenie stanu zagadek ---
+        puzzle_torches_.clear();
+        pressure_plates_.clear();
+        puzzles_solved_ = false;
+
         // 1. WROGOWIE
         for (const auto& spawn : level_.enemy_spawns) {
             Enemy* newEnemy = nullptr;
@@ -357,6 +415,18 @@ namespace dungeon {
                 // Y = 0.7f (startowa wysokość, i tak jest nadpisywana w frame_render przez animację)
                 world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
             }
+        }
+        // 3. ZAGADKA: POCHODNIE (Symbol 'L')
+        for (const auto& spawn : level_.puzzle_torches) {
+            // Wszystkie pochodnie startują jako zgaszone (false)
+            puzzle_torches_.push_back({ spawn.x, spawn.y, false });
+        }
+
+        // 4. ZAGADKA: PŁYTKI NACISKOWE (Symbol 'T')
+        for (const auto& spawn : level_.pressure_plates) {
+            // ID nadawane automatycznie: 1, 2, 3... w kolejności wczytania z mapy
+            int id = (int)pressure_plates_.size() + 1;
+            pressure_plates_.push_back({ spawn.x, spawn.y, id, 0 });
         }
     }
 
@@ -478,6 +548,8 @@ namespace dungeon {
                         // Logika: Aktualizacja pozycji
                         player_.GameX = target.x;
                         player_.GameY = target.y;
+                        //logika zagadki
+                        update_puzzles();
 
                         // Sprawdź pola specjalne (Wyjście / Next Level)
                         int idx = target.y * level_.w + target.x;
@@ -486,6 +558,7 @@ namespace dungeon {
                             if (cellType == io::Cell::NextLevel) load_next_level();
                             else if (cellType == io::Cell::Exit) state_ = GameState::Victory;
                         }
+
 
                         // Uruchomienie timera animacji
                         is_moving_ = true;
@@ -534,42 +607,58 @@ namespace dungeon {
             }
         }
 
-        // D. WALKA (ATAK PODSTAWOWY)
+        // D. WALKA / INTERAKCJA (ATAK PODSTAWOWY LUB PRZEŁĄCZNIK)
         if (atk && !atk_was_down_) {
-            Entity* target = GetEnemyInFront(player_);
+            // 1. Oblicz współrzędne pola przed graczem na podstawie YAW
+            int dx = 0, dy = 0;
+            int normalizedYaw = (player_.yaw % 360 + 360) % 360;
 
-            // Animacja startuje zawsze, nawet jak nie trafisz (machnięcie w powietrze)
-            attack_anim_timer_ = kAttackDuration_;
+            if (normalizedYaw == 0)   dy = -1; // Północ
+            else if (normalizedYaw == 90)  dx = 1;  // Wschód
+            else if (normalizedYaw == 180) dy = 1;  // Południe
+            else if (normalizedYaw == 270) dx = -1; // Zachód
 
-            // Jeśli jest cel i mamy AP
-            if (player_.ActionPoints > 0) {
-                if (target) {
-                    // Inicjacja sekwencji walki
-                    combat_lock_ = true;
-                    combat_timer_ = 1.0f;
-                    enemy_riposte_pending_ = true;
-                    current_combat_target_ = target;
+            int tx = player_.GameX + dx;
+            int ty = player_.GameY + dy;
 
-                    // Obliczanie obrażeń
-                    int dmg = player_.base_damage;
-
-                    // Backstab bonus
-                    int pYaw = (player_.yaw % 360 + 360) % 360;
-                    int eYaw = (target->yaw % 360 + 360) % 360;
-                    if (pYaw == eYaw) dmg *= 2;
-
-                    // Zadaj obrażenia i obróć wroga
-                    target->TakeDamage(dmg);
-                    target->UpdateOrientation((player_.yaw + 180) % 360);
-
-                    // Dźwięk uderzenia
-                    // ma_sound_start(&sfx_hit_);
+            // 2. Sprawdź czy przed graczem jest pochodnia "P"
+            bool interacted_with_puzzle = false;
+            for (auto& t : puzzle_torches_) {
+                if (t.x == tx && t.y == ty) {
+                    toggle_puzzle_torch(tx, ty); // Twoja funkcja przełączająca sąsiadów
+                    interacted_with_puzzle = true;
+                    attack_anim_timer_ = kAttackDuration_; // Opcjonalnie: animacja machnięcia przy przełączaniu
+                    break;
                 }
-                // Koszt ataku
-                player_.UseActionPoints(1);
+            }
+
+            // 3. Jeśli nie było pochodni, wykonaj normalną logikę walki
+            if (!interacted_with_puzzle) {
+                Entity* target = GetEnemyInFront(player_);
+                attack_anim_timer_ = kAttackDuration_;
+
+                if (player_.ActionPoints > 0) {
+                    if (target) {
+                        combat_lock_ = true;
+                        combat_timer_ = 1.0f;
+                        enemy_riposte_pending_ = true;
+                        current_combat_target_ = target;
+
+                        int dmg = player_.base_damage;
+
+                        // Backstab bonus
+                        int pYaw = (player_.yaw % 360 + 360) % 360;
+                        int eYaw = (target->yaw % 360 + 360) % 360;
+                        if (pYaw == eYaw) dmg *= 2;
+
+                        target->TakeDamage(dmg);
+                        target->UpdateOrientation((player_.yaw + 180) % 360);
+                        // ma_sound_start(&sfx_hit_);
+                    }
+                    player_.UseActionPoints(1);
+                }
             }
         }
-
         // E. SKILLE (1, 2, 3)
         if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
         if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
@@ -659,7 +748,104 @@ namespace dungeon {
             }
         }
     }
+    void App::toggle_puzzle_torch(int x, int y) {
+        // Sprawdzamy, czy gracz kliknął w ścianę na samej górze (Y=0)
+        // w zakresie naszych 6 pochodni (X: 4-9)
+        if (y != 0 || x < 4 || x > 9) return;
 
+        // Przełączamy Środek, Lewo (-1) i Prawo (+1)
+        int dx[] = {0, -1, 1};
+
+        for (int i = 0; i < 3; ++i) {
+            int targetX = x + dx[i];
+
+            // Granice rzędu pochodni: 4 i 9
+            if (targetX >= 4 && targetX <= 9) {
+                for (auto& t : puzzle_torches_) {
+                    if (t.x == targetX && t.y == 0) {
+                        t.is_lit = !t.is_lit;
+                        // Opcjonalnie: ma_engine_play_oneshot(&audio_engine_, "assets/sfx/fire.wav", NULL);
+                    }
+                }
+            }
+        }
+
+        // Sprawdzanie warunku zwycięstwa
+        int lit_count = 0;
+        for (const auto& t : puzzle_torches_) {
+            if (t.y == 0 && t.is_lit) lit_count++;
+        }
+
+        if (lit_count == 6) {
+            printf("Pochodnie zapalone! Otwieram tajne przejście.\n");
+            // Usuwamy ścianę blokującą dostęp do przedmiotu I
+            // Na Twojej mapie przedmiot I jest w okolicach (8, 4)
+            // Usuwamy ścianę na (5, 4), która odcina prawą sekcję
+            level_.cells[4 * level_.w + 5] = io::Cell::Floor;
+            build_world_mesh();
+            trauma_ = 0.5f; // Trzęsienie ziemi
+        }
+    }
+  void App::update_puzzles() {
+    // 1. Sprawdź czy gracz zmienił kafel
+    if (player_.GameX == last_puzzle_x_ && player_.GameY == last_puzzle_y_) return;
+
+    last_puzzle_x_ = player_.GameX;
+    last_puzzle_y_ = player_.GameY;
+
+    // 2. Definicja kroków (X, Y, Ile razy)
+    struct Step { int x, y, goal; const char* desc; };
+    const Step sequence[] = {
+        {6, 3, 3, "SRODEK"},    // T1
+        {5, 4, 2, "ZACHOD"},    // T2 (lewo)
+        {7, 4, 3, "WSCHOD"},    // T3 (prawo)
+        {6, 5, 1, "POLNOC"}     // T4 (dol - zgodnie z Twoim opisem)
+    };
+    const int num_stages = 4;
+
+    // 3. Znajdź płytkę pod graczem
+    PressurePlate* stepped = nullptr;
+    for (auto& p : pressure_plates_) {
+        if (p.x == last_puzzle_x_ && p.y == last_puzzle_y_) {
+            stepped = &p;
+            break;
+        }
+    }
+    if (!stepped) return;
+
+    // 4. Logika ścisłej sekwencji
+    const Step& target = sequence[current_stage_idx_];
+
+    if (stepped->x == target.x && stepped->y == target.y) {
+        // Gracz na poprawnej płytce
+        stepped->count++;
+        printf("Kierunek %s: %d/%d\n", target.desc, stepped->count, target.goal);
+
+        if (stepped->count == target.goal) {
+            current_stage_idx_++;
+            printf("ETAP ZAKONCZONY. Kolejny cel...\n");
+            // Resetujemy liczniki płytek dla czystości kolejnego etapu
+            for(auto& rp : pressure_plates_) rp.count = 0;
+        }
+    } else {
+        // Gracz wszedł na złą płytkę w złej kolejności -> TOTALNY RESET
+        printf("BLAD SEKWENCJI! Powrot do startu.\n");
+        current_stage_idx_ = 0;
+        for (auto& rp : pressure_plates_) rp.count = 0;
+    }
+
+    // 5. Wygrana: Otwarcie przejścia do przedmiotu I (1, 3)
+    if (current_stage_idx_ == num_stages && !puzzles_solved_) {
+        puzzles_solved_ = true;
+
+        // Hardkodujemy usunięcie ściany blokującej I na pozycji (2, 3)
+        level_.cells[3 * level_.w + 2] = io::Cell::Floor;
+
+        build_world_mesh(); // Przebuduj grafikę 3D, żeby ściana zniknęła
+        trauma_ = 0.6f;     // Efekt trzęsienia ziemi przy otwarciu przejścia
+        printf("MECHANIZM ODBLOKOWANY!\n");
+    }
+}
     // ZMIANA: Cała funkcja build_world_mesh podmieniona na wersję z drugiego kodu (ładowanie modeli)
     void App::build_world_mesh() {
         std::vector<float> floor_vertices;
@@ -1888,7 +2074,14 @@ namespace dungeon {
 
         ImGui::End();
     }
-
+    void App::init_puzzles(const io::Level& L) {
+        puzzle_torches_.clear();
+        pressure_plates_.clear();
+        for (const auto& s : L.item_spawns) {
+            if (s.type == 'L') puzzle_torches_.push_back({ s.x, s.y, false });
+            if (s.type == 'T') pressure_plates_.push_back({ s.x, s.y, (int)pressure_plates_.size() + 1, 0 });
+        }
+    }
     void App::init_audio() {
         ma_result result;
 

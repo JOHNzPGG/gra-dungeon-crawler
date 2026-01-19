@@ -14,7 +14,7 @@ namespace dungeon::io {
         std::string line;
         while (std::getline(f, line)) {
             // Usuwamy znak powrotu karetki '\r' (problem Windows vs Linux), 
-            // który czasem psuje czytanie mapy
+            // ktï¿½ry czasem psuje czytanie mapy
             if (!line.empty() && line.back() == '\r') line.pop_back();
             if (!line.empty()) lines.push_back(line);
         }
@@ -23,7 +23,7 @@ namespace dungeon::io {
         L.h = (int)lines.size();
         L.w = L.h ? (int)lines[0].size() : 0;
 
-        // Domyœlne wartoœci (¿eby nie l¹dowaæ w nicoœci w razie b³êdu)
+        // Domyï¿½lne wartoï¿½ci (ï¿½eby nie lï¿½dowaï¿½ w nicoï¿½ci w razie bï¿½ï¿½du)
         L.cells.assign(L.w * L.h, Cell::Wall);
         L.player_x = 1;
         L.player_y = 1;
@@ -35,10 +35,18 @@ namespace dungeon::io {
 
                 char c = lines[y][x];
 
-                // 1. Domyœlnie zak³adamy, ¿e to pod³oga (chyba ¿e trafimy na #)
-                // Wczeœniej by³o odwrotnie i to powodowa³o b³¹d!
+                // 1. Domyï¿½lnie zakï¿½adamy, ï¿½e to podï¿½oga (chyba ï¿½e trafimy na #)
+                // Wczeï¿½niej byï¿½o odwrotnie i to powodowaï¿½o bï¿½ï¿½d!
                 if (c == '#') {
                     L.cells[y * L.w + x] = Cell::Wall;
+                }
+                else if (c == 'L') {
+                    L.cells[y * L.w + x] = Cell::Wall; // POCHODNIA = ÅšCIANA
+                    L.puzzle_torches.push_back({ x, y, 'L' });
+                }
+                else if (c == 'T') {
+                    L.cells[y * L.w + x] = Cell::Floor; // PÅYTA = PODÅOGA
+                    L.pressure_plates.push_back({ x, y, 'T' });
                 }
                 else if (c == 'N') {
                     L.cells[y * L.w + x] = Cell::NextLevel;
@@ -47,11 +55,11 @@ namespace dungeon::io {
                     L.cells[y * L.w + x] = Cell::Exit;
                 }
                 else {
-                    // Kropka, Spacja, Wrogowie, Gracz -> Wszystko stoi na pod³odze
+                    // Kropka, Spacja, Wrogowie, Gracz -> Wszystko stoi na podï¿½odze
                     L.cells[y * L.w + x] = Cell::Floor;
                 }
 
-                // 2. Parsowanie obiektów
+                // 2. Parsowanie obiektï¿½w
                 if (c == '@' || c == 'v') {
                     L.player_x = x; L.player_y = y; L.player_start_yaw = 180.0f;
                 }
@@ -65,7 +73,7 @@ namespace dungeon::io {
                     L.player_x = x; L.player_y = y; L.player_start_yaw = 270.0f;
                 }
 
-                // --- TU BY£ B£¥D: Teraz 'S' i 'Z' s¹ ju¿ oznaczone jako Floor wy¿ej ---
+                // --- TU BYï¿½ Bï¿½ï¿½D: Teraz 'S' i 'Z' sï¿½ juï¿½ oznaczone jako Floor wyï¿½ej ---
                 else if (c == 'S') {
                     L.enemy_spawns.push_back({ x, y, 'S' });
                 }

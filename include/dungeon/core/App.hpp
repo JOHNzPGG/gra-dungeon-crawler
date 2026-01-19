@@ -1,6 +1,7 @@
 #ifndef DUNGEON_CORE_APP_HPP
 #define DUNGEON_CORE_APP_HPP
 
+#include <map>
 #include <string>
 
 #include <glad/glad.h>
@@ -26,6 +27,7 @@ namespace dungeon {
         std::string title = "Dungeon Starter";
     };
 
+
     enum class CameraMode {
         FirstPerson,
         ThirdPerson
@@ -48,6 +50,12 @@ namespace dungeon {
         bool isAlive;       // Czy jeszcze nie został podniesiony
     };
 
+    struct PuzzleTorch { int x, y; bool is_lit; };
+    struct PressurePlate { int x, y; int id; int count; };
+
+
+
+
     class App {
     public:
         explicit App(const AppConfig& cfg);
@@ -56,6 +64,12 @@ namespace dungeon {
         void run();
 
     private:
+        std::vector<PuzzleTorch> puzzle_torches_;
+        std::vector<PressurePlate> pressure_plates_;
+        int last_puzzle_x_ = -1, last_puzzle_y_ = -1;
+        bool puzzles_solved_ = false;
+        int current_stage_idx_ = 0;
+
         void init_glfw();
         void init_gl();
         void init_imgui();
@@ -63,6 +77,8 @@ namespace dungeon {
 
         void load_level();
         bool can_move_to(int x, int y) const;
+
+        void check_sequence_step(int x, int y);
 
         void build_world_mesh();
         void handle_input();
@@ -73,6 +89,12 @@ namespace dungeon {
 
         void EnemiesTurn();
 
+        void toggle_puzzle_torch(int x, int y);
+
+        void update_puzzles();
+
+        void update_step_puzzle();
+
         void frame_begin();
         void frame_render();
         void frame_ui();
@@ -80,6 +102,9 @@ namespace dungeon {
 
         void render_main_menu();
         void render_options_menu();
+
+        void init_puzzles(const io::Level &L);
+
         void on_resize(int width, int height);
 
         GLuint load_texture(const char* path);
@@ -108,7 +133,12 @@ namespace dungeon {
 
         void load_next_level();
         void render_victory_screen();
-
+        PuzzleTorch* get_puzzle_torch(int x, int y) {
+            for (auto& t : puzzle_torches_) {
+                if (t.x == x && t.y == y) return &t;
+            }
+            return nullptr;
+        }
 
     private:
         AppConfig   cfg_;

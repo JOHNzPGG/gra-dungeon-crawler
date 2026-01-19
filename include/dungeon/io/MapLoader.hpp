@@ -13,7 +13,7 @@ namespace dungeon::io {
         Exit = 3
     };
 
-    // Nowa struktura: Trzyma pozycjê ORAZ typ wroga (np. 'S', 'Z')
+    // Nowa struktura: Trzyma pozycjï¿½ ORAZ typ wroga (np. 'S', 'Z')
     struct EnemySpawn {
         int x, y;
         char type;
@@ -31,10 +31,12 @@ namespace dungeon::io {
         int player_x = 1;
         int player_y = 1;
 
-        float player_start_yaw = 180.0f; // <--- NOWE: Domyœlny k¹t startowy
+        float player_start_yaw = 180.0f; // <--- NOWE: Domyï¿½lny kï¿½t startowy
 
         std::vector<EnemySpawn> enemy_spawns;
         std::vector<ItemSpawn> item_spawns;
+        std::vector<ItemSpawn> puzzle_torches;  // Dla 'L'
+        std::vector<ItemSpawn> pressure_plates; // Dla 'T'
     };
 
     Level load_map_ascii(const std::string& path);
