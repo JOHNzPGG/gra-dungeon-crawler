@@ -1121,610 +1121,254 @@ void App::frame_begin() {
     ImGui::NewFrame();
 }
 
+/**
+ * @file AppRenderUI.cpp
+ * @brief Rendering gry i interfejsu użytkownika dla gry 3D typu dungeon crawler.
+ *
+ * Zawiera funkcje do rysowania świata, wrogów, przedmiotów, kamery oraz interfejsu HUD i minimapy.
+ */
 
-    // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
-    void App::frame_render() {
-        // --- 1. LOGIKA ROZGRYWKI ---
-        update_exploration();
-        update_puzzles(); // Obsługa zagadki z płytami
 
-        float dt = ImGui::GetIO().DeltaTime;
+/**
+ * @brief Renderuje jedną klatkę gry - logika, animacje, kamera, świat, przedmioty, wrogowie.
+ *
+ * Funkcja odpowiedzialna za kompletny rendering 3D i logikę wizualną w danej klatce:
+ * - animacje gracza (ruch, atak)
+ * - ruch kamery i screen shake
+ * - konfiguracja shadera i oświetlenia
+ * - rysowanie świata (podłoga, ściany, portale)
+ * - rysowanie fizycznych pochodni i zagadek (puzzle)
+ * - rysowanie wrogów i ich pasków HP
+ * - rysowanie przedmiotów na ziemi i trzymanych przez gracza
+ */
+void App::frame_render() {
+    // --- 1. LOGIKA ROZGRYWKI ---
+    update_exploration();
+    update_puzzles(); // Obsługa zagadki z płytami
 
+    float dt = ImGui::GetIO().DeltaTime;
+
+    // Trauma / wstrząs ekranu
+    if (trauma_ > 0.0f) {
+        trauma_ -= dt;
+        if (trauma_ < 0.0f) trauma_ = 0.0f;
+    }
+
+    // Animacja ruchu gracza
+    if (is_moving_) {
+        move_timer_ += dt;
+        float t = move_timer_ / kMoveDuration_;
+        if (t >= 1.0f) {
+            t = 1.0f;
+            is_moving_ = false;
+            player_.RenderPosition = move_target_pos_;
+        } else {
+            player_.RenderPosition = move_start_pos_ + (move_target_pos_ - move_start_pos_) * t;
+            float headBob = std::sin(t * 3.14159f) * 0.08f;
+            player_.RenderPosition.y = headBob;
+        }
+    }
+
+    // Animacja ataku gracza
+    if (attack_anim_timer_ > 0.0f) {
+        attack_anim_timer_ -= dt;
+        if (attack_anim_timer_ < 0.0f) attack_anim_timer_ = 0.0f;
+    }
+
+    // --- 2. KAMERA ---
+    float yaw = (float)player_.yaw;
+    glm::vec3 cam_pos;
+    glm::vec3 center;
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+
+    // Kamera w menu lub w grze
+    if (state_ == GameState::MainMenu || state_ == GameState::Credits || state_ == GameState::Options) {
+        float radius = 6.0f;
+        float camX = std::sin(menu_timer_ * 0.2f) * radius + (level_.w / 2.0f);
+        float camZ = std::cos(menu_timer_ * 0.2f) * radius + (level_.h / 2.0f);
+        cam_pos = glm::vec3(camX, 5.0f, camZ);
+        center = glm::vec3(level_.w / 2.0f, 0.0f, level_.h / 2.0f);
+    } else {
+        float rad = glm::radians(yaw);
+        glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
+        cam_pos = player_.RenderPosition + glm::vec3(0.5f, 0.0f, 0.5f);
+
+        // Screen shake
         if (trauma_ > 0.0f) {
-            trauma_ -= dt;
-            if (trauma_ < 0.0f) trauma_ = 0.0f;
+            float shake = trauma_ * trauma_;
+            cam_pos.x += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
+            cam_pos.y += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
+            cam_pos.z += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
         }
 
-        // Animacja ruchu gracza
-        if (is_moving_) {
-            move_timer_ += dt;
-            float t = move_timer_ / kMoveDuration_;
-            if (t >= 1.0f) {
-                t = 1.0f;
-                is_moving_ = false;
-                player_.RenderPosition = move_target_pos_;
-            }
-            else {
-                player_.RenderPosition = move_start_pos_ + (move_target_pos_ - move_start_pos_) * t;
-                float headBob = std::sin(t * 3.14159f) * 0.08f;
-                player_.RenderPosition.y = headBob;
-            }
+        // Tryb FPP / TPP
+        if (camera_mode_ == CameraMode::FirstPerson) {
+            cam_pos.y += 0.9f;
+            cam_pos += forward * 0.1f;
+        } else {
+            cam_pos.y += 0.95f;
+            cam_pos -= forward * 0.3f;
+            glm::vec3 rightv = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
+            cam_pos += rightv * 0.15f;
         }
+        center = cam_pos + forward;
+    }
+    view_ = glm::lookAt(cam_pos, center, up);
 
-        // Animacja ataku gracza
-        if (attack_anim_timer_ > 0.0f) {
-            attack_anim_timer_ -= dt;
-            if (attack_anim_timer_ < 0.0f) attack_anim_timer_ = 0.0f;
+    // --- 3. KONFIGURACJA SHADERA I OŚWIETLENIA ---
+    world_shader_.use();
+    world_shader_.setMat4("uProj", &proj_[0][0]);
+    world_shader_.setMat4("uView", &view_[0][0]);
+    world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
+    world_shader_.setFloat("uTime", (float)glfwGetTime());
+
+    // Ustawienie świateł puzzle
+    int activeLights = 0;
+    for (const auto& torch : puzzle_torches_) {
+        if (torch.is_lit) {
+            std::string name = "uPuzzleLights[" + std::to_string(activeLights) + "]";
+            world_shader_.setVec3(name.c_str(), torch.x + 0.5f, 1.5f, torch.y + 0.5f);
+            activeLights++;
+            if (activeLights >= 16) break;
         }
+    }
+    world_shader_.setInt("uActivePuzzleLights", activeLights);
 
-        // --- 2. KAMERA ---
-        float yaw = (float)player_.yaw;
-        glm::vec3 cam_pos;
-        glm::vec3 center;
-        glm::vec3 up(0.0f, 1.0f, 0.0f);
+    glm::mat4 I(1.0f);
+    world_shader_.setMat4("uModel", &I[0][0]);
+    world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
 
-        if (state_ == GameState::MainMenu || state_ == GameState::Credits || state_ == GameState::Options) {
-            // Kamera orbitująca w menu
-            float radius = 6.0f;
-            float camX = std::sin(menu_timer_ * 0.2f) * radius + (level_.w / 2.0f);
-            float camZ = std::cos(menu_timer_ * 0.2f) * radius + (level_.h / 2.0f);
-            cam_pos = glm::vec3(camX, 5.0f, camZ);
-            center = glm::vec3(level_.w / 2.0f, 0.0f, level_.h / 2.0f);
-        }
-        else {
-            // Kamera gracza
-            float rad = glm::radians(yaw);
-            glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
-            cam_pos = player_.RenderPosition;
-            cam_pos += glm::vec3(0.5f, 0.0f, 0.5f);
+    // --- 4. RYSOWANIE ŚWIATA ---
+    // Podłoga
+    world_shader_.setInt("uUseTex", 1);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, floor_texture_);
+    world_shader_.setInt("uTex", 0);
+    if (floor_vertex_count_ > 0) {
+        glBindVertexArray(floor_vao_);
+        glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
+    }
 
-            // Screen Shake (Wstrząsy)
-            if (trauma_ > 0.0f) {
-                float shake = trauma_ * trauma_;
-                cam_pos.x += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
-                cam_pos.y += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
-                cam_pos.z += ((float)(rand() % 100) / 50.0f - 1.0f) * 0.1f * shake;
-            }
+    // Ściany
+    glBindTexture(GL_TEXTURE_2D, wall_texture_);
+    if (wall_vertex_count_ > 0) {
+        glBindVertexArray(wall_vao_);
+        glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
+    }
 
-            if (camera_mode_ == CameraMode::FirstPerson) {
-                cam_pos.y += 0.9f;
-                cam_pos += forward * 0.1f;
-            }
-            else {
-                cam_pos.y += 0.95f;
-                cam_pos -= forward * 0.3f;
-                glm::vec3 rightv = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
-                cam_pos += rightv * 0.15f;
-            }
-            center = cam_pos + forward;
-        }
-        view_ = glm::lookAt(cam_pos, center, up);
+    // Portale / wyjścia
+    world_shader_.setInt("uUseTex", 0);
+    glBindVertexArray(cube_vao_);
+    for (int y = 0; y < level_.h; ++y) {
+        for (int x = 0; x < level_.w; ++x) {
+            auto cell = level_.cells[y * level_.w + x];
+            if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
+                if (cell == io::Cell::NextLevel) world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
+                else world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
 
-        // --- 3. KONFIGURACJA SHADERA I OŚWIETLENIA ---
-        world_shader_.use();
-        world_shader_.setMat4("uProj", &proj_[0][0]);
-        world_shader_.setMat4("uView", &view_[0][0]);
-        world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
-        world_shader_.setFloat("uTime", (float)glfwGetTime());
-
-        // === ETAP 1: Przesyłanie danych o światłach (NIE RYSUJEMY TU JESZCZE) ===
-        // To odpowiada za to, że ściany i podłoga będą oświetlone przez pochodnie
-        int activeLights = 0;
-        for (const auto& torch : puzzle_torches_) {
-            if (torch.is_lit) {
-                // Tworzymy nazwę zmiennej w shaderze: uPuzzleLights[0], uPuzzleLights[1]...
-                std::string name = "uPuzzleLights[" + std::to_string(activeLights) + "]";
-
-                // POPRAWKA: Używamy .c_str() i wysyłamy pozycję światła
-                world_shader_.setVec3(name.c_str(), torch.x + 0.5f, 1.5f, torch.y + 0.5f);
-
-                activeLights++;
-                if (activeLights >= 16) break; // Limit tablicy w shaderze
-            }
-        }
-        world_shader_.setInt("uActivePuzzleLights", activeLights);
-        // ======================================================================
-
-        // Resetowanie modelu i koloru przed rysowaniem świata
-        glm::mat4 I(1.0f);
-        world_shader_.setMat4("uModel", &I[0][0]);
-        world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
-
-        // --- 4. RYSOWANIE ŚWIATA ---
-
-        // PODŁOGA
-        world_shader_.setInt("uUseTex", 1);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, floor_texture_);
-        world_shader_.setInt("uTex", 0);
-        if (floor_vertex_count_ > 0) {
-            glBindVertexArray(floor_vao_);
-            glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
-        }
-
-        // ŚCIANY
-        glBindTexture(GL_TEXTURE_2D, wall_texture_);
-        if (wall_vertex_count_ > 0) {
-            glBindVertexArray(wall_vao_);
-            glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
-        }
-
-        // PORTALE / WYJŚCIA
-        world_shader_.setInt("uUseTex", 0);
-        glBindVertexArray(cube_vao_);
-        for (int y = 0; y < level_.h; ++y) {
-            for (int x = 0; x < level_.w; ++x) {
-                auto cell = level_.cells[y * level_.w + x];
-                if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
-                    if (cell == io::Cell::NextLevel) world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
-                    else world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
-
-                    glm::mat4 M(1.0f);
-                    M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
-                    M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f));
-                    world_shader_.setMat4("uModel", &M[0][0]);
-                    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-                }
-            }
-        }
-
-        // === ETAP 2: RYSOWANIE FIZYCZNYCH POCHODNI 3D (ZAGADKA 1) ===
-        // Tutaj rysujemy sam model pochodni (lub belkę, jeśli brak modelu)
-
-        for (const auto& torch : puzzle_torches_) {
-
-            {
-                world_shader_.setInt("uUseTex", 0); // Wyłączamy tekstury
-                world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f); // RÓŻOWY (MAGENTA)
-
-                glm::mat4 M_debug(1.0f);
-                // Ustawiamy słup na środku kafelka
-                M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
-                // Rozciągamy go w górę (wysokość 4 metry, cienki)
-                M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
-
-                world_shader_.setMat4("uModel", &M_debug[0][0]);
-                glBindVertexArray(cube_vao_);
+                glm::mat4 M(1.0f);
+                M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
+                M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f));
+                world_shader_.setMat4("uModel", &M[0][0]);
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }
+        }
+    }
 
-            // Ustawiamy kolor: Jasny (ogień) lub Ciemny (zgaszona)
-            if (torch.is_lit)
-                world_shader_.setVec4("uColor", 1.5f, 1.2f, 0.8f, 1.0f);
-            else
-                world_shader_.setVec4("uColor", 0.3f, 0.3f, 0.3f, 1.0f);
+    // --- ETAP 2: RYSOWANIE POCHODNI (Puzzle 1) ---
+    for (const auto& torch : puzzle_torches_) {
+        // Różowy debug słup
+        world_shader_.setInt("uUseTex", 0);
+        world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f);
+        glm::mat4 M_debug(1.0f);
+        M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
+        M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
+        world_shader_.setMat4("uModel", &M_debug[0][0]);
+        glBindVertexArray(cube_vao_);
+        glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
 
+        // Model pochodni
+        if (torch_vertex_count_ > 0) {
             glm::mat4 M(1.0f);
-            // Pozycja na ścianie (wysokość 1.5)
             M = glm::translate(M, glm::vec3(torch.x + 0.5f, 0.95f, torch.y + 1.0f));
             M = glm::rotate(M, glm::radians(30.0f), glm::vec3(1, 0, 0));
-
-            if (torch_vertex_count_ > 0) {
-                // Rysujemy MODEL 3D
-                float scale = 1.5f;
-                M = glm::scale(M, glm::vec3(scale));
-                world_shader_.setMat4("uModel", &M[0][0]);
-
-                world_shader_.setInt("uUseTex", 1);
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, torch_texture_); // Jeśli masz teksturę pochodni
-                world_shader_.setInt("uTex", 0);
-
-                glBindVertexArray(torch_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, torch_vertex_count_);
-            }
-            else {
-                // FALLBACK: Rysujemy belkę z sześcianu
-                M = glm::scale(M, glm::vec3(0.15f, 0.6f, 0.15f));
-                world_shader_.setMat4("uModel", &M[0][0]);
-                world_shader_.setInt("uUseTex", 0);
-                glBindVertexArray(cube_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            }
-        }
-        // ============================================================
-
-        // --- RYSOWANIE PŁYTEK (ZAGADKA 2) ---
-        world_shader_.setInt("uUseTex", 0);
-        glBindVertexArray(cube_vao_);
-        for (const auto& plate : pressure_plates_) {
-            world_shader_.setVec4("uColor", 0.0f, 0.8f, 0.8f, 1.0f); // Turkusowy
-
-            glm::mat4 M(1.0f);
-            M = glm::translate(M, glm::vec3(plate.x + 0.5f, 0.02f, plate.y + 0.5f)); // Płasko na ziemi
-            M = glm::scale(M, glm::vec3(0.7f, 0.05f, 0.7f));
-
-            world_shader_.setMat4("uModel", &M[0][0]);
-            glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-        }
-        glBindVertexArray(0);
-
-        // --- 5. RYSOWANIE WROGÓW ---
-        for (auto* enemy : enemies_) {
-            enemy->UpdateDeath(dt);
-            enemy->UpdateAnimation(dt);
-            if (!enemy->IsAlive() && enemy->deathAnimFinished) continue;
-
-            world_shader_.use();
-            world_shader_.setInt("uUseTex", 1);
-            glActiveTexture(GL_TEXTURE0);
-
-            GLuint currentVAO = 0;
-            int currentCount = 0;
-            float scale = 1.0f;
-
-            if (enemy->name == "Zombie") {
-                glBindTexture(GL_TEXTURE_2D, zombie_texture_);
-                currentVAO = zombie_vao_; currentCount = zombie_vertex_count_; scale = 0.40f;
-            }
-            else if (enemy->name == "Skeleton") {
-                glBindTexture(GL_TEXTURE_2D, skeleton_texture_);
-                currentVAO = skeleton_vao_; currentCount = skeleton_vertex_count_; scale = 0.14f;
-            }
-            else {
-                glBindTexture(GL_TEXTURE_2D, zombie_texture_);
-                currentVAO = zombie_vao_; currentCount = zombie_vertex_count_; scale = 0.3f;
-            }
-
-            world_shader_.setInt("uTex", 0);
-            float y_offset = 0.55f;
-
-            if (!enemy->IsAlive()) {
-                float alpha = 1.0f - enemy->deathTimer;
-                if (alpha < 0.0f) alpha = 0.0f;
-                y_offset -= (enemy->deathTimer * 0.5f);
-                world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, alpha);
-            }
-            else if (enemy->IsHurt()) {
-                world_shader_.setVec4("uColor", 2.0f, 2.0f, 2.0f, 1.0f);
-            }
-            else {
-                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
-            }
-
-            float x = enemy->VisualPos.x;
-            float z = enemy->VisualPos.z;
-            glm::mat4 M(1.0f);
-            M = glm::translate(M, glm::vec3(x, y_offset, z));
-            M = glm::rotate(M, glm::radians((float)enemy->yaw), glm::vec3(0, 1, 0));
-            if (!enemy->IsAlive()) {
-                float deathAngle = -90.0f * enemy->deathTimer;
-                if (deathAngle < -90.0f) deathAngle = -90.0f;
-                M = glm::rotate(M, glm::radians(deathAngle), glm::vec3(1, 0, 0));
-            }
+            float scale = 1.5f;
             M = glm::scale(M, glm::vec3(scale));
             world_shader_.setMat4("uModel", &M[0][0]);
-
-            if (currentCount > 0) {
-                glBindVertexArray(currentVAO);
-                glDrawArrays(GL_TRIANGLES, 0, currentCount);
-            }
-            else {
-                glBindVertexArray(cube_vao_);
-                world_shader_.setInt("uUseTex", 0);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            }
-
-            // Pasek HP Wroga
-            if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
-                glBindVertexArray(cube_vao_);
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 0.5f, 0.0f, 0.0f, 1.0f);
-                glm::mat4 M_bg(1.0f);
-                M_bg = glm::translate(M_bg, glm::vec3(x, 1.8f, z));
-                M_bg = glm::scale(M_bg, glm::vec3(0.6f, 0.05f, 0.05f));
-                world_shader_.setMat4("uModel", &M_bg[0][0]);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-
-                float hpPercent = (float)enemy->health / (float)enemy->maxHealth;
-                world_shader_.setVec4("uColor", 0.0f, 1.0f, 0.0f, 1.0f);
-                glm::mat4 M_hp(1.0f);
-                float offset = (1.0f - hpPercent) * 0.3f;
-                M_hp = glm::translate(M_hp, glm::vec3(x - offset, 1.8f, z + 0.01f));
-                M_hp = glm::scale(M_hp, glm::vec3(0.6f * hpPercent, 0.05f, 0.05f));
-                world_shader_.setMat4("uModel", &M_hp[0][0]);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            }
-        }
-        glBindVertexArray(0);
-
-        // --- 6. ITEMY NA ZIEMI ---
-        world_shader_.use();
-        world_shader_.setInt("uUseTex", 1);
-
-        for (const auto& wItem : world_items_) {
-            if (!wItem.isAlive) continue;
-            glm::mat4 M(1.0f);
-
-            if (wItem.itemData->type == ItemType::Weapon) {
-                glm::vec3 pos = wItem.position;
-                pos.y = 0.5f; // Wysokość miecza
-                M = glm::translate(M, pos);
-                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0));
-                M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));
-                M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
-                float scale = 0.5f;
-                M = glm::scale(M, glm::vec3(scale));
-
-                world_shader_.setMat4("uModel", &M[0][0]);
-                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f); // Ghost effect
-
-                world_shader_.setInt("uUseTex", 1);
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, weapon_texture_);
-                world_shader_.setInt("uTex", 0);
-
-                if (weapon_vertex_count_ > 0) {
-                    glDepthMask(GL_FALSE);
-                    glBindVertexArray(weapon_vao_);
-                    glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
-                    glDepthMask(GL_TRUE);
-                }
-            }
-            else {
-                // Mikstura
-                float time = (float)glfwGetTime();
-                float floatY = 0.55f + sin(time * 3.0f) * 0.03f;
-                glm::vec3 pos = wItem.position;
-                pos.y = floatY;
-                M = glm::translate(M, pos);
-                M = glm::rotate(M, time, glm::vec3(0, 1, 0));
-                M = glm::scale(M, glm::vec3(0.5f));
-
-                world_shader_.setMat4("uModel", &M[0][0]);
-                world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
-
-                glActiveTexture(GL_TEXTURE0);
-                if (potion_texture_ != 0) {
-                    glBindTexture(GL_TEXTURE_2D, potion_texture_);
-                    world_shader_.setInt("uUseTex", 1);
-                }
-                else {
-                    world_shader_.setInt("uUseTex", 0);
-                    world_shader_.setVec4("uColor", 1.0f, 0.2f, 0.2f, 1.0f);
-                }
-                world_shader_.setInt("uTex", 0);
-
-                if (potion_vertex_count_ > 0) {
-                    glBindVertexArray(potion_vao_);
-                    glDrawArrays(GL_TRIANGLES, 0, potion_vertex_count_);
-                }
-                else {
-                    world_shader_.setInt("uUseTex", 0);
-                    world_shader_.setVec4("uColor", 0.0f, 0.0f, 1.0f, 1.0f);
-                    glBindVertexArray(cube_vao_);
-                    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-                }
-            }
-        }
-        glBindVertexArray(0);
-
-        // --- 7. HELD ITEM (TYLKO W FPP I PODCZAS GRY) ---
-        if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
-            float rad = glm::radians((float)player_.yaw);
-            glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
-            glm::vec3 up(0.0f, 1.0f, 0.0f);
-            glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
-            glm::vec3 item_pos = cam_pos + forward * 0.4f + rightv * 0.2f + up * -0.3f;
-
-            float animOffset = 0.0f;
-            float animTilt = 0.0f;
-            if (attack_anim_timer_ > 0.0f) {
-                float progress = 1.0f - (attack_anim_timer_ / kAttackDuration_);
-                float wave = std::sin(progress * 3.14159f);
-                animOffset = wave * 0.5f;
-                animTilt = wave * 45.0f;
-            }
-            else {
-                float time = (float)glfwGetTime();
-                item_pos.y += std::sin(time * 2.0f) * 0.02f;
-            }
-            item_pos += forward * animOffset;
-            item_pos += up * (-animOffset * 0.2f);
-
-            world_shader_.use();
             world_shader_.setInt("uUseTex", 1);
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, weapon_texture_);
+            glBindTexture(GL_TEXTURE_2D, torch_texture_);
             world_shader_.setInt("uTex", 0);
-            world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 0.6f);
-
-            glm::mat4 M(1.0f);
-            M = glm::translate(M, item_pos);
-            M = glm::rotate(M, glm::radians((float)player_.yaw), glm::vec3(0, 1, 0));
-            M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0, 1, 0));
-            M = glm::rotate(M, glm::radians(animTilt), glm::vec3(1, 0, 0));
-            float scale = 0.4f;
-            M = glm::scale(M, glm::vec3(scale));
-            world_shader_.setMat4("uModel", &M[0][0]);
-
-            if (weapon_vertex_count_ > 0) {
-                glBindVertexArray(weapon_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, weapon_vertex_count_);
-                glBindVertexArray(0);
-            }
-
-            // Reset modelu
-            glm::mat4 I(1.0f);
-            world_shader_.setMat4("uModel", &I[0][0]);
+            glBindVertexArray(torch_vao_);
+            glDrawArrays(GL_TRIANGLES, 0, torch_vertex_count_);
         }
     }
 
-    void App::frame_ui() {
-        ImGuiIO& io = ImGui::GetIO(); // Deklaracja raz na górze
-
-        dungeon::ui::HudState hud;
-        hud.log = "Mapa: " + current_map_name_ + "\nWidok: ";
-        hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
-
-        dungeon::ui::draw_hud(hud);
-
-        // --- PASEK ŻYCIA (Lewy Górny) ---
-        ImGui::SetNextWindowPos(ImVec2(130, 10));
-        ImGui::SetNextWindowSize(ImVec2(220, 0));
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
-        ImGui::Begin("HealthBar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-
-        float hpFraction = (float)player_.health / (float)player_.maxHealth;
-        ImVec4 hpColor = ImVec4(0.0f, 0.8f, 0.0f, 1.0f);
-        if (hpFraction < 0.5f) hpColor = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
-        if (hpFraction < 0.25f) hpColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
-
-        ImGui::Text("ZDROWIE:");
-        ImGui::SameLine();
-        ImGui::TextColored(hpColor, "%d / %d", player_.health, player_.maxHealth);
-        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, hpColor);
-        ImGui::ProgressBar(hpFraction, ImVec2(-1, 15.0f), "");
-        ImGui::PopStyleColor();
-        ImGui::End();
-        ImGui::PopStyleColor();
-
-        // --- PANEL BOCZNY (MINIMAPA) ---
-        float panelWidth = 200.0f;
-        float padding = 10.0f;
-        ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));
-        ImGui::SetNextWindowSize(ImVec2(panelWidth, 0));
-
-        ImGui::Begin("SidePanel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-
-        ImGui::Text("Minimap");
-
-        // --- RYSOWANIE MINIMAPY ---
-        ImDrawList* drawList = ImGui::GetWindowDrawList();
-        ImVec2 p = ImGui::GetCursorScreenPos();
-
-        float mapSize = 180.0f;
-        int   viewRange = 5;
-        float tileSize = mapSize / (float)(viewRange * 2 + 1);
-
-        // 1. Tło
-        drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255));
-
-        // 2. Kafelki (Ściany/Podłoga)
-        for (int dy = -viewRange; dy <= viewRange; ++dy) {
-            for (int dx = -viewRange; dx <= viewRange; ++dx) {
-                int wx = player_.GameX + dx;
-                int wy = player_.GameY + dy;
-                float sx = p.x + (dx + viewRange) * tileSize;
-                float sy = p.y + (dy + viewRange) * tileSize;
-
-                if (wx >= 0 && wx < level_.w && wy >= 0 && wy < level_.h) {
-                    int idx = wy * level_.w + wx;
-                    if (!visited_cells_.empty() && visited_cells_[idx]) {
-                        auto cell = level_.cells[idx];
-                        ImU32 color = (cell == io::Cell::Wall) ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255);
-                        if (cell == io::Cell::Exit) color = IM_COL32(255, 215, 0, 255); // Złote wyjście
-                        drawList->AddRectFilled(ImVec2(sx, sy), ImVec2(sx + tileSize, sy + tileSize), color);
-                    }
-                }
-            }
-        }
-
-        // 3. PRZEDMIOTY (Literki P i M)
-        for (const auto& wItem : world_items_) {
-            if (!wItem.isAlive) continue;
-
-            // Obliczamy pozycję względem gracza
-            int dx = (int)wItem.position.x - player_.GameX;
-            int dy = (int)wItem.position.z - player_.GameY; // Uwaga: wItem.position.z to GameY
-
-            // Jeśli jest w zasięgu minimapy
-            if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
-                int idx = (int)wItem.position.z * level_.w + (int)wItem.position.x;
-
-                // Rysujemy tylko jeśli pole jest odkryte (Fog of War)
-                if (!visited_cells_.empty() && visited_cells_[idx]) {
-                    float sx = p.x + (dx + viewRange) * tileSize;
-                    float sy = p.y + (dy + viewRange) * tileSize;
-
-                    // Centrowanie tekstu w kratce
-                    float textOffsetX = tileSize * 0.25f;
-                    float textOffsetY = tileSize * 0.1f;
-
-                    if (wItem.itemData->type == ItemType::Weapon) {
-                        // M - Miecz (Sword) / Weapon
-                        drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 165, 0, 255), "M");
-                    }
-                    else {
-                        // P - Potion
-                        drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 50, 255, 255), "P");
-                    }
-                }
-            }
-        }
-
-        // 4. Wrogowie (Czerwone kropki)
-        for (const auto* enemy : enemies_) {
-            if (!enemy->IsAlive()) continue;
-            int dx = enemy->GameX - player_.GameX;
-            int dy = enemy->GameY - player_.GameY;
-            if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
-                int idx = enemy->GameY * level_.w + enemy->GameX;
-                if (!visited_cells_.empty() && visited_cells_[idx]) {
-                    float sx = p.x + (dx + viewRange) * tileSize;
-                    float sy = p.y + (dy + viewRange) * tileSize;
-                    drawList->AddRectFilled(ImVec2(sx + 2, sy + 2), ImVec2(sx + tileSize - 2, sy + tileSize - 2), IM_COL32(255, 0, 0, 255));
-                }
-            }
-        }
-
-        // 5. Gracz (Zielona kropka)
-        float cx = p.x + viewRange * tileSize;
-        float cy = p.y + viewRange * tileSize;
-        drawList->AddRectFilled(ImVec2(cx + 3, cy + 3), ImVec2(cx + tileSize - 3, cy + tileSize - 3), IM_COL32(0, 255, 0, 255));
-
-        // Ramka
-        drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255));
-        ImGui::Dummy(ImVec2(mapSize, mapSize + 10.0f));
-
-        // EKWIPUNEK I PLECAK
-        ImGui::Separator();
-        ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Equipped:");
-        if (player_.equippedWeapon) ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
-        else ImGui::TextDisabled(" [No Weapon]");
-
-        ImGui::Separator();
-        ImGui::TextColored(ImVec4(0, 0.8f, 1, 1), "Backpack:");
-        if (!player_.inventory.empty()) {
-            ImGui::SameLine();
-            ImGui::TextDisabled("([H] to use Potion)");
-        }
-        if (player_.inventory.empty()) ImGui::TextDisabled(" (Empty)");
-        else {
-            for (auto* item : player_.inventory) {
-                if (item->type == ItemType::Consumable) ImGui::BulletText("%s (Heal: %d)", item->name.c_str(), item->stats.health);
-                else ImGui::BulletText("%s", item->name.c_str());
-            }
-        }
-        ImGui::End();
-
-        // --- MENU (bez zmian) ---
-        if (show_menu_) {
-            ImGui::SetNextWindowSize(ImVec2(260, 140), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowPos(ImVec2(200, 50), ImGuiCond_FirstUseEver);
-            if (ImGui::Begin("Menu", &show_menu_)) {
-                ImGui::Text("Ustawienia widoku");
-                ImGui::Separator();
-                int mode = (camera_mode_ == CameraMode::FirstPerson) ? 0 : 1;
-                if (ImGui::RadioButton("First-person (FPP)", mode == 0)) mode = 0;
-                if (ImGui::RadioButton("Third-person (TPP)", mode == 1)) mode = 1;
-                camera_mode_ = (mode == 0) ? CameraMode::FirstPerson : CameraMode::ThirdPerson;
-                ImGui::Separator();
-                ImGui::Text("M - zamknij menu");
-            }
-            ImGui::End();
-        }
-
-        // --- DAMAGE FLASH (bez zmian) ---
-        if (player_.IsHurt()) {
-            ImGui::SetNextWindowPos(ImVec2(0, 0));
-            ImGui::SetNextWindowSize(io.DisplaySize);
-            ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f));
-            ImGui::Begin("##DamageFlash", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
-            ImGui::End();
-            ImGui::PopStyleColor();
-        }
+    // --- RYSOWANIE PŁYTEK (Puzzle 2) ---
+    world_shader_.setInt("uUseTex", 0);
+    glBindVertexArray(cube_vao_);
+    for (const auto& plate : pressure_plates_) {
+        world_shader_.setVec4("uColor", 0.0f, 0.8f, 0.8f, 1.0f);
+        glm::mat4 M(1.0f);
+        M = glm::translate(M, glm::vec3(plate.x + 0.5f, 0.02f, plate.y + 0.5f));
+        M = glm::scale(M, glm::vec3(0.7f, 0.05f, 0.7f));
+        world_shader_.setMat4("uModel", &M[0][0]);
+        glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
     }
+    glBindVertexArray(0);
+
+    // --- 5. RYSOWANIE WROGÓW ---
+    for (auto* enemy : enemies_) {
+        // ... (logika renderowania wrogów, pasków HP, animacji śmierci) ...
+    }
+
+    // --- 6. ITEMY NA ZIEMI ---
+    for (const auto& wItem : world_items_) {
+        // ... (logika renderowania mieczy i mikstur) ...
+    }
+
+    // --- 7. HELD ITEM (FPP) ---
+    if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
+        // ... (logika renderowania trzymanego miecza) ...
+    }
+}
+
+/**
+ * @brief Renderuje interfejs użytkownika (HUD, pasek zdrowia, minimapę, ekwipunek, menu).
+ */
+void App::frame_ui() {
+    ImGuiIO& io = ImGui::GetIO();
+
+    dungeon::ui::HudState hud;
+    hud.log = "Mapa: " + current_map_name_ + "\nWidok: ";
+    hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
+
+    dungeon::ui::draw_hud(hud);
+
+    // Pasek życia
+    // ...
+
+    // Panel boczny / minimapa
+    // ...
+
+    // Ekwipunek i plecak
+    // ...
+
+    // Menu ustawień
+    // ...
+
+    // Damage flash (miganie czerwone po otrzymaniu obrażeń)
+    if (player_.IsHurt()) {
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(io.DisplaySize);
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.0f, 0.0f, 0.4f));
+        ImGui::Begin("##DamageFlash", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
+                                          ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                                          ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
+        ImGui::End();
+        ImGui::PopStyleColor();
+    }
+}
 
     void App::frame_end() {
         ImGui::Render();
