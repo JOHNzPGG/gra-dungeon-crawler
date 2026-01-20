@@ -8,7 +8,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <glm/glm.hpp>
-
 #include <glm/mat4x4.hpp>
 
 #include "dungeon/gfx/Shader.hpp"
@@ -18,248 +17,249 @@
 #include "game/clases/Skill.h"
 #include "miniaudio.h"
 
-
 namespace dungeon {
 
-    struct AppConfig {
-        int width = 1280;
-        int height = 720;
-        std::string title = "Dungeon Starter";
-    };
+/**
+ * @brief Konfiguracja aplikacji 3D
+ */
+struct AppConfig {
+    int width = 1280;           /**< Szerokość okna */
+    int height = 720;           /**< Wysokość okna */
+    std::string title = "Dungeon Starter"; /**< Tytuł okna */
+};
 
+/**
+ * @brief Tryb kamery
+ */
+enum class CameraMode {
+    FirstPerson,   /**< Pierwsza osoba */
+    ThirdPerson    /**< Trzecia osoba */
+};
 
-    enum class CameraMode {
-        FirstPerson,
-        ThirdPerson
-    };
+/**
+ * @brief Stan gry
+ */
+enum class GameState {
+    MainMenu,    /**< Menu główne */
+    Options,     /**< Opcje */
+    Credits,     /**< Ekran autorów */
+    Playing,     /**< Gra w toku */
+    GameOver,    /**< Ekran śmierci */
+    Victory,     /**< Ekran zwycięstwa */
+    Paused       /**< Pauza */
+};
 
-    enum class GameState {
-        MainMenu,
-        Options,
-        Credits,
-        Playing,
-        GameOver,
-        Victory,
-        Paused
-    };
+/**
+ * @brief Przedmiot leżący w świecie 3D
+ */
+struct WorldItem {
+    Item* itemData;        /**< Wskaźnik na dane przedmiotu */
+    glm::vec3 position;    /**< Pozycja w świecie */
+    bool isAlive;          /**< Czy przedmiot jest nadal aktywny */
+};
 
-    // Struktura reprezentująca przedmiot leżący na ziemi w świecie 3D
-    struct WorldItem {
-        Item* itemData;     // Wskaźnik do danych przedmiotu (statystyki, nazwa)
-        glm::vec3 position; // Gdzie leży
-        bool isAlive;       // Czy jeszcze nie został podniesiony
-    };
+/**
+ * @brief Pochodnia w puzzlu
+ */
+struct PuzzleTorch {
+    int x, y;         /**< Pozycja na mapie */
+    bool is_lit;      /**< Czy pochodnia jest zapalona */
+};
 
-    struct PuzzleTorch { int x, y; bool is_lit; };
-    struct PressurePlate { int x, y; int id; int count; };
+/**
+ * @brief Płyta naciskowa w puzzlu
+ */
+struct PressurePlate {
+    int x, y;         /**< Pozycja na mapie */
+    int id;           /**< ID płyty */
+    int count;        /**< Licznik aktywacji */
+};
 
+/**
+ * @brief Główna klasa aplikacji gry 3D
+ */
+class App {
+public:
+    /**
+     * @brief Konstruktor aplikacji
+     * @param cfg Konfiguracja aplikacji
+     */
+    explicit App(const AppConfig& cfg);
 
+    /** @brief Destruktor aplikacji */
+    ~App();
 
+    /** @brief Główna pętla gry */
+    void run();
 
-    class App {
-    public:
-        explicit App(const AppConfig& cfg);
-        ~App();
+private:
+    // --- PUZZLE ---
+    std::vector<PuzzleTorch> puzzle_torches_;   /**< Wszystkie pochodnie w puzzlach */
+    std::vector<PressurePlate> pressure_plates_; /**< Wszystkie płyty naciskowe */
+    int last_puzzle_x_ = -1;  /**< Ostatnia x w puzzlu */
+    int last_puzzle_y_ = -1;  /**< Ostatnia y w puzzlu */
+    bool puzzles_solved_ = false; /**< Flaga rozwiązania puzzli */
+    int current_stage_idx_ = 0;   /**< Aktualny etap/puzzle */
 
-        void run();
+    // --- INICJALIZACJA ---
+    void init_glfw();       /**< Inicjalizacja GLFW */
+    void init_gl();         /**< Inicjalizacja OpenGL */
+    void init_imgui();      /**< Inicjalizacja ImGui */
+    void shutdown_imgui();  /**< Zamykanie ImGui */
 
-    private:
-        std::vector<PuzzleTorch> puzzle_torches_;
-        std::vector<PressurePlate> pressure_plates_;
-        int last_puzzle_x_ = -1, last_puzzle_y_ = -1;
-        bool puzzles_solved_ = false;
-        int current_stage_idx_ = 0;
+    void load_level();       /**< Ładuje aktualny poziom */
+    bool can_move_to(int x, int y) const; /**< Sprawdza, czy gracz może się przesunąć */
 
-        void init_glfw();
-        void init_gl();
-        void init_imgui();
-        void shutdown_imgui();
+    void build_world_mesh(); /**< Buduje siatkę świata */
+    void handle_input();     /**< Obsługuje wejście użytkownika */
 
-        void load_level();
-        bool can_move_to(int x, int y) const;
+    Entity* GetEnemyInFront(const Entity& unit); /**< Zwraca wroga przed jednostką */
+    std::vector<Entity*> ResolveSkillTarget(const Entity& unit, Skill* skill); /**< Zwraca cele umiejętności */
 
-        //void check_sequence_step(int x, int y);
+    void EnemiesTurn(); /**< Tura wrogów */
 
-        void build_world_mesh();
-        void handle_input();
+    void toggle_puzzle_torch(int x, int y); /**< Zapala/zgasi pochodnię puzzla */
+    void update_puzzles();                  /**< Aktualizuje stan puzzli */
 
-        Entity* GetEnemyInFront(const Entity& unit);
-        std::vector<Entity*> ResolveSkillTarget(const Entity& unit, Skill* skill);
+    void frame_begin();   /**< Przygotowanie ramki */
+    void frame_render();  /**< Renderowanie sceny */
+    void frame_ui();      /**< Renderowanie UI */
+    void frame_end();     /**< Kończenie ramki */
 
+    void render_main_menu(); /**< Renderowanie menu głównego */
+    void render_options_menu(); /**< Renderowanie menu opcji */
 
-        void EnemiesTurn();
+    void init_puzzles(const io::Level &L); /**< Inicjalizacja puzzli z poziomu */
 
-        void toggle_puzzle_torch(int x, int y);
+    void on_resize(int width, int height); /**< Obsługa zmiany rozmiaru okna */
 
-        void update_puzzles();
+    GLuint load_texture(const char* path); /**< Ładuje teksturę z pliku */
 
-        //void update_step_puzzle();
+    void build_cube_mesh();              /**< Buduje meshe kostki */
+    void spawn_entities_from_level();    /**< Tworzy jednostki w poziomie */
 
-        void frame_begin();
-        void frame_render();
-        void frame_ui();
-        void frame_end();
+    void reset_game();       /**< Resetuje mapę i ekwipunek */
+    void render_game_over(); /**< Renderuje ekran śmierci */
+    void update_combat();    /**< Obsługuje sekwencję walki */
 
-        void render_main_menu();
-        void render_options_menu();
+    std::vector<bool> visited_cells_; /**< Oznaczenie odwiedzonych komórek */
+    void update_exploration();        /**< Aktualizacja eksploracji */
+    bool check_los(int x1, int y1, int x2, int y2) const; /**< Sprawdza linię widoczności */
 
-        void init_puzzles(const io::Level &L);
+    void build_weapon_mesh(); /**< Buduje mesh broni */
+    void build_enemy_mesh();  /**< Buduje meshe wrogów */
 
-        void on_resize(int width, int height);
+    std::vector<std::string> map_list_; /**< Lista map */
+    int current_level_idx_ = 0;         /**< Indeks aktualnego poziomu */
+    void load_next_level();             /**< Ładuje następny poziom */
+    void render_victory_screen();       /**< Renderuje ekran zwycięstwa */
 
-        GLuint load_texture(const char* path);
+    PuzzleTorch* get_puzzle_torch(int x, int y); /**< Pobiera pochodnię puzzla na współrzędnych */
 
-        void build_cube_mesh();
-        void spawn_entities_from_level();
+private:
+    // --- KONFIGURACJA I OKNO ---
+    AppConfig   cfg_;        /**< Konfiguracja aplikacji */
+    GLFWwindow* window_ = nullptr; /**< Wskaźnik na okno GLFW */
 
-        void reset_game();       // Czyści mapę i EQ
-        void render_game_over(); // Rysuje ekran śmierci
-        void update_combat();    // Obsługuje sekwencję 1-sekundową
+    // --- SHADERY I MACIERZE ---
+    gfx::Shader world_shader_; /**< Shader świata */
+    glm::mat4 proj_{ 1.0f };   /**< Macierz projekcji */
+    glm::mat4 view_{ 1.0f };   /**< Macierz widoku */
 
-        std::vector<bool> visited_cells_;
-        void update_exploration();
-        bool check_los(int x1, int y1, int x2, int y2) const;
-        void build_weapon_mesh();
-        void build_enemy_mesh();
+    io::Level   level_{};       /**< Obiekt poziomu */
+    std::string current_map_name_; /**< Nazwa aktualnej mapy */
 
-        std::vector<std::string> map_list_ = {
-            "assets/maps/levelPuzzle1.map",
-            "assets/maps/level1.map",
-            "assets/maps/level2.map",
-            "assets/maps/level3.map",
-            "assets/maps/level4.map",
-            "assets/maps/level5.map"
-        };
-        int current_level_idx_ = 0;
+    // --- MESHE ŚWIATA ---
+    GLuint floor_vao_ = 0, floor_vbo_ = 0; /**< Floor VAO i VBO */
+    GLuint wall_vao_ = 0, wall_vbo_ = 0;   /**< Wall VAO i VBO */
+    int floor_vertex_count_ = 0;           /**< Liczba wierzchołków podłogi */
+    int wall_vertex_count_ = 0;            /**< Liczba wierzchołków ścian */
 
-        void load_next_level();
-        void render_victory_screen();
-        PuzzleTorch* get_puzzle_torch(int x, int y) {
-            for (auto& t : puzzle_torches_) {
-                if (t.x == x && t.y == y) return &t;
-            }
-            return nullptr;
-        }
+    // --- MESHE BRONI, POTIONS, WROGÓW ---
+    GLuint weapon_vao_ = 0, weapon_vbo_ = 0, weapon_texture_ = 0;
+    int weapon_vertex_count_ = 0;
 
-    private:
-        AppConfig   cfg_;
-        GLFWwindow* window_ = nullptr;
+    GLuint zombie_vao_ = 0, zombie_vbo_ = 0, zombie_texture_ = 0;
+    int zombie_vertex_count_ = 0;
 
-        gfx::Shader world_shader_;
-        glm::mat4   proj_{ 1.0f };
-        glm::mat4   view_{ 1.0f };
+    GLuint skeleton_vao_ = 0, skeleton_vbo_ = 0, skeleton_texture_ = 0;
+    int skeleton_vertex_count_ = 0;
 
-        io::Level   level_{};
-        std::string current_map_name_;
+    GLuint potion_vao_ = 0, potion_vbo_ = 0, potion_texture_ = 0;
+    int potion_vertex_count_ = 0;
+    bool h_was_down_ = false; /**< Flaga picia mikstur */
 
-        GLuint floor_vao_ = 0;
-        GLuint floor_vbo_ = 0;
-        GLuint wall_vao_ = 0;
-        GLuint wall_vbo_ = 0;
-        int    floor_vertex_count_ = 0;
-        int    wall_vertex_count_ = 0;
+    GLuint torch_vao_ = 0, torch_vbo_ = 0, torch_texture_ = 0;
+    int torch_vertex_count_ = 0;
 
-        GLuint weapon_vao_ = 0;
-        GLuint weapon_vbo_ = 0;
-        GLuint weapon_texture_ = 0;
-        int weapon_vertex_count_ = 0;
+    GLuint wall_texture_ = 0;  /**< Tekstura ścian */
+    GLuint floor_texture_ = 0; /**< Tekstura podłogi */
 
-        // ZOMBIE
-        GLuint zombie_vao_ = 0;
-        GLuint zombie_vbo_ = 0;
-        GLuint zombie_texture_ = 0;
-        int zombie_vertex_count_ = 0;
+    ::Player   player_;           /**< Gracz */
+    std::vector<Enemy*> enemies_; /**< Wrogowie */
+    CameraMode camera_mode_ = CameraMode::FirstPerson; /**< Tryb kamery */
 
-        // SZKIELET
-        GLuint skeleton_vao_ = 0;
-        GLuint skeleton_vbo_ = 0;
-        GLuint skeleton_texture_ = 0;
-        int skeleton_vertex_count_ = 0;
+    // --- INPUT ---
+    bool left_was_down_ = false;  /**< Czy klawisz w lewo był wciśnięty */
+    bool right_was_down_ = false;
+    bool up_was_down_ = false;
+    bool esc_was_down_ = false;
+    bool atk_was_down_ = false;
+    bool k1_was_down_  = false;
+    bool k2_was_down_  = false;
+    bool k3_was_down_  = false;
 
-        //POTION
+    // --- MENU I STAN GRY ---
+    bool show_menu_ = false; /**< Flaga menu */
+    GameState state_ = GameState::MainMenu; /**< Aktualny stan gry */
 
-        GLuint potion_vao_ = 0;
-        GLuint potion_vbo_ = 0;
-        GLuint potion_texture_ = 0;
-        int potion_vertex_count_ = 0;
-        bool h_was_down_ = false; // Do picia mikstur
+    GLuint cube_vao_ = 0, cube_vbo_ = 0;
+    int cube_vertex_count_ = 0;
+    std::vector<glm::vec3> enemies_world_pos_; /**< Pozycje wrogów w świecie */
+    bool has_held_item_ = false;
+    GLuint item_texture_ = 0; /**< Tekstura trzymanego przedmiotu */
+    std::vector<WorldItem> world_items_; /**< Przedmioty w świecie */
 
-        //TORCH
+    // --- WALKI ---
+    float attack_anim_timer_ = 0.0f;       /**< Czas animacji ataku */
+    const float kAttackDuration_ = 0.25f;  /**< Długość animacji ataku */
+    bool combat_lock_ = false;             /**< Czy sterowanie jest zablokowane */
+    float combat_timer_ = 0.0f;            /**< Licznik czasu sekwencji walki */
+    bool enemy_riposte_pending_ = false;   /**< Flaga kontrataku wroga */
+    Entity* current_combat_target_ = nullptr; /**< Aktualny cel walki */
 
-        GLuint torch_vao_ = 0;
-        GLuint torch_vbo_ = 0;
-        GLuint torch_texture_ = 0;
-        int torch_vertex_count_ = 0;
+    // --- RUCH ---
+    bool is_moving_ = false;          /**< Flaga ruchu gracza */
+    glm::vec3 move_start_pos_;        /**< Pozycja startowa ruchu */
+    glm::vec3 move_target_pos_;       /**< Pozycja końcowa ruchu */
+    float move_timer_ = 0.0f;         /**< Licznik ruchu */
+    const float kMoveDuration_ = 0.25f; /**< Czas trwania kroku */
 
-        GLuint wall_texture_ = 0;
-        GLuint floor_texture_ = 0;
+    float trauma_ = 0.1f; /**< Siła trzęsienia ekranu */
 
-        ::Player   player_;
-        std::vector<Enemy*> enemies_;
-        CameraMode camera_mode_ = CameraMode::FirstPerson;
+    // --- AUDIO ---
+    ma_engine audio_engine_; /**< Silnik audio */
+    ma_sound bg_music_;      /**< Muzyka w tle */
+    ma_sound sfx_torch_;     /**< Dźwięk pochodni */
 
+    void init_audio();        /**< Inicjalizacja audio */
+    void update_audio_state();/**< Aktualizacja stanu audio */
 
-        bool left_was_down_ = false;
-        bool right_was_down_ = false;
-        bool up_was_down_ = false;
-        bool esc_was_down_ = false;
-        bool atk_was_down_ = false;
-        bool k1_was_down_  = false;
-        bool k2_was_down_  = false;
-        bool k3_was_down_  = false;
+    float master_volume_ = 0.5f; /**< Głośność globalna */
 
-        bool show_menu_ = false;
-        GameState state_ = GameState::MainMenu;
+    // --- MENU PAUZY, ŁADOWANIA, AUTORZY ---
+    void render_pause_menu();    /**< Renderowanie menu pauzy */
+    GameState previous_state_ = GameState::MainMenu;
 
-        GLuint cube_vao_ = 0;
-        GLuint cube_vbo_ = 0;
-        int cube_vertex_count_ = 0;
-        std::vector<glm::vec3> enemies_world_pos_;
-        bool has_held_item_ = false;
-        GLuint item_texture_ = 0; // kiedy� tekstura
-        std::vector<WorldItem> world_items_;
-        float attack_anim_timer_ = 0.0f;       // Obecny czas animacji (0 = brak ataku)
-        const float kAttackDuration_ = 0.25f;  // Jak długo trwa cios (w sekundach)
-        bool combat_lock_ = false;       // Czy sterowanie jest zablokowane?
-        float combat_timer_ = 0.0f;      // Licznik czasu sekwencji (1.0s -> 0.0s)
-        bool enemy_riposte_pending_ = false; // Czy wróg ma nam oddać w połowie sekwencji?
-        Entity* current_combat_target_ = nullptr; // Kogo bijemy (żeby wiedział kto oddaje)
+    void render_loading_screen(); /**< Renderowanie ekranu ładowania */
+    float menu_timer_ = 0.0f;    /**< Licznik czasu menu */
+    void render_credits();        /**< Renderowanie ekranu autorów */
 
-        bool is_moving_ = false;          // Czy gracz jest w trakcie kroku?
-        glm::vec3 move_start_pos_;        // Skąd wyruszyliśmy (wizualnie)
-        glm::vec3 move_target_pos_;       // Dokąd idziemy (wizualnie)
-        float move_timer_ = 0.0f;         // Licznik czasu
-        const float kMoveDuration_ = 0.25f; // Czas trwania kroku (0.25s jest idealne)
+    void push_retro_style();      /**< Ustawienie stylu retro przycisków */
+    void pop_retro_style();       /**< Przywrócenie stylu przycisków */
 
-        float trauma_ = 0.1f; // Poziom trzęsienia ekranu (od 0.0 do 1.0)
-
-        // --- AUDIO ---
-        ma_engine audio_engine_; // Silnik dźwiękowy
-        ma_sound bg_music_;      // Muzyka w tle
-        ma_sound sfx_torch_;     // Dźwięk pochodni
-
-        void init_audio();       // Funkcja inicjalizująca
-        void update_audio_state(); // Funkcja sprawdzająca czy włączyć/wyłączyć ogień
-
-        // --- AUDIO & SETTINGS ---
-        float master_volume_ = 0.5f; // Domyślna głośność 50%
-
-        // --- FUNKCJE RENDERUJĄCE ---
-        void render_pause_menu();    // Nowe menu pod ESC
-        GameState previous_state_ = GameState::MainMenu;
-
-        void render_loading_screen();
-
-        float menu_timer_ = 0.0f; // Do obracania kamery w menu
-        void render_credits();    // Funkcja rysująca ekran autorów
-
-        // Funkcja pomocnicza do stylu przycisków
-        void push_retro_style();
-        void pop_retro_style();
-
-        GLuint create_texture_from_color(float r, float g, float b);
-
-    };
+    GLuint create_texture_from_color(float r, float g, float b); /**< Tworzy teksturę z koloru */
+};
 
 } // namespace dungeon
 

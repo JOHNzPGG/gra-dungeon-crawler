@@ -7,7 +7,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-// Dodano z drugiego kodu: obsługa modeli 3D
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
@@ -26,86 +25,40 @@
 #include <vector>
 #include <cmath>
 #include <filesystem>
-#include <map> // Potrzebne dla tiny_obj_loader logic
+#include <map>
 
+/**
+ * @brief Callback błędu GLFW
+ *
+ * Wypisuje kod i opis błędu do stderr.
+ * @param code Kod błędu
+ * @param desc Opis błędu
+ */
 static void glfw_error_cb(int code, const char* desc) {
     std::fprintf(stderr, "GLFW error %d: %s\n", code, desc);
 }
 
+/** Vertex shader świata 3D */
 static const char* kWorldVS = R"(#version 330 core
 layout(location=0) in vec3 aPos;
 layout(location=1) in vec2 aTexCoord;
 
 out vec2 vTexCoord;
-out vec3 vFragPos; // NOWE: Pozycja punktu w świecie 3D
+out vec3 vFragPos;
 
 uniform mat4 uProj;
 uniform mat4 uView;
 uniform mat4 uModel;
 
 void main() {
-  // Obliczamy pozycję w świecie (World Space)
   vec4 worldPos = uModel * vec4(aPos, 1.0);
   vFragPos = vec3(worldPos);
-
   gl_Position = uProj * uView * worldPos;
   vTexCoord = aTexCoord;
 }
 )";
-//STARY SHADER DOCELOWO WYWALIĆ
-// Fragment shader – ZMIENIONY NA WERSJĘ Z KODU DRUGIEGO (obsługa uUseTex)
- /*static const char* kWorldFS = R"(#version 330 core
-out vec4 FragColor;
 
-in vec2 vTexCoord;
-in vec3 vFragPos;
-
-uniform sampler2D uTex; 
-uniform int uUseTex;
-uniform vec4 uColor;
-uniform vec3 uCamPos; 
-uniform float uTime; // NOWE: Czas gry do animacji
-
-void main() {
-    vec4 baseColor;
-
-    if (uUseTex == 1) {
-        baseColor = texture(uTex, vTexCoord) * uColor;
-    } else {
-        baseColor = uColor;
-    }
-
-    if(baseColor.a < 0.1) discard;
-
-    // --- OBLICZANIE POCHODNI ---
-    float dist = distance(vFragPos, uCamPos);
-
-    // 1. Efekt Migotania (Flicker)
-    // Łączymy dwa sinusy o różnych prędkościach, żeby ruch był nieregularny
-    float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
-
-    // Dodajemy migotanie do zasięgu światła
-    float lightStart = 2.5 + flicker;
-    float lightEnd = 8.0 + flicker * 2.0;
-
-    float lightFactor = (lightEnd - dist) / (lightEnd - lightStart);
-    lightFactor = clamp(lightFactor, 0.0, 1.0);
-
-    // 2. Kolor Światła (Ciepły Pomarańcz)
-    // Zamiast białego (1.0, 1.0, 1.0) dajemy ogień
-    vec3 torchColor = vec3(1.0, 0.85, 0.6);
-
-    // Ambient (światło otoczenia) - lekko niebieskawy dla kontrastu
-    vec3 ambient = vec3(0.05, 0.05, 0.1);
-
-    // Łączymy światło pochodni z ambientem
-    vec3 finalLight = (torchColor * lightFactor) + ambient;
-
-    // 3. Wynik
-    FragColor = vec4(baseColor.rgb * finalLight, baseColor.a);
-}
-)"; */
-
+/** Fragment shader świata 3D z efektem pochodni i zagadki */
 static const char* kWorldFS = R"(#version 330 core
 out vec4 FragColor;
 
@@ -118,7 +71,6 @@ uniform vec4 uColor;
 uniform vec3 uCamPos;
 uniform float uTime;
 
-// --- DANE ZAGADKI ---
 uniform vec3 uPuzzleLights[16];
 uniform int uActivePuzzleLights;
 
@@ -131,18 +83,15 @@ void main() {
     }
     if(baseColor.a < 0.1) discard;
 
-    // 1. POCHODNIA GRACZA (Twoja logika)
     float dist = distance(vFragPos, uCamPos);
     float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
     float lightStart = 2.5 + flicker;
     float lightEnd = 8.0 + flicker * 2.0;
     float playerLight = clamp((lightEnd - dist) / (lightEnd - lightStart), 0.0, 1.0);
 
-    // 2. POCHODNIE Z ZAGADKI (Logika Lights Out)
     float puzzleLightTotal = 0.0;
     for(int i = 0; i < uActivePuzzleLights; i++) {
         float d = distance(vFragPos, uPuzzleLights[i]);
-        // Każda pochodnia ma lekko przesunięte migotanie (uTime + i)
         float pFlicker = sin(uTime * 12.0 + float(i)) * 0.05;
         float pLight = clamp((4.5 + pFlicker - d) / (4.5 + pFlicker - 0.5), 0.0, 1.0);
         puzzleLightTotal = max(puzzleLightTotal, pLight);
@@ -151,7 +100,6 @@ void main() {
     vec3 torchColor = vec3(1.0, 0.85, 0.6);
     vec3 ambient = vec3(0.05, 0.05, 0.1);
 
-    // Łączymy oba źródła światła
     float combinedLight = max(playerLight, puzzleLightTotal);
     vec3 finalLight = (torchColor * combinedLight) + ambient;
 
@@ -161,575 +109,494 @@ void main() {
 
 namespace dungeon {
 
-    App::App(const AppConfig& cfg)
-        : cfg_(cfg),
-        player_(1, 1, 0)   // startowe x, y, yaw
-    {
-        init_glfw();
-        init_gl();
-        init_imgui();
-        init_audio();
-        render_loading_screen();
-        load_level();
-        build_world_mesh(); 
-        build_cube_mesh();
-        build_weapon_mesh();
-        build_enemy_mesh();
-        spawn_entities_from_level();
-        // Dodaj to, żeby gracz miał czym walczyć!
-        // Skill(nazwa, koszt AP, obrażenia)
-        player_.LearnSkill(new Skill("Strong Hit", 1, 15));
-        // Domyślny skill ma offset (0,0) czyli bije w miejscu stania? 
-        // Zwykle trzeba zdefiniować "offsets" w skillu, np. pole przed graczem:
-        if (!player_.skills.empty()) {
-            player_.skills[0]->offsets.push_back({ 0, -1 }); // przykładowy offset "przed siebie"
+/**
+ * @brief Konstruktor głównej aplikacji Dungeon
+ *
+ * Inicjalizuje GLFW, OpenGL, ImGui, audio, ładuje poziom startowy,
+ * buduje siatki świata, jednostki i przedmioty, a także domyślny skill gracza.
+ * @param cfg Konfiguracja aplikacji (rozmiar okna i tytuł)
+ */
+App::App(const AppConfig& cfg)
+    : cfg_(cfg),
+      player_(1, 1, 0)
+{
+    init_glfw();
+    init_gl();
+    init_imgui();
+    init_audio();
+    render_loading_screen();
+    load_level();
+    build_world_mesh();
+    build_cube_mesh();
+    build_weapon_mesh();
+    build_enemy_mesh();
+    spawn_entities_from_level();
+
+    player_.LearnSkill(new Skill("Strong Hit", 1, 15));
+    if (!player_.skills.empty()) {
+        player_.skills[0]->offsets.push_back({ 0, -1 });
+    }
+}
+
+/**
+ * @brief Destruktor klasy App
+ *
+ * Czyści pamięć GPU, usuwa jednostki, przedmioty i de-inicjalizuje audio oraz okno GLFW.
+ */
+App::~App() {
+    shutdown_imgui();
+
+    for (auto* e : enemies_) delete e;
+    enemies_.clear();
+
+    if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
+    if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
+    if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
+    if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
+    if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
+    if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
+
+    if (zombie_vao_) glDeleteVertexArrays(1, &zombie_vao_);
+    if (zombie_vbo_) glDeleteBuffers(1, &zombie_vbo_);
+
+    if (skeleton_vao_) glDeleteVertexArrays(1, &skeleton_vao_);
+    if (skeleton_vbo_) glDeleteBuffers(1, &skeleton_vbo_);
+
+    if (window_) {
+        glfwDestroyWindow(window_);
+        glfwTerminate();
+    }
+
+    if (cube_vbo_) glDeleteBuffers(1, &cube_vbo_);
+    if (cube_vao_) glDeleteVertexArrays(1, &cube_vao_);
+
+    if (potion_vao_) glDeleteVertexArrays(1, &potion_vao_);
+    if (potion_vbo_) glDeleteBuffers(1, &potion_vbo_);
+
+    if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
+    if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
+
+    ma_sound_uninit(&bg_music_);
+    ma_sound_uninit(&sfx_torch_);
+    ma_engine_uninit(&audio_engine_);
+}
+
+/**
+ * @brief Inicjalizacja GLFW
+ *
+ * Tworzy okno, ustawia callbacki i kontekst OpenGL.
+ * @throws std::runtime_error Jeśli inicjalizacja GLFW lub okna się nie powiedzie
+ */
+void App::init_glfw() {
+    glfwSetErrorCallback(glfw_error_cb);
+    if (!glfwInit())
+        throw std::runtime_error("GLFW init failed");
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window_ = glfwCreateWindow(cfg_.width, cfg_.height, cfg_.title.c_str(), nullptr, nullptr);
+    if (!window_)
+        throw std::runtime_error("Window creation failed");
+
+    glfwMakeContextCurrent(window_);
+    glfwSwapInterval(1);
+
+    glfwSetWindowUserPointer(window_, this);
+    glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* win, int w, int h) {
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(win));
+        if (app) app->on_resize(w, h);
+    });
+}
+
+/**
+ * @brief Inicjalizacja OpenGL i shaderów
+ *
+ * Włącza test głębokości, mieszanie kolorów, tworzy shader świata i ładuje tekstury.
+ * @throws std::runtime_error Jeśli GLAD nie załaduje funkcji OpenGL
+ */
+void App::init_gl() {
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        throw std::runtime_error("GLAD load failed");
+
+    glViewport(0, 0, cfg_.width, cfg_.height);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    float aspect = static_cast<float>(cfg_.width) / static_cast<float>(cfg_.height);
+    proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
+
+    world_shader_ = gfx::Shader(kWorldVS, kWorldFS);
+
+    wall_texture_ = load_texture("assets/models/wmremove-transformed.PNG");
+    floor_texture_ = load_texture("assets/models/kamienna_posadzka.PNG");
+
+    glfwMaximizeWindow(window_);
+    int fb_w = 0, fb_h = 0;
+    glfwGetFramebufferSize(window_, &fb_w, &fb_h);
+    if (fb_w > 0 && fb_h > 0) on_resize(fb_w, fb_h);
+}
+
+/**
+ * @brief Callback zmiany rozdzielczości okna
+ * @param width Nowa szerokość okna
+ * @param height Nowa wysokość okna
+ */
+void App::on_resize(int width, int height) {
+    if (width <= 0 || height <= 0) return;
+    cfg_.width = width;
+    cfg_.height = height;
+    glViewport(0, 0, width, height);
+    float aspect = static_cast<float>(width) / static_cast<float>(height);
+    proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
+}
+
+/**
+ * @brief Inicjalizacja ImGui
+ */
+void App::init_imgui() {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window_, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_CreateFontsTexture();
+}
+
+/**
+ * @brief Wyłączenie i czyszczenie ImGui
+ */
+void App::shutdown_imgui() {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+/**
+ * @brief Ładowanie poziomu z pliku mapy
+ */
+void App::load_level() {
+    namespace fs = std::filesystem;
+
+    if (current_map_name_.empty()) current_map_name_ = map_list_[0];
+    std::string path = current_map_name_;
+
+    if (!fs::exists(path)) {
+        printf("Brak mapy: %s. Próba wczytania test.map\n", path.c_str());
+        path = "assets/maps/test.map";
+        if (!fs::exists(path)) throw std::runtime_error("BRAK ZADNYCH MAP!");
+    }
+
+    level_ = io::load_map_ascii(path);
+
+    player_.GameX = level_.player_x;
+    player_.GameY = level_.player_y;
+    player_.yaw = level_.player_start_yaw;
+    player_.RenderPosition = glm::vec3(level_.player_x, 0.0f, level_.player_y);
+
+    is_moving_ = false;
+    move_timer_ = 0.0f;
+    move_start_pos_ = player_.RenderPosition;
+    move_target_pos_ = player_.RenderPosition;
+
+    visited_cells_.assign(level_.w * level_.h, false);
+    update_exploration();
+}
+
+/**
+ * @brief Tworzy wrogów, przedmioty i zagadki na podstawie danych poziomu
+ */
+void App::spawn_entities_from_level() {
+    for (auto* e : enemies_) delete e;
+    enemies_.clear();
+    world_items_.clear();
+    puzzle_torches_.clear();
+    pressure_plates_.clear();
+    puzzles_solved_ = false;
+
+    for (const auto& spawn : level_.enemy_spawns) {
+        Enemy* newEnemy = nullptr;
+        if (spawn.type == 'Z') {
+            newEnemy = new Enemy(spawn.x, spawn.y, 180, 140, 140, 1, 25, "Zombie");
+        } else if (spawn.type == 'S') {
+            newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
+        } else {
+            newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
+        }
+
+        if (newEnemy) {
+            newEnemy->yaw = 0.0f;
+            float vx = (float)newEnemy->GameX + 0.5f;
+            float vz = (float)newEnemy->GameY + 0.5f;
+            newEnemy->VisualPos = glm::vec3(vx, 0.0f, vz);
+            enemies_.push_back(newEnemy);
         }
     }
 
-    App::~App() {
-        shutdown_imgui();
+    // Spawn przedmiotów
+    for (const auto& spawn : level_.item_spawns) {
+        float x = static_cast<float>(spawn.x) + 0.5f;
+        float z = static_cast<float>(spawn.y) + 0.5f;
+        Item* newItem = nullptr;
+        char t = spawn.type;
 
-        for (auto* e : enemies_) {
-            delete e;
-        }
-        enemies_.clear();
-        if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
-        if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
-        if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
-        if (wall_vao_)  glDeleteVertexArrays(1, &wall_vao_);
-        if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
-        if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
-
-        if (zombie_vao_) glDeleteVertexArrays(1, &zombie_vao_);
-        if (zombie_vbo_) glDeleteBuffers(1, &zombie_vbo_);
-
-        if (skeleton_vao_) glDeleteVertexArrays(1, &skeleton_vao_);
-        if (skeleton_vbo_) glDeleteBuffers(1, &skeleton_vbo_);
-
-        if (window_) {
-            glfwDestroyWindow(window_);
-            glfwTerminate();
-        }
-        if (cube_vbo_) glDeleteBuffers(1, &cube_vbo_);
-        if (cube_vao_) glDeleteVertexArrays(1, &cube_vao_);
-
-        if (potion_vao_) glDeleteVertexArrays(1, &potion_vao_);
-        if (potion_vbo_) glDeleteBuffers(1, &potion_vbo_);
-
-        if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
-        if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
-
-        ma_sound_uninit(&bg_music_);
-        ma_sound_uninit(&sfx_torch_);
-        ma_engine_uninit(&audio_engine_);
-
-    }
-
-    void App::init_glfw() {
-        glfwSetErrorCallback(glfw_error_cb);
-        if (!glfwInit())
-            throw std::runtime_error("GLFW init failed");
-
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        window_ = glfwCreateWindow(cfg_.width, cfg_.height, cfg_.title.c_str(), nullptr, nullptr);
-        if (!window_)
-            throw std::runtime_error("Window creation failed");
-
-        glfwMakeContextCurrent(window_);
-        glfwSwapInterval(1);
-
-        // pozwala wywołać metody App z callbacków GLFW
-        glfwSetWindowUserPointer(window_, this);
-
-        glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* win, int w, int h) {
-            auto* app = static_cast<App*>(glfwGetWindowUserPointer(win));
-            if (app) {
-                app->on_resize(w, h);
-            }
-            });
-
-    }
-
-    void App::init_gl() {
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-            throw std::runtime_error("GLAD load failed");
-
-        glViewport(0, 0, cfg_.width, cfg_.height);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        float aspect = static_cast<float>(cfg_.width) / static_cast<float>(cfg_.height);
-        proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
-
-        world_shader_ = gfx::Shader(kWorldVS, kWorldFS);
-
-        // ZMIANA: Ścieżki do tekstur z drugiego kodu
-        wall_texture_ = load_texture("assets/models/wmremove-transformed.PNG");
-        floor_texture_ = load_texture("assets/models/kamienna_posadzka.PNG");
-
-        // Start w trybie "full windowed"
-        glfwMaximizeWindow(window_);
-        int fb_w = 0, fb_h = 0;
-        glfwGetFramebufferSize(window_, &fb_w, &fb_h);
-        if (fb_w > 0 && fb_h > 0) {
-            on_resize(fb_w, fb_h);
+        if (t == 'P') {
+            ItemStats stats; stats.health = 40;
+            newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
+        } else if (t == 'M') {
+            ItemStats stats; stats.damage = 35;
+            newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
+        } else if (t == 'I') {
+            ItemStats stats; stats.damage = 100;
+            newItem = new Item("SOMETHING", ItemType::Weapon, false, stats);
         }
 
-    }
-
-    void App::on_resize(int width, int height) {
-        if (width <= 0 || height <= 0) return;
-
-        cfg_.width = width;
-        cfg_.height = height;
-
-        glViewport(0, 0, width, height);
-
-        float aspect = static_cast<float>(width) / static_cast<float>(height);
-        proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
-    }
-
-    void App::init_imgui() {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(window_, true);
-        ImGui_ImplOpenGL3_Init("#version 330");
-        ImGui_ImplOpenGL3_CreateFontsTexture();
-    }
-
-    void App::shutdown_imgui() {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-    }
-
-    void App::load_level() {
-        namespace fs = std::filesystem;
-
-        // Zabezpieczenie na pustą nazwę mapy
-        if (current_map_name_.empty()) {
-            current_map_name_ = map_list_[0];
-        }
-
-        std::string path = current_map_name_;
-
-        // Sprawdź czy plik istnieje
-        if (!fs::exists(path)) {
-            // Jeśli nie ma mapy, spróbuj wczytać domyślną, żeby gra nie crashowała
-            printf("Brak mapy: %s. Próba wczytania test.map\n", path.c_str());
-            path = "assets/maps/test.map";
-            if (!fs::exists(path)) throw std::runtime_error("BRAK ZADNYCH MAP!");
-        }
-
-        // 1. Ładowanie danych
-        level_ = io::load_map_ascii(path);
-
-        // 2. Ustawianie LOGIKI (Gdzie jestem na siatce)
-        player_.GameX = level_.player_x;
-        player_.GameY = level_.player_y;
-        player_.yaw = level_.player_start_yaw;
-
-        // 3. Ustawianie WIZUALIÓW (Gdzie jest kamera)
-        // TO JEST KLUCZOWE: Musimy zsynchronizować RenderPosition z GameX/Y!
-        player_.RenderPosition = glm::vec3(level_.player_x, 0.0f, level_.player_y);
-
-        // 4. Resetowanie zmiennych animacji
-        // Musimy powiedzieć grze: "Nie ruszamy się, stoimy w miejscu startu"
-        is_moving_ = false;
-        move_timer_ = 0.0f;
-        move_start_pos_ = player_.RenderPosition;
-        move_target_pos_ = player_.RenderPosition;
-
-        // 5. Inicjalizacja mgły wojny (Poprawka crasha)
-        visited_cells_.assign(level_.w * level_.h, false);
-        update_exploration(); // Odkryj startową pozycję
-    }
-
-    void App::spawn_entities_from_level() {
-        for (auto* e : enemies_) delete e;
-        enemies_.clear();
-        world_items_.clear();
-
-        // --- NOWE: Czyszczenie stanu zagadek ---
-        puzzle_torches_.clear();
-        pressure_plates_.clear();
-        puzzles_solved_ = false;
-
-        // 1. WROGOWIE
-        for (const auto& spawn : level_.enemy_spawns) {
-            Enemy* newEnemy = nullptr;
-
-            if (spawn.type == 'Z') {
-                newEnemy = new Enemy(spawn.x, spawn.y, 180, 140, 140, 1, 25, "Zombie");
-            }
-            else if (spawn.type == 'S') { // Np. S dla Szkieleta
-                newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
-            }
-            else {
-                // Domyślny (jeśli np. wpisałeś E)
-                newEnemy = new Enemy(spawn.x, spawn.y, 180, 60, 60, 2, 10, "Skeleton");
-            }
-
-            if (newEnemy) {
-                newEnemy->yaw = 0.0f;
-                float vx = (float)newEnemy->GameX + 0.5f;
-                float vz = (float)newEnemy->GameY + 0.5f;
-                newEnemy->VisualPos = glm::vec3(vx, 0.0f, vz);
-                enemies_.push_back(newEnemy);
-            }
-        }
-
-        // 2. PRZEDMIOTY (Nowa logika oparta na znakach mapy)
-        for (const auto& spawn : level_.item_spawns) {
-            float x = static_cast<float>(spawn.x) + 0.5f;
-            float z = static_cast<float>(spawn.y) + 0.5f;
-
-            Item* newItem = nullptr;
-
-            // --- SPRAWDZAMY ZNAK Z MAPY ---
-            char t = spawn.type; // Upewnij się, że MapLoader to wczytał!
-
-            if (t == 'P') {
-                // P = POTION
-                ItemStats stats; stats.health = 40;
-                newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
-            }
-            else if (t == 'M') {
-                // M = MIECZ (Sword), I = Domyślny Item
-                ItemStats stats; stats.damage = 35;
-                newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
-            }
-            else if (t == 'I') {
-                //I = Domyślny Item
-                ItemStats stats; stats.damage = 100;
-                newItem = new Item("SOMETHING", ItemType::Weapon, false, stats);
-            }
-            else {
-                // Nieznany typ? Dajmy miksturę jako fallback, albo nic.
-                // printf("Nieznany item na mapie: %c\n", t);
-            }
-
-            if (newItem) {
-                // Y = 0.7f (startowa wysokość, i tak jest nadpisywana w frame_render przez animację)
-                world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
-            }
-        }
-        // 3. ZAGADKA: POCHODNIE (Symbol 'L')
-        for (const auto& spawn : level_.puzzle_torches) {
-            // Wszystkie pochodnie startują jako zgaszone (false)
-            puzzle_torches_.push_back({ spawn.x, spawn.y, false });
-        }
-
-        // 4. ZAGADKA: PŁYTKI NACISKOWE (Symbol 'T')
-        for (const auto& spawn : level_.pressure_plates) {
-            // ID nadawane automatycznie: 1, 2, 3... w kolejności wczytania z mapy
-            int id = (int)pressure_plates_.size() + 1;
-            pressure_plates_.push_back({ spawn.x, spawn.y, id, 0 });
+        if (newItem) {
+            world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
         }
     }
 
-    bool App::can_move_to(int x, int y) const {
-        if (x < 0 || y < 0) return false;
-        if (x >= level_.w || y >= level_.h) return false;
-
-        auto cell = level_.cells[y * level_.w + x];
-        return cell != io::Cell::Wall;
+    // Spawn pochodni i płytek naciskowych
+    for (const auto& spawn : level_.puzzle_torches) puzzle_torches_.push_back({ spawn.x, spawn.y, false });
+    for (const auto& spawn : level_.pressure_plates) {
+        int id = (int)pressure_plates_.size() + 1;
+        pressure_plates_.push_back({ spawn.x, spawn.y, id, 0 });
     }
+}
 
-    // Zwraca wskaźnik do przeciwnika stojącego przed daną jednostką
-    Entity* App::GetEnemyInFront(const Entity& unit) {
-        glm::ivec2 front = unit.GetForwardTile();
+
+
+    /**
+ * @brief Sprawdza, czy jednostka może się poruszyć na dane pole
+ *
+ * @param x Współrzędna X w siatce
+ * @param y Współrzędna Y w siatce
+ * @return true Jeśli pole jest przechodnie
+ * @return false Jeśli pole jest ścianą lub poza mapą
+ */
+bool App::can_move_to(int x, int y) const {
+    if (x < 0 || y < 0) return false;
+    if (x >= level_.w || y >= level_.h) return false;
+
+    auto cell = level_.cells[y * level_.w + x];
+    return cell != io::Cell::Wall;
+}
+
+/**
+ * @brief Zwraca wskaźnik do przeciwnika stojącego przed daną jednostką
+ *
+ * @param unit Jednostka (np. gracz) której przód sprawdzamy
+ * @return Entity* Wskaźnik do przeciwnika lub nullptr, jeśli brak przeciwnika
+ */
+Entity* App::GetEnemyInFront(const Entity& unit) {
+    glm::ivec2 front = unit.GetForwardTile();
+    for (Entity* e : enemies_) {
+        if (!e->IsAlive()) continue;
+        if (e->GameX == front.x && e->GameY == front.y) return e;
+    }
+    return nullptr;
+}
+
+/**
+ * @brief Zwraca listę jednostek trafionych przez dany skill
+ *
+ * @param unit Jednostka wykonująca skill
+ * @param skill Wskaźnik do skilla
+ * @return std::vector<Entity*> Lista trafionych jednostek
+ */
+std::vector<Entity*> App::ResolveSkillTarget(const Entity& unit, Skill* skill) {
+    std::vector<Entity*> targets;
+    for (const auto& offset : skill->offsets) {
+        int tx = unit.GameX + offset.x;
+        int ty = unit.GameY + offset.y;
+
         for (Entity* e : enemies_) {
             if (!e->IsAlive()) continue;
-            if (e->GameX == front.x && e->GameY == front.y) return e;
+            if (e->GameX == tx && e->GameY == ty) targets.push_back(e);
         }
-        return nullptr;
+    }
+    return targets;
+}
+
+/**
+ * @brief Obsługuje wszystkie wejścia gracza (ruch, atak, interakcje, skille)
+ *
+ * Funkcja wykonuje się co klatkę i reaguje na:
+ * - Strzałki / WSAD do ruchu
+ * - Spację do ataku lub interakcji
+ * - Numery 1-3 do skilli
+ * - H do użycia mikstur
+ * - ESC do pauzy / menu
+ */
+void App::handle_input() {
+    // 1. BLOKADY (Kiedy gracz nie może sterować)
+    if (combat_lock_ || is_moving_ || attack_anim_timer_ > 0.0f) {
+        if (combat_lock_) update_combat();
+        return;
     }
 
-    // Zwraca wektor jednostek trafionych przez dany skill
-    std::vector<Entity*> App::ResolveSkillTarget(const Entity& unit, Skill* skill) {
-        std::vector<Entity*> targets;
-        for (const auto& offset : skill->offsets) {
-            int tx = unit.GameX + offset.x;
-            int ty = unit.GameY + offset.y;
+    // 2. ODCZYT KLAWISZY
+    bool left = glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
+    bool right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
+    bool up = glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS;
+    bool atk = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
+    bool esc = glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+    bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
+    bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
+    bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
+    bool keyH = glfwGetKey(window_, GLFW_KEY_H) == GLFW_PRESS;
 
-            for (Entity* e : enemies_) {
-                if (!e->IsAlive()) continue;
-                if (e->GameX == tx && e->GameY == ty) targets.push_back(e);
-            }
-        }
-        return targets;
+    // 3. PAUZA I MENU
+    if (esc && !esc_was_down_) {
+        if (state_ == GameState::Playing) state_ = GameState::Paused;
+        else if (state_ == GameState::Paused) state_ = GameState::Playing;
+        else if (state_ == GameState::Options) state_ = GameState::Paused;
     }
+    esc_was_down_ = esc;
 
-    void App::handle_input() {
-        // ------------------------------------------------------------
-        // 1. BLOKADY (Kiedy gracz nie może sterować)
-        // ------------------------------------------------------------
-
-        // Jeśli trwa animacja walki lub ruchu - czekamy
-        if (combat_lock_ || is_moving_ || attack_anim_timer_ > 0.0f) {
-            if (combat_lock_) update_combat(); // Upewnij się, że walka się aktualizuje
-            return;
-        }
-
-        // ------------------------------------------------------------
-        // 2. ODCZYT KLAWISZY (Input Polling)
-        // ------------------------------------------------------------
-
-        // Ruch (Strzałki + WSAD)
-        bool left = glfwGetKey(window_, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS;
-        bool right = glfwGetKey(window_, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS;
-        bool up = glfwGetKey(window_, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS;
-
-        // Akcje
-        bool atk = glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS;
-        bool esc = glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS;
-
-        // Skille (1, 2, 3)
-        bool k1 = glfwGetKey(window_, GLFW_KEY_1) == GLFW_PRESS;
-        bool k2 = glfwGetKey(window_, GLFW_KEY_2) == GLFW_PRESS;
-        bool k3 = glfwGetKey(window_, GLFW_KEY_3) == GLFW_PRESS;
-
-        bool keyH = glfwGetKey(window_, GLFW_KEY_H) == GLFW_PRESS;
-
-        // ------------------------------------------------------------
-        // 3. PAUZA I MENU (ESC)
-        // ------------------------------------------------------------
-
-        // Obsługa przełączania pauzy
-        if (esc && !esc_was_down_) { // Pamiętaj zmienić m_was_down_ na esc_was_down_ w .hpp!
-            if (state_ == GameState::Playing) {
-                state_ = GameState::Paused;
-            }
-            else if (state_ == GameState::Paused) {
-                state_ = GameState::Playing;
-            }
-            else if (state_ == GameState::Options) {
-                // Z opcji wracamy do pauzy (jeśli byliśmy w grze)
-                state_ = GameState::Paused;
-            }
-        }
-        esc_was_down_ = esc;
-
-        // Jeśli gra jest zapauzowana lub jesteśmy w menu - ignorujemy resztę sterowania
-        if (state_ != GameState::Playing) {
-            // Resetujemy flagi "was_down" dla ruchu, żeby postać nie ruszyła po odpałzowaniu
-            left_was_down_ = left;
-            right_was_down_ = right;
-            up_was_down_ = up;
-            atk_was_down_ = atk;
-            return;
-        }
-
-        // ------------------------------------------------------------
-        // 4. LOGIKA ROZGRYWKI (Tylko gdy GameState::Playing)
-        // ------------------------------------------------------------
-
-        // A. OBRÓT
-        if (left && !left_was_down_) player_.TurnLeft();
-        if (right && !right_was_down_) player_.TurnRight();
-
-        // B. RUCH
-        if (up && !up_was_down_) {
-            glm::ivec2 target = player_.GetForwardTile();
-
-            // Sprawdź czy pole jest wolne (ściana + wróg)
-            if (can_move_to(target.x, target.y)) {
-                if (GetEnemyInFront(player_) == nullptr) {
-
-                    // Próba ruchu (kosztuje 1 AP)
-                    if (player_.UseActionPoints(1)) {
-                        // Animacja: Start
-                        move_start_pos_ = glm::vec3(player_.RenderPosition.x, 0.0f, player_.RenderPosition.z);
-                        move_target_pos_ = glm::vec3(target.x, 0.0f, target.y);
-
-                        // Logika: Aktualizacja pozycji
-                        player_.GameX = target.x;
-                        player_.GameY = target.y;
-                        //logika zagadki
-                        update_puzzles();
-
-                        // Sprawdź pola specjalne (Wyjście / Next Level)
-                        int idx = target.y * level_.w + target.x;
-                        if (idx >= 0 && idx < level_.cells.size()) {
-                            auto cellType = level_.cells[idx];
-                            if (cellType == io::Cell::NextLevel) load_next_level();
-                            else if (cellType == io::Cell::Exit) state_ = GameState::Victory;
-                        }
-
-
-                        // Uruchomienie timera animacji
-                        is_moving_ = true;
-                        move_timer_ = 0.0f;
-                    }
-                }
-                else {
-                    // Opcjonalnie: Dźwięk błędu / komunikat "Wróg blokuje drogę"
-                    std::cout << "Blokada: Przeciwnik na drodze!" << std::endl;
-                }
-            }
-        }
-
-        // C. AUTOMATYCZNE PODNOSZENIE PRZEDMIOTÓW
-        // Sprawdzamy, czy stoimy na czymś po ruchu
-        for (auto& wItem : world_items_) {
-            if (!wItem.isAlive) continue;
-
-            // Sprawdź kolizję (proste porównanie intów)
-            if ((int)wItem.position.x == player_.GameX && (int)wItem.position.z == player_.GameY) {
-                Item* item = wItem.itemData;
-
-                if (item->type == ItemType::Weapon) {
-                    // Podmiana broni (wyrzuć starą, weź nową)
-                    if (player_.equippedWeapon) {
-                        WorldItem dropped;
-                        dropped.itemData = player_.equippedWeapon;
-                        dropped.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
-                        dropped.isAlive = true;
-                        world_items_.push_back(dropped);
-                    }
-                    player_.Equip(item);
-                    has_held_item_ = true;
-                }
-                else {
-                    // Mikstura itp.
-                    player_.AddToInventory(item);
-                }
-
-                // Oznacz jako zebrany
-                wItem.isAlive = false;
-
-                // Opcjonalnie: Dźwięk podniesienia
-                // ma_sound_start(&sfx_pickup_); 
-                break;
-            }
-        }
-
-        // D. WALKA / INTERAKCJA (ATAK PODSTAWOWY LUB PRZEŁĄCZNIK)
-        if (atk && !atk_was_down_) {
-            // 1. Oblicz współrzędne pola przed graczem na podstawie YAW
-            int dx = 0, dy = 0;
-            int normalizedYaw = (player_.yaw % 360 + 360) % 360;
-
-            if (normalizedYaw == 0)   dy = -1; // Północ
-            else if (normalizedYaw == 90)  dx = 1;  // Wschód
-            else if (normalizedYaw == 180) dy = 1;  // Południe
-            else if (normalizedYaw == 270) dx = -1; // Zachód
-
-            int tx = player_.GameX + dx;
-            int ty = player_.GameY + dy;
-
-            // 2. Sprawdź czy przed graczem jest pochodnia "P"
-            bool interacted_with_puzzle = false;
-            for (auto& t : puzzle_torches_) {
-                if (t.x == tx && t.y == ty) {
-                    toggle_puzzle_torch(tx, ty); // Twoja funkcja przełączająca sąsiadów
-                    interacted_with_puzzle = true;
-                    attack_anim_timer_ = kAttackDuration_; // Opcjonalnie: animacja machnięcia przy przełączaniu
-                    break;
-                }
-            }
-
-            // 3. Jeśli nie było pochodni, wykonaj normalną logikę walki
-            if (!interacted_with_puzzle) {
-                Entity* target = GetEnemyInFront(player_);
-                attack_anim_timer_ = kAttackDuration_;
-
-                if (player_.ActionPoints > 0) {
-                    if (target) {
-                        combat_lock_ = true;
-                        combat_timer_ = 1.0f;
-                        enemy_riposte_pending_ = true;
-                        current_combat_target_ = target;
-
-                        int dmg = player_.base_damage;
-
-                        // Backstab bonus
-                        int pYaw = (player_.yaw % 360 + 360) % 360;
-                        int eYaw = (target->yaw % 360 + 360) % 360;
-                        if (pYaw == eYaw) dmg *= 2;
-
-                        target->TakeDamage(dmg);
-                        target->UpdateOrientation((player_.yaw + 180) % 360);
-                        // ma_sound_start(&sfx_hit_);
-                    }
-                    player_.UseActionPoints(1);
-                }
-            }
-        }
-        // E. SKILLE (1, 2, 3)
-        if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
-        if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
-        if (k3 && !k3_was_down_) player_.UseSkill(2, ResolveSkillTarget(player_, player_.skills[2]));
-
-        if (keyH && !h_was_down_) {
-            // 1. Przeszukaj ekwipunek
-            for (auto it = player_.inventory.begin(); it != player_.inventory.end(); ++it) {
-                Item* item = *it;
-
-                // Szukamy przedmiotu jadalnego (Consumable)
-                if (item->type == ItemType::Consumable) {
-
-                    // 2. Sprawdź czy jest sens pić (czy mamy niepełne HP)
-                    if (player_.health < player_.maxHealth) {
-
-                        // 3. Leczenie
-                        int healAmount = item->stats.health;
-                        player_.health += healAmount;
-
-                        // Nie przekraczaj max HP
-                        if (player_.health > player_.maxHealth) {
-                            player_.health = player_.maxHealth;
-                        }
-
-                        // 4. Usuń przedmiot
-                        // Najpierw usuwamy z wektora
-                        player_.inventory.erase(it);
-                        // Potem zwalniamy pamięć (bo item był stworzony przez new)
-                        delete item;
-
-                        printf("Wypito miksture! Przywrocono %d HP.\n", healAmount);
-
-                        // Opcjonalnie: Dźwięk
-                        // ma_sound_start(&sfx_drink_); 
-
-                        // Przerywamy pętlę (pijemy tylko jedną na kliknięcie!)
-                        break;
-                    }
-                    else {
-                        printf("Masz pelne zdrowie!\n");
-                        // Jeśli chcesz, żeby mimo to zużyło miksturę, usuń 'else' i 'break' przenieś wyżej.
-                        break;
-                    }
-                }
-            }
-        }
-        h_was_down_ = keyH;
-
-        // ------------------------------------------------------------
-        // 5. ZAPAMIĘTANIE STANU KLAWISZY (Na następną klatkę)
-        // ------------------------------------------------------------
+    if (state_ != GameState::Playing) {
         left_was_down_ = left;
         right_was_down_ = right;
         up_was_down_ = up;
         atk_was_down_ = atk;
-        k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
-        // esc_was_down_ jest aktualizowane wyżej, przy obsłudze pauzy
+        return;
+    }
 
-        // ------------------------------------------------------------
-        // 6. ZARZĄDZANIE TURAMI
-        // ------------------------------------------------------------
-        // Jeśli gracz zużył wszystkie punkty akcji -> Tura wrogów
-        if (!combat_lock_ && player_.ActionPoints <= 0) {
-            EnemiesTurn();
-            player_.ResetActionPoints(2);
+    // 4. LOGIKA ROZGRYWKI
+    // A. OBRÓT
+    if (left && !left_was_down_) player_.TurnLeft();
+    if (right && !right_was_down_) player_.TurnRight();
+
+    // B. RUCH
+    if (up && !up_was_down_) {
+        glm::ivec2 target = player_.GetForwardTile();
+        if (can_move_to(target.x, target.y) && GetEnemyInFront(player_) == nullptr) {
+            if (player_.UseActionPoints(1)) {
+                move_start_pos_ = glm::vec3(player_.RenderPosition.x, 0.0f, player_.RenderPosition.z);
+                move_target_pos_ = glm::vec3(target.x, 0.0f, target.y);
+                player_.GameX = target.x;
+                player_.GameY = target.y;
+                update_puzzles();
+
+                int idx = target.y * level_.w + target.x;
+                if (idx >= 0 && idx < level_.cells.size()) {
+                    auto cellType = level_.cells[idx];
+                    if (cellType == io::Cell::NextLevel) load_next_level();
+                    else if (cellType == io::Cell::Exit) state_ = GameState::Victory;
+                }
+
+                is_moving_ = true;
+                move_timer_ = 0.0f;
+            }
+        } else {
+            std::cout << "Blokada: Przeciwnik na drodze!" << std::endl;
         }
     }
+
+    // C. AUTOMATYCZNE PODNOSZENIE PRZEDMIOTÓW
+    for (auto& wItem : world_items_) {
+        if (!wItem.isAlive) continue;
+        if ((int)wItem.position.x == player_.GameX && (int)wItem.position.z == player_.GameY) {
+            Item* item = wItem.itemData;
+            if (item->type == ItemType::Weapon) {
+                if (player_.equippedWeapon) {
+                    WorldItem dropped;
+                    dropped.itemData = player_.equippedWeapon;
+                    dropped.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
+                    dropped.isAlive = true;
+                    world_items_.push_back(dropped);
+                }
+                player_.Equip(item);
+                has_held_item_ = true;
+            } else player_.AddToInventory(item);
+            wItem.isAlive = false;
+            break;
+        }
+    }
+
+    // D. WALKA / INTERAKCJA
+    if (atk && !atk_was_down_) {
+        int dx = 0, dy = 0;
+        int normalizedYaw = (player_.yaw % 360 + 360) % 360;
+        if (normalizedYaw == 0) dy = -1;
+        else if (normalizedYaw == 90) dx = 1;
+        else if (normalizedYaw == 180) dy = 1;
+        else if (normalizedYaw == 270) dx = -1;
+
+        int tx = player_.GameX + dx;
+        int ty = player_.GameY + dy;
+
+        bool interacted_with_puzzle = false;
+        for (auto& t : puzzle_torches_) {
+            if (t.x == tx && t.y == ty) {
+                toggle_puzzle_torch(tx, ty);
+                interacted_with_puzzle = true;
+                attack_anim_timer_ = kAttackDuration_;
+                break;
+            }
+        }
+
+        if (!interacted_with_puzzle) {
+            Entity* target = GetEnemyInFront(player_);
+            attack_anim_timer_ = kAttackDuration_;
+
+            if (player_.ActionPoints > 0) {
+                if (target) {
+                    combat_lock_ = true;
+                    combat_timer_ = 1.0f;
+                    enemy_riposte_pending_ = true;
+                    current_combat_target_ = target;
+
+                    int dmg = player_.base_damage;
+                    int pYaw = (player_.yaw % 360 + 360) % 360;
+                    int eYaw = (target->yaw % 360 + 360) % 360;
+                    if (pYaw == eYaw) dmg *= 2;
+
+                    target->TakeDamage(dmg);
+                    target->UpdateOrientation((player_.yaw + 180) % 360);
+                }
+                player_.UseActionPoints(1);
+            }
+        }
+    }
+
+    // E. SKILLE
+    if (k1 && !k1_was_down_) player_.UseSkill(0, ResolveSkillTarget(player_, player_.skills[0]));
+    if (k2 && !k2_was_down_) player_.UseSkill(1, ResolveSkillTarget(player_, player_.skills[1]));
+    if (k3 && !k3_was_down_) player_.UseSkill(2, ResolveSkillTarget(player_, player_.skills[2]));
+
+    if (keyH && !h_was_down_) {
+        for (auto it = player_.inventory.begin(); it != player_.inventory.end(); ++it) {
+            Item* item = *it;
+            if (item->type == ItemType::Consumable && player_.health < player_.maxHealth) {
+                int healAmount = item->stats.health;
+                player_.health += healAmount;
+                if (player_.health > player_.maxHealth) player_.health = player_.maxHealth;
+                player_.inventory.erase(it);
+                delete item;
+                printf("Wypito miksture! Przywrocono %d HP.\n", healAmount);
+                break;
+            }
+        }
+    }
+    h_was_down_ = keyH;
+
+    // 5. ZAPAMIĘTANIE STANU KLAWISZY
+    left_was_down_ = left;
+    right_was_down_ = right;
+    up_was_down_ = up;
+    atk_was_down_ = atk;
+    k1_was_down_ = k1; k2_was_down_ = k2; k3_was_down_ = k3;
+
+    // 6. ZARZĄDZANIE TURAMI
+    if (!combat_lock_ && player_.ActionPoints <= 0) {
+        EnemiesTurn();
+        player_.ResetActionPoints(2);
+    }
+}
+
 
     void App::EnemiesTurn() {
         for (Enemy* enemy : enemies_) {
