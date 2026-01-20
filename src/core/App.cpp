@@ -966,7 +966,7 @@ namespace dungeon {
                 const auto cell = level_.cells[y * w + x];
 
                 // === PODŁOGA ===
-                if (cell == io::Cell::Floor) {
+                if (cell != io::Cell::Wall) {
                     if (use_floor_model) {
                         // Skalowanie i ustawianie modelu podłogi
                         float scale = 0.53f;     // Dostosuj skalę
@@ -1302,6 +1302,59 @@ namespace dungeon {
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
             glBindVertexArray(0);
         }
+
+        // =========================================================
+        // 4. ŁADOWANIE PORTALU
+        // =========================================================
+        attrib.vertices.clear(); attrib.texcoords.clear(); 
+        shapes.clear(); materials.clear(); err.clear();
+
+        // Upewnij się, że masz plik portal.obj!
+        std::string portalPath = baseDir + "portal.obj"; 
+        bool retPortal = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, portalPath.c_str(), baseDir.c_str());
+
+        if (retPortal) {
+            std::string texturePath = baseDir + "portal.jpeg"; // lub "portal.jpeg" - sprawdź rozszerzenie!
+            portal_texture_ = load_texture(texturePath.c_str());
+
+            // Dla pewności wypisz w konsoli czy się udało (jeśli texture == 0 to błąd)
+            if (portal_texture_ == 0) {
+                printf("BLAD: Nie udalo sie zaladowac tekstury portalu: %s\n", texturePath.c_str());
+            }
+            else {
+                printf("SUKCES: Zaladowano teksture portalu.\n");
+            }
+            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+                portal_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+            } 
+            
+            std::vector<float> vertices;
+            for (const auto& shape : shapes) {
+                for (const auto& index : shape.mesh.indices) {
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    if (index.texcoord_index >= 0) {
+                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+                    } else {
+                        vertices.push_back(0.0f); vertices.push_back(0.0f);
+                    }
+                }
+            }
+            portal_vertex_count_ = (int)(vertices.size() / 5);
+
+            glGenVertexArrays(1, &portal_vao_);
+            glGenBuffers(1, &portal_vbo_);
+            glBindVertexArray(portal_vao_);
+            glBindBuffer(GL_ARRAY_BUFFER, portal_vbo_);
+            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
+            glBindVertexArray(0);
+        }
+
     }
 
     void App::build_enemy_mesh() {
@@ -1544,44 +1597,88 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
-        // PORTALE / WYJŚCIA
+        // --- PORTALE / WYJŚCIA ---
         world_shader_.setInt("uUseTex", 0);
         glBindVertexArray(cube_vao_);
+
         for (int y = 0; y < level_.h; ++y) {
             for (int x = 0; x < level_.w; ++x) {
                 auto cell = level_.cells[y * level_.w + x];
+
                 if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
-                    if (cell == io::Cell::NextLevel) world_shader_.setVec4("uColor", 0.0f, 0.5f, 1.0f, 0.6f);
-                    else world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.6f);
+
+                    // 1. RYSOWANIE PROMIEŃIA (Tylko dla EXIT)
+                    if (cell == io::Cell::Exit) {
+                        world_shader_.setInt("uUseTex", 0); // Bez tekstury
+                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.4f); // Złoty, półprzezroczysty
+
+                        // Wyłączamy zapis głębi, żeby promień był "duchowy"
+                        glDepthMask(GL_FALSE);
+
+                        glm::mat4 M_beam(1.0f);
+                        // Słup na środku kafelka, wysoki
+                        M_beam = glm::translate(M_beam, glm::vec3(x + 0.5f, 2.0f, y + 0.5f));
+                        M_beam = glm::scale(M_beam, glm::vec3(0.1f, 4.0f, 0.1f));
+
+                        world_shader_.setMat4("uModel", &M_beam[0][0]);
+
+                        // Rysujemy kostkę jako słup (bo cube_vao_ jest zbindowane)
+                        glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+
+                        glDepthMask(GL_TRUE); // Przywracamy głębię
+                    }
+
+                    // 2. RYSOWANIE MODELU PORTALU (Na podłodze)
+
+                    // Ustaw kolor bazowy (dla fallbacku lub tintu)
+                    if (cell == io::Cell::NextLevel)
+                        world_shader_.setVec4("uColor", 0.5f, 0.8f, 1.0f, 1.0f); // Niebieski
+                    else
+                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.2f, 1.0f); // Złoty
 
                     glm::mat4 M(1.0f);
-                    M = glm::translate(M, glm::vec3(x + 0.5f, 0.5f, y + 0.5f));
-                    M = glm::scale(M, glm::vec3(0.8f, 1.0f, 0.8f));
-                    world_shader_.setMat4("uModel", &M[0][0]);
-                    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+                    // Lekko nad ziemią (0.05f), żeby leżał na kamieniach
+                    M = glm::translate(M, glm::vec3(x + 0.5f, 0.55f, y + 0.5f));
+
+                    if (portal_vertex_count_ > 0) {
+                        // --- MAMY MODEL 3D ---
+                        float scale = 0.4f; // Dopasuj skalę
+                        M = glm::scale(M, glm::vec3(scale));
+                        world_shader_.setMat4("uModel", &M[0][0]);
+
+                        world_shader_.setInt("uUseTex", 1);             // 1. Włącz tryb tekstur w shaderze
+                        glActiveTexture(GL_TEXTURE0);                   // 2. Wybierz slot 0
+                        glBindTexture(GL_TEXTURE_2D, portal_texture_);  // 3. Podepnij naszą teksturę
+                        world_shader_.setInt("uTex", 0);                // 4. Powiedz shaderowi, że tekstura jest w slocie 0
+
+                        world_shader_.setInt("uUseTex", 1); // Włączamy teksturę
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, portal_texture_);
+                        world_shader_.setInt("uTex", 0);
+
+                        glBindVertexArray(portal_vao_);
+                        glDrawArrays(GL_TRIANGLES, 0, portal_vertex_count_);
+
+                        // Przywracamy cube_vao_ dla kolejnych iteracji pętli (jeśli fallback potrzebny)
+                        glBindVertexArray(cube_vao_);
+                    }
+                    else {
+                        // --- FALLBACK (Płaska kostka) ---
+                        M = glm::scale(M, glm::vec3(0.8f, 0.05f, 0.8f));
+                        world_shader_.setMat4("uModel", &M[0][0]);
+
+                        world_shader_.setInt("uUseTex", 0);
+                        glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+                    }
                 }
             }
         }
+        glBindVertexArray(0);
 
         // === ETAP 2: RYSOWANIE FIZYCZNYCH POCHODNI 3D (ZAGADKA 1) ===
         // Tutaj rysujemy sam model pochodni (lub belkę, jeśli brak modelu)
 
         for (const auto& torch : puzzle_torches_) {
-
-            {
-                world_shader_.setInt("uUseTex", 0); // Wyłączamy tekstury
-                world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f); // RÓŻOWY (MAGENTA)
-
-                glm::mat4 M_debug(1.0f);
-                // Ustawiamy słup na środku kafelka
-                M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
-                // Rozciągamy go w górę (wysokość 4 metry, cienki)
-                M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
-
-                world_shader_.setMat4("uModel", &M_debug[0][0]);
-                glBindVertexArray(cube_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            }
 
             // Ustawiamy kolor: Jasny (ogień) lub Ciemny (zgaszona)
             if (torch.is_lit)
@@ -1732,8 +1829,9 @@ namespace dungeon {
             glm::mat4 M(1.0f);
 
             if (wItem.itemData->type == ItemType::Weapon) {
+                
                 glm::vec3 pos = wItem.position;
-                pos.y = 0.5f; // Wysokość miecza
+                pos.y = 1.0f; // Wysokość miecza
                 M = glm::translate(M, pos);
                 M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0));
                 M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));

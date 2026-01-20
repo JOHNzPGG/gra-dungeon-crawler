@@ -191,6 +191,14 @@ namespace dungeon {
         GLuint torch_texture_ = 0;
         int torch_vertex_count_ = 0;
 
+        //PORTAL
+
+        // PORTAL
+        GLuint portal_vao_ = 0;
+        GLuint portal_vbo_ = 0;
+        GLuint portal_texture_ = 0;
+        int portal_vertex_count_ = 0;
+
         GLuint wall_texture_ = 0;
         GLuint floor_texture_ = 0;
 
