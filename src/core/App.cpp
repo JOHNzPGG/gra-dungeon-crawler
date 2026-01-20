@@ -906,302 +906,221 @@ void App::build_cube_mesh() {
     glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 }
+/**
+ * @brief Buduje siatkę dla broni i przedmiotów w grze (miecz, mikstura, pochodnia)
+ *
+ * Funkcja ładuje modele 3D z plików .obj przy użyciu tinyobjloader,
+ * tworzy odpowiednie VAO/VBO oraz ładuje tekstury z plików lub fallback kolorów.
+ * Obsługuje:
+ *  - Miecz (sword2.obj)
+ *  - Mikstura (potion.obj)
+ *  - Pochodnia (torch.obj)
+ */
+void App::build_weapon_mesh() {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err;
+    std::string baseDir = "assets/models/";
 
-    void App::build_weapon_mesh() {
-        // Zmienne pomocnicze - deklarujemy je RAZ na całą funkcję
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
-        std::string err;
-        std::string baseDir = "assets/models/";
+    // =======================
+    // 1. Ładowanie miecza
+    // =======================
+    std::string swordPath = baseDir + "sword2.obj";
+    bool retSword = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, swordPath.c_str(), baseDir.c_str());
+    if (!err.empty()) printf("[SWORD LOAD INFO]: %s\n", err.c_str());
 
-        // =========================================================
-        // 1. ŁADOWANIE MIECZA (SWORD)
-        // =========================================================
-
-        // UWAGA: Tu wpisz nazwę swojego modelu Low Poly!
-        std::string swordPath = baseDir + "sword2.obj";
-
-        bool retSword = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, swordPath.c_str(), baseDir.c_str());
-
-        if (!err.empty()) printf("[SWORD LOAD INFO]: %s\n", err.c_str());
-
-        if (retSword) {
-            // --- LOGIKA TEKSTURY / KOLORU ---
-            weapon_texture_ = 0; // Reset
-
-            // Sprawdzamy czy model ma jakikolwiek materiał
-            if (!materials.empty()) {
-                // Opcja A: Materiał ma plik z teksturą (diffuse_texname)
-                if (!materials[0].diffuse_texname.empty()) {
-                    std::string texPath = baseDir + materials[0].diffuse_texname;
-                    weapon_texture_ = load_texture(texPath.c_str());
-                    printf("Zaladowano teksture miecza z pliku: %s\n", texPath.c_str());
-                }
-                // Opcja B: Materiał ma tylko kolor (diffuse RGB)
-                else {
-                    float r = materials[0].diffuse[0];
-                    float g = materials[0].diffuse[1];
-                    float b = materials[0].diffuse[2];
-                    weapon_texture_ = create_texture_from_color(r, g, b);
-                    printf("Stworzono teksture miecza z koloru MTL: [%.2f, %.2f, %.2f]\n", r, g, b);
-                }
+    if (retSword) {
+        weapon_texture_ = 0;
+        if (!materials.empty()) {
+            if (!materials[0].diffuse_texname.empty()) {
+                std::string texPath = baseDir + materials[0].diffuse_texname;
+                weapon_texture_ = load_texture(texPath.c_str());
+            } else {
+                float r = materials[0].diffuse[0];
+                float g = materials[0].diffuse[1];
+                float b = materials[0].diffuse[2];
+                weapon_texture_ = create_texture_from_color(r, g, b);
             }
-
-            // Opcja C: Brak materiałów - dajemy domyślny szary
-            if (weapon_texture_ == 0) {
-                weapon_texture_ = create_texture_from_color(0.6f, 0.6f, 0.7f); // Szaro-niebieski
-                printf("Brak materialu, uzyto domyslnego koloru.\n");
-            }
-
-            // --- TWORZENIE GEOMETRII (Bez zmian) ---
-            std::vector<float> vertices;
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        // Ważne: Low Poly z kolorami często nie ma UV, albo ma dziwne.
-                        // Jeśli model jest cały czarny, spróbuj usunąć "1.0f - "
-                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        // Jeśli brak UV w pliku, dajemy 0,0 (dla tekstury 1x1 to bez znaczenia)
-                        vertices.push_back(0.0f); vertices.push_back(0.0f);
-                    }
-                }
-            }
-            weapon_vertex_count_ = (int)(vertices.size() / 5);
-
-            if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
-            if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
-
-            glGenVertexArrays(1, &weapon_vao_);
-            glGenBuffers(1, &weapon_vbo_);
-            glBindVertexArray(weapon_vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
-            glBindVertexArray(0);
         }
+        if (weapon_texture_ == 0) weapon_texture_ = create_texture_from_color(0.6f, 0.6f, 0.7f);
 
-        // =========================================================
-        // 2. ŁADOWANIE MIKSTURY (POTION)
-        // =========================================================
-
-        // WAŻNE: Czyścimy zmienne zamiast je deklarować od nowa (to naprawia błędy C2086)
-        attrib.vertices.clear(); attrib.texcoords.clear();
-        shapes.clear(); materials.clear(); err.clear();
-
-        std::string potionPath = baseDir + "potion.obj"; // Upewnij się, że masz ten plik!
-        bool retPotion = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, potionPath.c_str(), baseDir.c_str());
-
-        if (!err.empty()) printf("[POTION LOAD INFO]: %s\n", err.c_str());
-
-        if (retPotion) {
-            // Tekstura Mikstury (z pliku .mtl lub fallback)
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                potion_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
+        std::vector<float> vertices;
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                vertices.push_back(attrib.vertices[3*index.vertex_index+0]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+1]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+2]);
+                if (index.texcoord_index >= 0) {
+                    vertices.push_back(attrib.texcoords[2*index.texcoord_index+0]);
+                    vertices.push_back(1.0f - attrib.texcoords[2*index.texcoord_index+1]);
+                } else { vertices.push_back(0.0f); vertices.push_back(0.0f); }
             }
-            else {
-                // potion_texture_ = load_texture("assets/models/potion_red.png"); // Opcjonalnie
-            }
-
-            std::vector<float> vertices;
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        vertices.push_back(0.0f); vertices.push_back(0.0f);
-                    }
-                }
-            }
-            potion_vertex_count_ = (int)(vertices.size() / 5);
-
-            glGenVertexArrays(1, &potion_vao_);
-            glGenBuffers(1, &potion_vbo_);
-            glBindVertexArray(potion_vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, potion_vbo_);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
-            glBindVertexArray(0);
         }
+        weapon_vertex_count_ = (int)(vertices.size()/5);
 
-        // =========================================================
-        // 3. ŁADOWANIE POCHODNI (TORCH)
-        // =========================================================
-
-        // Czyścimy zmienne loadera (zapobiega błędom redefinicji)
-        attrib.vertices.clear(); attrib.texcoords.clear();
-        shapes.clear(); materials.clear(); err.clear();
-
-        // Upewnij się, że masz plik assets/models/torch.obj !
-        std::string torchPath = baseDir + "torch.obj";
-        bool retTorch = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, torchPath.c_str(), baseDir.c_str());
-
-        if (retTorch) {
-            // Tekstura
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                torch_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
-            }
-
-            // Geometria
-            std::vector<float> vertices;
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        vertices.push_back(0.0f); vertices.push_back(0.0f);
-                    }
-                }
-            }
-            torch_vertex_count_ = (int)(vertices.size() / 5);
-
-            if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
-            if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
-
-            glGenVertexArrays(1, &torch_vao_);
-            glGenBuffers(1, &torch_vbo_);
-            glBindVertexArray(torch_vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, torch_vbo_);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
-            glBindVertexArray(0);
-        }
-    }
-
-    void App::build_enemy_mesh() {
-        // Zmienne pomocnicze (użyjemy ich dwukrotnie)
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
-        std::string err;
-        std::string baseDir = "assets/models/";
-
-        // ==========================================
-        // 1. ŁADOWANIE ZOMBIE
-        // ==========================================
-        std::string zombiePath = baseDir + "zombie.obj";
-        bool retZ = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, zombiePath.c_str(), baseDir.c_str());
-
-        if (retZ) {
-            // Tekstura Zombie
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                zombie_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
-            }
-            else {
-                zombie_texture_ = load_texture("assets/models/zombie.png"); // Fallback
-            }
-
-            // Dane wierzchołków
-            std::vector<float> vertices;
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        vertices.push_back(0.0f); vertices.push_back(0.0f);
-                    }
-                }
-            }
-            zombie_vertex_count_ = (int)(vertices.size() / 5);
-
-            // Bufory Zombie
-            glGenVertexArrays(1, &zombie_vao_);
-            glGenBuffers(1, &zombie_vbo_);
-            glBindVertexArray(zombie_vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, zombie_vbo_);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
-        }
-
-        // ==========================================
-        // 2. ŁADOWANIE SZKIELETA (Resetujemy zmienne tinyobj)
-        // ==========================================
-        attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
-
-        std::string skeletonPath = baseDir + "skeleton.obj"; // UPEWNIJ SIĘ ŻE MASZ TEN PLIK!
-        bool retS = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, skeletonPath.c_str(), baseDir.c_str());
-
-        if (retS) {
-            // Tekstura Szkieleta
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                skeleton_texture_ = load_texture((baseDir + materials[0].diffuse_texname).c_str());
-            }
-            else {
-                skeleton_texture_ = load_texture("assets/models/skeleton.png"); // Fallback
-            }
-
-            // Dane wierzchołków
-            std::vector<float> vertices;
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        vertices.push_back(1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        vertices.push_back(0.0f); vertices.push_back(0.0f);
-                    }
-                }
-            }
-            skeleton_vertex_count_ = (int)(vertices.size() / 5);
-
-            // Bufory Szkieleta
-            glGenVertexArrays(1, &skeleton_vao_);
-            glGenBuffers(1, &skeleton_vbo_);
-            glBindVertexArray(skeleton_vao_);
-            glBindBuffer(GL_ARRAY_BUFFER, skeleton_vbo_);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); glEnableVertexAttribArray(1);
-        }
-
+        if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_);
+        if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
+        glGenVertexArrays(1, &weapon_vao_);
+        glGenBuffers(1, &weapon_vbo_);
+        glBindVertexArray(weapon_vao_);
+        glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), vertices.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0); glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
         glBindVertexArray(0);
     }
 
-    void App::frame_begin() {
-        glfwPollEvents();
-        handle_input();
+    // =======================
+    // 2. Ładowanie mikstury
+    // =======================
+    attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
+    std::string potionPath = baseDir + "potion.obj";
+    bool retPotion = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, potionPath.c_str(), baseDir.c_str());
+    if (!err.empty()) printf("[POTION LOAD INFO]: %s\n", err.c_str());
 
-        glClearColor(0.05f, 0.06f, 0.08f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if (retPotion) {
+        if (!materials.empty() && !materials[0].diffuse_texname.empty())
+            potion_texture_ = load_texture((baseDir+materials[0].diffuse_texname).c_str());
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        std::vector<float> vertices;
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                vertices.push_back(attrib.vertices[3*index.vertex_index+0]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+1]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+2]);
+                if (index.texcoord_index >= 0) {
+                    vertices.push_back(attrib.texcoords[2*index.texcoord_index+0]);
+                    vertices.push_back(1.0f - attrib.texcoords[2*index.texcoord_index+1]);
+                } else { vertices.push_back(0.0f); vertices.push_back(0.0f); }
+            }
+        }
+        potion_vertex_count_ = (int)(vertices.size()/5);
+        glGenVertexArrays(1,&potion_vao_); glGenBuffers(1,&potion_vbo_);
+        glBindVertexArray(potion_vao_); glBindBuffer(GL_ARRAY_BUFFER,potion_vbo_);
+        glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(float),vertices.data(),GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0); glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
     }
+
+    // =======================
+    // 3. Ładowanie pochodni
+    // =======================
+    attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
+    std::string torchPath = baseDir + "torch.obj";
+    bool retTorch = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, torchPath.c_str(), baseDir.c_str());
+    if (retTorch) {
+        if (!materials.empty() && !materials[0].diffuse_texname.empty())
+            torch_texture_ = load_texture((baseDir+materials[0].diffuse_texname).c_str());
+
+        std::vector<float> vertices;
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                vertices.push_back(attrib.vertices[3*index.vertex_index+0]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+1]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+2]);
+                if (index.texcoord_index >= 0) {
+                    vertices.push_back(attrib.texcoords[2*index.texcoord_index+0]);
+                    vertices.push_back(1.0f - attrib.texcoords[2*index.texcoord_index+1]);
+                } else { vertices.push_back(0.0f); vertices.push_back(0.0f); }
+            }
+        }
+        torch_vertex_count_ = (int)(vertices.size()/5);
+        if (torch_vao_) glDeleteVertexArrays(1,&torch_vao_);
+        if (torch_vbo_) glDeleteBuffers(1,&torch_vbo_);
+        glGenVertexArrays(1,&torch_vao_); glGenBuffers(1,&torch_vbo_);
+        glBindVertexArray(torch_vao_); glBindBuffer(GL_ARRAY_BUFFER,torch_vbo_);
+        glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(float),vertices.data(),GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0); glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
+        glBindVertexArray(0);
+    }
+}
+
+/**
+ * @brief Buduje siatki dla wrogów (Zombie i Szkielet)
+ */
+void App::build_enemy_mesh() {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err;
+    std::string baseDir = "assets/models/";
+
+    // Ładowanie Zombie
+    std::string zombiePath = baseDir+"zombie.obj";
+    bool retZ = tinyobj::LoadObj(&attrib,&shapes,&materials,&err,zombiePath.c_str(),baseDir.c_str());
+    if (retZ) {
+        if(!materials.empty() && !materials[0].diffuse_texname.empty())
+            zombie_texture_ = load_texture((baseDir+materials[0].diffuse_texname).c_str());
+        else zombie_texture_ = load_texture("assets/models/zombie.png");
+
+        std::vector<float> vertices;
+        for(const auto& shape:shapes)
+            for(const auto& index:shape.mesh.indices){
+                vertices.push_back(attrib.vertices[3*index.vertex_index+0]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+1]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+2]);
+                if(index.texcoord_index>=0){
+                    vertices.push_back(attrib.texcoords[2*index.texcoord_index+0]);
+                    vertices.push_back(1.0f-attrib.texcoords[2*index.texcoord_index+1]);
+                }else{vertices.push_back(0.0f);vertices.push_back(0.0f);}
+            }
+        zombie_vertex_count_=(int)(vertices.size()/5);
+        glGenVertexArrays(1,&zombie_vao_); glGenBuffers(1,&zombie_vbo_);
+        glBindVertexArray(zombie_vao_); glBindBuffer(GL_ARRAY_BUFFER,zombie_vbo_);
+        glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(float),vertices.data(),GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0);glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float)));glEnableVertexAttribArray(1);
+    }
+
+    // Ładowanie Szkieletu
+    attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
+    std::string skeletonPath = baseDir+"skeleton.obj";
+    bool retS = tinyobj::LoadObj(&attrib,&shapes,&materials,&err,skeletonPath.c_str(),baseDir.c_str());
+    if(retS){
+        if(!materials.empty() && !materials[0].diffuse_texname.empty())
+            skeleton_texture_ = load_texture((baseDir+materials[0].diffuse_texname).c_str());
+        else skeleton_texture_ = load_texture("assets/models/skeleton.png");
+
+        std::vector<float> vertices;
+        for(const auto& shape:shapes)
+            for(const auto& index:shape.mesh.indices){
+                vertices.push_back(attrib.vertices[3*index.vertex_index+0]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+1]);
+                vertices.push_back(attrib.vertices[3*index.vertex_index+2]);
+                if(index.texcoord_index>=0){
+                    vertices.push_back(attrib.texcoords[2*index.texcoord_index+0]);
+                    vertices.push_back(1.0f-attrib.texcoords[2*index.texcoord_index+1]);
+                }else{vertices.push_back(0.0f);vertices.push_back(0.0f);}
+            }
+        skeleton_vertex_count_=(int)(vertices.size()/5);
+        glGenVertexArrays(1,&skeleton_vao_); glGenBuffers(1,&skeleton_vbo_);
+        glBindVertexArray(skeleton_vao_); glBindBuffer(GL_ARRAY_BUFFER,skeleton_vbo_);
+        glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(float),vertices.data(),GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0);glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float)));glEnableVertexAttribArray(1);
+    }
+    glBindVertexArray(0);
+}
+
+/**
+ * @brief Rozpoczyna nową klatkę renderowania
+ *
+ * Wywołuje GLFW PollEvents, obsługę wejścia, czyści bufor,
+ * a następnie przygotowuje nową ramkę ImGui.
+ */
+void App::frame_begin() {
+    glfwPollEvents();
+    handle_input();
+    glClearColor(0.05f,0.06f,0.08f,1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
 
     // ZMIANA: Zachowana logika z kodu głównego (kamera/HUD), ale z dodaną obsługą uUseTex dla nowego shadera
     void App::frame_render() {
