@@ -5,6 +5,11 @@
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/*.cpp")
 set(OLD_GLOB
   "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App.cpp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App_Init.cpp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App_Input.cpp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App_Logic.cpp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App_Render.cpp"
+  "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/core/App_UI.cpp"
   "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/game/clases/Enemy.cpp"
   "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/game/clases/Entity.cpp"
   "D:/Pliki/gra dungeon projekt/gra-dungeon-crawler/src/game/clases/Item.cpp"

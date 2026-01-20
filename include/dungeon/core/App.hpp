@@ -134,12 +134,7 @@ namespace dungeon {
 
         void load_next_level();
         void render_victory_screen();
-        PuzzleTorch* get_puzzle_torch(int x, int y) {
-            for (auto& t : puzzle_torches_) {
-                if (t.x == x && t.y == y) return &t;
-            }
-            return nullptr;
-        }
+        PuzzleTorch* get_puzzle_torch(int x, int y);
 
     private:
         AppConfig   cfg_;
