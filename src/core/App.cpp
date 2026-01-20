@@ -597,83 +597,93 @@ void App::handle_input() {
     }
 }
 
+/**
+ * @brief Przetwarza turę wszystkich wrogów
+ *
+ * Każdy przeciwnik otrzymuje punkty akcji, wykonuje swoją logikę AI
+ * i odpala animację ruchu, jeśli zmienił pozycję.
+ */
+void App::EnemiesTurn() {
+    for (Enemy* enemy : enemies_) {
+        if (!enemy->IsAlive()) continue;
 
-    void App::EnemiesTurn() {
-        for (Enemy* enemy : enemies_) {
-            if (!enemy->IsAlive()) continue;
+        enemy->ResetActionPoints(1);
 
-            enemy->ResetActionPoints(1);
+        // 1. Zapamiętaj gdzie wróg stał PRZED ruchem
+        int oldX = enemy->GameX;
+        int oldY = enemy->GameY;
 
-            // 1. Zapamiętaj gdzie wróg stał PRZED ruchem
-            int oldX = enemy->GameX;
-            int oldY = enemy->GameY;
+        // 2. Wykonaj logikę (AI zmienia GameX/GameY)
+        enemy->TakeTurn(&player_, level_);
 
-            // 2. Wykonaj logikę (AI zmienia GameX/GameY)
-            enemy->TakeTurn(&player_, level_);
-
-            // 3. Sprawdź czy się ruszył
-            if (enemy->GameX != oldX || enemy->GameY != oldY) {
-                // Jeśli tak, odpal animację
-                enemy->StartMoveAnimation(oldX, oldY, enemy->GameX, enemy->GameY);
-            }
+        // 3. Sprawdź czy się ruszył
+        if (enemy->GameX != oldX || enemy->GameY != oldY) {
+            // Jeśli tak, odpal animację
+            enemy->StartMoveAnimation(oldX, oldY, enemy->GameX, enemy->GameY);
         }
     }
-    void App::toggle_puzzle_torch(int x, int y) {
-        // Sprawdzamy, czy gracz kliknął w ścianę na samej górze (Y=0)
-        // w zakresie naszych 6 pochodni (X: 4-9)
-        if (y != 0 || x < 4 || x > 9) return;
+}
 
-        // Przełączamy Środek, Lewo (-1) i Prawo (+1)
-        int dx[] = {0, -1, 1};
+/**
+ * @brief Przełącza pochodnię w zagadce
+ *
+ * Jeśli gracz kliknie pochodnię, przełącza ją i jej sąsiadów
+ * Sprawdza, czy wszystkie pochodnie są zapalone i otwiera przejście.
+ *
+ * @param x Współrzędna X pochodni
+ * @param y Współrzędna Y pochodni
+ */
+void App::toggle_puzzle_torch(int x, int y) {
+    if (y != 0 || x < 4 || x > 9) return;
 
-        for (int i = 0; i < 3; ++i) {
-            int targetX = x + dx[i];
+    int dx[] = {0, -1, 1};
 
-            // Granice rzędu pochodni: 4 i 9
-            if (targetX >= 4 && targetX <= 9) {
-                for (auto& t : puzzle_torches_) {
-                    if (t.x == targetX && t.y == 0) {
-                        t.is_lit = !t.is_lit;
-                        // Opcjonalnie: ma_engine_play_oneshot(&audio_engine_, "assets/sfx/fire.wav", NULL);
-                    }
+    for (int i = 0; i < 3; ++i) {
+        int targetX = x + dx[i];
+        if (targetX >= 4 && targetX <= 9) {
+            for (auto& t : puzzle_torches_) {
+                if (t.x == targetX && t.y == 0) {
+                    t.is_lit = !t.is_lit;
+                    // ma_engine_play_oneshot(&audio_engine_, "assets/sfx/fire.wav", NULL);
                 }
             }
         }
-
-        // Sprawdzanie warunku zwycięstwa
-        int lit_count = 0;
-        for (const auto& t : puzzle_torches_) {
-            if (t.y == 0 && t.is_lit) lit_count++;
-        }
-
-        if (lit_count == 6) {
-            printf("Pochodnie zapalone! Otwieram tajne przejście.\n");
-            // Usuwamy ścianę blokującą dostęp do przedmiotu I
-            // Na Twojej mapie przedmiot I jest w okolicach (8, 4)
-            // Usuwamy ścianę na (5, 4), która odcina prawą sekcję
-            level_.cells[4 * level_.w + 5] = io::Cell::Floor;
-            build_world_mesh();
-            trauma_ = 0.5f; // Trzęsienie ziemi
-        }
     }
-  void App::update_puzzles() {
-    // 1. Sprawdź czy gracz zmienił kafel
+
+    int lit_count = 0;
+    for (const auto& t : puzzle_torches_) {
+        if (t.y == 0 && t.is_lit) lit_count++;
+    }
+
+    if (lit_count == 6) {
+        printf("Pochodnie zapalone! Otwieram tajne przejście.\n");
+        level_.cells[4 * level_.w + 5] = io::Cell::Floor;
+        build_world_mesh();
+        trauma_ = 0.5f;
+    }
+}
+
+/**
+ * @brief Aktualizuje zagadki typu "płytki naciskowe"
+ *
+ * Funkcja sprawdza, czy gracz przeszedł po właściwej płytce w odpowiedniej kolejności.
+ * Otwiera przejście po zakończeniu sekwencji.
+ */
+void App::update_puzzles() {
     if (player_.GameX == last_puzzle_x_ && player_.GameY == last_puzzle_y_) return;
 
     last_puzzle_x_ = player_.GameX;
     last_puzzle_y_ = player_.GameY;
 
-    // 2. Definicja kroków (X, Y, Ile razy)
     struct Step { int x, y, goal; const char* desc; };
     const Step sequence[] = {
-        {6, 3, 3, "SRODEK"},    // T1
-        {5, 4, 2, "ZACHOD"},    // T2 (lewo)
-        {7, 4, 3, "WSCHOD"},    // T3 (prawo)
-        {6, 5, 1, "POLNOC"}     // T4 (dol - zgodnie z Twoim opisem)
+        {6, 3, 3, "SRODEK"},
+        {5, 4, 2, "ZACHOD"},
+        {7, 4, 3, "WSCHOD"},
+        {6, 5, 1, "POLNOC"}
     };
     const int num_stages = 4;
 
-    // 3. Znajdź płytkę pod graczem
     PressurePlate* stepped = nullptr;
     for (auto& p : pressure_plates_) {
         if (p.x == last_puzzle_x_ && p.y == last_puzzle_y_) {
@@ -683,310 +693,219 @@ void App::handle_input() {
     }
     if (!stepped) return;
 
-    // 4. Logika ścisłej sekwencji
     const Step& target = sequence[current_stage_idx_];
 
     if (stepped->x == target.x && stepped->y == target.y) {
-        // Gracz na poprawnej płytce
         stepped->count++;
         printf("Kierunek %s: %d/%d\n", target.desc, stepped->count, target.goal);
 
         if (stepped->count == target.goal) {
             current_stage_idx_++;
             printf("ETAP ZAKONCZONY. Kolejny cel...\n");
-            // Resetujemy liczniki płytek dla czystości kolejnego etapu
             for(auto& rp : pressure_plates_) rp.count = 0;
         }
     } else {
-        // Gracz wszedł na złą płytkę w złej kolejności -> TOTALNY RESET
         printf("BLAD SEKWENCJI! Powrot do startu.\n");
         current_stage_idx_ = 0;
         for (auto& rp : pressure_plates_) rp.count = 0;
     }
 
-    // 5. Wygrana: Otwarcie przejścia do przedmiotu I (1, 3)
     if (current_stage_idx_ == num_stages && !puzzles_solved_) {
         puzzles_solved_ = true;
-
-        // Hardkodujemy usunięcie ściany blokującej I na pozycji (2, 3)
         level_.cells[3 * level_.w + 2] = io::Cell::Floor;
-
-        build_world_mesh(); // Przebuduj grafikę 3D, żeby ściana zniknęła
-        trauma_ = 0.6f;     // Efekt trzęsienia ziemi przy otwarciu przejścia
+        build_world_mesh();
+        trauma_ = 0.6f;
         printf("MECHANIZM ODBLOKOWANY!\n");
     }
 }
-    // ZMIANA: Cała funkcja build_world_mesh podmieniona na wersję z drugiego kodu (ładowanie modeli)
-    void App::build_world_mesh() {
-        std::vector<float> floor_vertices;
-        std::vector<float> wall_vertices;
 
-        // Kontenery TinyObjLoader (będziemy ich używać dwukrotnie)
-        tinyobj::attrib_t attrib;
-        std::vector<tinyobj::shape_t> shapes;
-        std::vector<tinyobj::material_t> materials;
-        std::string err;
-        std::string base_dir = "assets/models/";
+/**
+ * @brief Tworzy siatkę świata 3D
+ *
+ * Ładuje modele ścian i podłogi z plików .obj, generuje quady,
+ * skaluje je do pozycji w poziomie i przesyła do GPU.
+ */
+void App::build_world_mesh() {
+    std::vector<float> floor_vertices;
+    std::vector<float> wall_vertices;
 
-        // ---------------------------------------------------------
-        // KROK 1: ŁADOWANIE MODELU ŚCIANY
-        // ---------------------------------------------------------
-        std::string wall_obj_path = base_dir + "Untitled.obj"; // Plik ściany
-        std::vector<float> wall_model_data; // Tu trzymamy wzorzec ściany
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err;
+    std::string base_dir = "assets/models/";
 
-        bool retWall = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, wall_obj_path.c_str(), base_dir.c_str());
+    // WALL
+    std::string wall_obj_path = base_dir + "Untitled.obj";
+    std::vector<float> wall_model_data;
 
-        if (!err.empty()) fprintf(stderr, "[WALL INFO]: %s\n", err.c_str());
+    bool retWall = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, wall_obj_path.c_str(), base_dir.c_str());
+    if (!err.empty()) fprintf(stderr, "[WALL INFO]: %s\n", err.c_str());
 
-        if (retWall) {
-            // A. Tekstura z MTL dla ściany
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                std::string tex_path = base_dir + materials[0].diffuse_texname;
-                if (wall_texture_) glDeleteTextures(1, &wall_texture_);
-                wall_texture_ = load_texture(tex_path.c_str());
-            }
+    if (retWall) {
+        if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+            std::string tex_path = base_dir + materials[0].diffuse_texname;
+            if (wall_texture_) glDeleteTextures(1, &wall_texture_);
+            wall_texture_ = load_texture(tex_path.c_str());
+        }
 
-            // B. Spłaszczanie danych ściany
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
 
-                    if (index.texcoord_index >= 0) {
-                        wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        wall_model_data.push_back(0.0f); wall_model_data.push_back(0.0f);
-                    }
+                if (index.texcoord_index >= 0) {
+                    wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                    wall_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                } else {
+                    wall_model_data.push_back(0.0f); wall_model_data.push_back(0.0f);
                 }
             }
         }
-
-        // ---------------------------------------------------------
-        // KROK 2: ŁADOWANIE MODELU PODŁOGI (NOWOŚĆ)
-        // ---------------------------------------------------------
-
-        // Czyścimy kontenery przed drugim ładowaniem
-        attrib.vertices.clear();
-        attrib.texcoords.clear();
-        shapes.clear();
-        materials.clear();
-        err.clear();
-
-        std::string floor_obj_path = base_dir + "kamien1.obj"; // TUTAJ WPISZ NAZWĘ PLIKU PODŁOGI
-        std::vector<float> floor_model_data; // Tu trzymamy wzorzec podłogi
-
-        bool retFloor = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, floor_obj_path.c_str(), base_dir.c_str());
-
-        if (!err.empty()) fprintf(stderr, "[FLOOR INFO]: %s\n", err.c_str());
-
-        if (retFloor) {
-            // A. Tekstura z MTL dla podłogi (opcjonalnie)
-            if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
-                std::string tex_path = base_dir + materials[0].diffuse_texname;
-                if (floor_texture_) glDeleteTextures(1, &floor_texture_);
-                floor_texture_ = load_texture(tex_path.c_str());
-            }
-
-            // B. Spłaszczanie danych podłogi
-            for (const auto& shape : shapes) {
-                for (const auto& index : shape.mesh.indices) {
-                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
-                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
-                    floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
-
-                    if (index.texcoord_index >= 0) {
-                        floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                        floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
-                    }
-                    else {
-                        floor_model_data.push_back(0.0f); floor_model_data.push_back(0.0f);
-                    }
-                }
-            }
-        }
-
-        bool use_wall_model = !wall_model_data.empty();
-        bool use_floor_model = !floor_model_data.empty();
-
-        // ---------------------------------------------------------
-        // KROK 3: GENEROWANIE SIATKI ŚWIATA
-        // ---------------------------------------------------------
-
-        const int w = level_.w;
-        const int h = level_.h;
-
-        // Helper do generowania płaskiego quada (fallback, jeśli nie ma modelu)
-        auto add_quad = [](std::vector<float>& buf, glm::vec3 a, glm::vec2 ua, glm::vec3 b, glm::vec2 ub, glm::vec3 c, glm::vec2 uc, glm::vec3 d, glm::vec2 ud) {
-            auto push = [&buf](glm::vec3 v, glm::vec2 uv) {
-                buf.push_back(v.x); buf.push_back(v.y); buf.push_back(v.z);
-                buf.push_back(uv.x); buf.push_back(uv.y);
-                };
-            push(a, ua); push(b, ub); push(c, uc);
-            push(a, ua); push(c, uc); push(d, ud);
-            };
-
-        for (int y = 0; y < h; ++y) {
-            for (int x = 0; x < w; ++x) {
-                const auto cell = level_.cells[y * w + x];
-
-                // === PODŁOGA ===
-                if (cell == io::Cell::Floor) {
-                    if (use_floor_model) {
-                        // Skalowanie i ustawianie modelu podłogi
-                        float scale = 0.53f;     // Dostosuj skalę
-                        float offset_x = 0.5f;  // Centrowanie w kratce
-                        float offset_y = 0.0f;  // Podłoga jest na poziomie 0
-                        float offset_z = 0.5f;  // Centrowanie w kratce
-
-                        for (size_t i = 0; i < floor_model_data.size(); i += 5) {
-                            float vx = floor_model_data[i + 0];
-                            float vy = floor_model_data[i + 1];
-                            float vz = floor_model_data[i + 2];
-                            float tu = floor_model_data[i + 3];
-                            float tv = floor_model_data[i + 4];
-
-                            vx = vx * scale + offset_x + x;
-                            vy = vy * scale + offset_y;     // Podłoga na 0
-                            vz = vz * scale + offset_z + y;
-
-                            floor_vertices.push_back(vx);
-                            floor_vertices.push_back(vy);
-                            floor_vertices.push_back(vz);
-                            floor_vertices.push_back(tu);
-                            floor_vertices.push_back(tv);
-                        }
-                    }
-                    else {
-                        // Fallback (stary sposób generowania quada)
-                        add_quad(floor_vertices,
-                            { x, 0.0f, y }, { 0.0f, 0.0f },
-                            { x + 1, 0.0f, y }, { 1.0f, 0.0f },
-                            { x + 1, 0.0f, y + 1 }, { 1.0f, 1.0f },
-                            { x, 0.0f, y + 1 }, { 0.0f, 1.0f });
-                    }
-                    add_quad(floor_vertices,
-                        { x + 1, 1.5f, y }, { 1.0f, 0.0f }, // Prawy-Góra
-                        { x,     1.5f, y }, { 0.0f, 0.0f }, // Lewy-Góra
-                        { x,     1.5f, y + 1 }, { 0.0f, 1.0f }, // Lewy-Dół
-                        { x + 1, 1.5f, y + 1 }, { 1.0f, 1.0f }  // Prawy-Dół
-                    );
-                }
-
-                // === ŚCIANY ===
-                if (cell == io::Cell::Wall) {
-                    if (use_wall_model) {
-                        float scale = 0.50f;
-                        float yscale = 1.0f;
-                        float offset_x = 0.5f;
-                        float offset_y = 0.5f;
-                        float offset_z = 0.5f;
-
-                        for (size_t i = 0; i < wall_model_data.size(); i += 5) {
-                            float vx = wall_model_data[i + 0];
-                            float vy = wall_model_data[i + 1];
-                            float vz = wall_model_data[i + 2];
-                            float tu = wall_model_data[i + 3];
-                            float tv = wall_model_data[i + 4];
-
-                            vx = vx * scale + offset_x + x;
-                            vy = vy * yscale + offset_y;
-                            vz = vz * scale + offset_z + y;
-
-                            wall_vertices.push_back(vx);
-                            wall_vertices.push_back(vy);
-                            wall_vertices.push_back(vz);
-                            wall_vertices.push_back(tu);
-                            wall_vertices.push_back(tv);
-                        }
-                    }
-                    else {
-                        // Fallback (sześcian)
-                        float h0 = 0.0f, h1 = 1.0f;
-                        add_quad(wall_vertices, { x, h0, y + 1 }, { 0.0f, 0.0f }, { x + 1, h0, y + 1 }, { 1.0f, 0.0f }, { x + 1, h1, y + 1 }, { 1.0f, 1.0f }, { x, h1, y + 1 }, { 0.0f, 1.0f });
-                        add_quad(wall_vertices, { x + 1, h0, y }, { 0.0f, 0.0f }, { x, h0, y }, { 1.0f, 0.0f }, { x, h1, y }, { 1.0f, 1.0f }, { x + 1, h1, y }, { 0.0f, 1.0f });
-                        add_quad(wall_vertices, { x, h0, y }, { 0.0f, 0.0f }, { x, h0, y + 1 }, { 1.0f, 0.0f }, { x, h1, y + 1 }, { 1.0f, 1.0f }, { x, h1, y }, { 0.0f, 1.0f });
-                        add_quad(wall_vertices, { x + 1, h0, y + 1 }, { 0.0f, 0.0f }, { x + 1, h0, y }, { 1.0f, 0.0f }, { x + 1, h1, y }, { 1.0f, 1.0f }, { x + 1, h1, y + 1 }, { 0.0f, 1.0f });
-                    }
-                }
-            }
-        }
-
-        // ---------------------------------------------------------
-        // KROK 4: PRZESŁANIE DANYCH DO GPU (VAO / VBO)
-        // ---------------------------------------------------------
-
-        floor_vertex_count_ = static_cast<int>(floor_vertices.size() / 5);
-        wall_vertex_count_ = static_cast<int>(wall_vertices.size() / 5);
-
-        auto setup_vao = [](GLuint& vao, GLuint& vbo, const std::vector<float>& data) {
-            if (data.empty()) return;
-            glGenVertexArrays(1, &vao);
-            glGenBuffers(1, &vbo);
-            glBindVertexArray(vao);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(1);
-            };
-
-        // Usuwamy stare bufory, jeśli istniały (ważne przy przeładowaniu poziomu)
-        if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
-        if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
-        if (wall_vao_) glDeleteVertexArrays(1, &wall_vao_);
-        if (wall_vbo_) glDeleteBuffers(1, &wall_vbo_);
-        floor_vao_ = 0; floor_vbo_ = 0; wall_vao_ = 0; wall_vbo_ = 0;
-
-        setup_vao(floor_vao_, floor_vbo_, floor_vertices);
-        setup_vao(wall_vao_, wall_vbo_, wall_vertices);
     }
 
-    void App::build_cube_mesh() {
-        // Kostka jednostkowa w centrum (od -0.5 do +0.5)
-        // Vertex: pos(3) + uv(2) => 5 floatów, żeby pasowało do shadera
-        const float v[] = {
-            // front
-            -0.5f,-0.5f, 0.5f, 0,0,   0.5f,-0.5f, 0.5f, 1,0,   0.5f, 0.5f, 0.5f, 1,1,
-            -0.5f,-0.5f, 0.5f, 0,0,   0.5f, 0.5f, 0.5f, 1,1,  -0.5f, 0.5f, 0.5f, 0,1,
-            // back
-             0.5f,-0.5f,-0.5f, 0,0,  -0.5f,-0.5f,-0.5f, 1,0,  -0.5f, 0.5f,-0.5f, 1,1,
-             0.5f,-0.5f,-0.5f, 0,0,  -0.5f, 0.5f,-0.5f, 1,1,   0.5f, 0.5f,-0.5f, 0,1,
-             // left
-             -0.5f,-0.5f,-0.5f, 0,0,  -0.5f,-0.5f, 0.5f, 1,0,  -0.5f, 0.5f, 0.5f, 1,1,
-             -0.5f,-0.5f,-0.5f, 0,0,  -0.5f, 0.5f, 0.5f, 1,1,  -0.5f, 0.5f,-0.5f, 0,1,
-             // right
-              0.5f,-0.5f, 0.5f, 0,0,   0.5f,-0.5f,-0.5f, 1,0,   0.5f, 0.5f,-0.5f, 1,1,
-              0.5f,-0.5f, 0.5f, 0,0,   0.5f, 0.5f,-0.5f, 1,1,   0.5f, 0.5f, 0.5f, 0,1,
-              // top
-              -0.5f, 0.5f, 0.5f, 0,0,   0.5f, 0.5f, 0.5f, 1,0,   0.5f, 0.5f,-0.5f, 1,1,
-              -0.5f, 0.5f, 0.5f, 0,0,   0.5f, 0.5f,-0.5f, 1,1,  -0.5f, 0.5f,-0.5f, 0,1,
-              // bottom
-              -0.5f,-0.5f,-0.5f, 0,0,   0.5f,-0.5f,-0.5f, 1,0,   0.5f,-0.5f, 0.5f, 1,1,
-              -0.5f,-0.5f,-0.5f, 0,0,   0.5f,-0.5f, 0.5f, 1,1,  -0.5f,-0.5f, 0.5f, 0,1,
-        };
+    // FLOOR
+    attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
+    std::string floor_obj_path = base_dir + "kamien1.obj";
+    std::vector<float> floor_model_data;
 
-        cube_vertex_count_ = (int)(sizeof(v) / sizeof(float) / 5);
+    bool retFloor = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, floor_obj_path.c_str(), base_dir.c_str());
+    if (!err.empty()) fprintf(stderr, "[FLOOR INFO]: %s\n", err.c_str());
 
-        glGenVertexArrays(1, &cube_vao_);
-        glGenBuffers(1, &cube_vbo_);
-        glBindVertexArray(cube_vao_);
-        glBindBuffer(GL_ARRAY_BUFFER, cube_vbo_);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(v), v, GL_STATIC_DRAW);
+    if (retFloor) {
+        if (!materials.empty() && !materials[0].diffuse_texname.empty()) {
+            std::string tex_path = base_dir + materials[0].diffuse_texname;
+            if (floor_texture_) glDeleteTextures(1, &floor_texture_);
+            floor_texture_ = load_texture(tex_path.c_str());
+        }
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                floor_model_data.push_back(attrib.vertices[3 * index.vertex_index + 2]);
 
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-
-        glBindVertexArray(0);
+                if (index.texcoord_index >= 0) {
+                    floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                    floor_model_data.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                } else {
+                    floor_model_data.push_back(0.0f); floor_model_data.push_back(0.0f);
+                }
+            }
+        }
     }
+
+    bool use_wall_model = !wall_model_data.empty();
+    bool use_floor_model = !floor_model_data.empty();
+
+    const int w = level_.w;
+    const int h = level_.h;
+
+    auto add_quad = [](std::vector<float>& buf, glm::vec3 a, glm::vec2 ua, glm::vec3 b, glm::vec2 ub,
+                       glm::vec3 c, glm::vec2 uc, glm::vec3 d, glm::vec2 ud) {
+        auto push = [&buf](glm::vec3 v, glm::vec2 uv) { buf.push_back(v.x); buf.push_back(v.y); buf.push_back(v.z); buf.push_back(uv.x); buf.push_back(uv.y); };
+        push(a, ua); push(b, ub); push(c, uc); push(a, ua); push(c, uc); push(d, ud);
+    };
+
+    for (int y = 0; y < h; ++y) {
+        for (int x = 0; x < w; ++x) {
+            const auto cell = level_.cells[y * w + x];
+
+            if (cell == io::Cell::Floor) {
+                if (use_floor_model) {
+                    float scale = 0.53f, offset_x = 0.5f, offset_y = 0.0f, offset_z = 0.5f;
+                    for (size_t i = 0; i < floor_model_data.size(); i += 5) {
+                        float vx = floor_model_data[i + 0] * scale + offset_x + x;
+                        float vy = floor_model_data[i + 1] * scale + offset_y;
+                        float vz = floor_model_data[i + 2] * scale + offset_z + y;
+                        float tu = floor_model_data[i + 3], tv = floor_model_data[i + 4];
+                        floor_vertices.push_back(vx); floor_vertices.push_back(vy); floor_vertices.push_back(vz);
+                        floor_vertices.push_back(tu); floor_vertices.push_back(tv);
+                    }
+                } else {
+                    add_quad(floor_vertices, { x,0.0f,y }, {0,0}, { x+1,0.0f,y }, {1,0}, {x+1,0.0f,y+1}, {1,1}, {x,0.0f,y+1}, {0,1});
+                }
+            }
+
+            if (cell == io::Cell::Wall) {
+                if (use_wall_model) {
+                    float scale = 0.5f, yscale = 1.0f, offset_x = 0.5f, offset_y = 0.5f, offset_z = 0.5f;
+                    for (size_t i = 0; i < wall_model_data.size(); i += 5) {
+                        float vx = wall_model_data[i + 0] * scale + offset_x + x;
+                        float vy = wall_model_data[i + 1] * yscale + offset_y;
+                        float vz = wall_model_data[i + 2] * scale + offset_z + y;
+                        float tu = wall_model_data[i + 3], tv = wall_model_data[i + 4];
+                        wall_vertices.push_back(vx); wall_vertices.push_back(vy); wall_vertices.push_back(vz);
+                        wall_vertices.push_back(tu); wall_vertices.push_back(tv);
+                    }
+                } else {
+                    add_quad(wall_vertices, {x,0,y+1},{0,0},{x+1,0,y+1},{1,0},{x+1,1,y+1},{1,1},{x,1,y+1},{0,1});
+                    add_quad(wall_vertices, {x+1,0,y},{0,0},{x,0,y},{1,0},{x,1,y},{1,1},{x+1,1,y},{0,1});
+                    add_quad(wall_vertices, {x,0,y},{0,0},{x,0,y+1},{1,0},{x,1,y+1},{1,1},{x,1,y},{0,1});
+                    add_quad(wall_vertices, {x+1,0,y+1},{0,0},{x+1,0,y},{1,0},{x+1,1,y},{1,1},{x+1,1,y+1},{0,1});
+                }
+            }
+        }
+    }
+
+    floor_vertex_count_ = (int)(floor_vertices.size()/5);
+    wall_vertex_count_ = (int)(wall_vertices.size()/5);
+
+    auto setup_vao = [](GLuint& vao, GLuint& vbo, const std::vector<float>& data){
+        if (data.empty()) return;
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(float), data.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0); glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
+    };
+
+    if (floor_vao_) glDeleteVertexArrays(1,&floor_vao_);
+    if (floor_vbo_) glDeleteBuffers(1,&floor_vbo_);
+    if (wall_vao_) glDeleteVertexArrays(1,&wall_vao_);
+    if (wall_vbo_) glDeleteBuffers(1,&wall_vbo_);
+    floor_vao_=floor_vbo_=wall_vao_=wall_vbo_=0;
+
+    setup_vao(floor_vao_, floor_vbo_, floor_vertices);
+    setup_vao(wall_vao_, wall_vbo_, wall_vertices);
+}
+
+/**
+ * @brief Buduje siatkę kostki jednostkowej 1x1x1
+ *
+ * Służy do debugu lub jako fallback dla obiektów w grze.
+ */
+void App::build_cube_mesh() {
+    const float v[] = {
+        -0.5f,-0.5f,0.5f,0,0, 0.5f,-0.5f,0.5f,1,0, 0.5f,0.5f,0.5f,1,1,
+        -0.5f,-0.5f,0.5f,0,0, 0.5f,0.5f,0.5f,1,1, -0.5f,0.5f,0.5f,0,1,
+        0.5f,-0.5f,-0.5f,0,0, -0.5f,-0.5f,-0.5f,1,0, -0.5f,0.5f,-0.5f,1,1,
+        0.5f,-0.5f,-0.5f,0,0, -0.5f,0.5f,-0.5f,1,1, 0.5f,0.5f,-0.5f,0,1,
+        -0.5f,-0.5f,-0.5f,0,0, -0.5f,-0.5f,0.5f,1,0, -0.5f,0.5f,0.5f,1,1,
+        -0.5f,-0.5f,-0.5f,0,0, -0.5f,0.5f,0.5f,1,1, -0.5f,0.5f,-0.5f,0,1,
+        0.5f,-0.5f,0.5f,0,0, 0.5f,-0.5f,-0.5f,1,0, 0.5f,0.5f,-0.5f,1,1,
+        0.5f,-0.5f,0.5f,0,0, 0.5f,0.5f,-0.5f,1,1, 0.5f,0.5f,0.5f,0,1,
+        -0.5f,0.5f,0.5f,0,0, 0.5f,0.5f,0.5f,1,0, 0.5f,0.5f,-0.5f,1,1,
+        -0.5f,0.5f,0.5f,0,0, 0.5f,0.5f,-0.5f,1,1, -0.5f,0.5f,-0.5f,0,1,
+        -0.5f,-0.5f,-0.5f,0,0, 0.5f,-0.5f,-0.5f,1,0, 0.5f,-0.5f,0.5f,1,1,
+        -0.5f,-0.5f,-0.5f,0,0, 0.5f,-0.5f,0.5f,1,1, -0.5f,-0.5f,0.5f,0,1
+    };
+
+    cube_vertex_count_ = sizeof(v)/sizeof(float)/5;
+
+    glGenVertexArrays(1,&cube_vao_);
+    glGenBuffers(1,&cube_vbo_);
+    glBindVertexArray(cube_vao_);
+    glBindBuffer(GL_ARRAY_BUFFER,cube_vbo_);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(v),v,GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0); glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float))); glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+}
 
     void App::build_weapon_mesh() {
         // Zmienne pomocnicze - deklarujemy je RAZ na całą funkcję
