@@ -1,3 +1,10 @@
+/**
+ * @file App_Render.cpp
+ * @brief Modu³ renderuj¹cy grafikê 3D.
+ * Zawiera funkcjê `frame_render`, która odpowiada za narysowanie ca³ej sceny gry:
+ * mapy, wrogów, przedmiotów oraz interfejsu 3D (broñ w rêce).
+ */
+
 #include "dungeon/core/App.hpp"
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -9,7 +16,7 @@ namespace dungeon {
     void App::frame_begin() {
         glfwPollEvents();
         handle_input();
-        glClearColor(0.05f, 0.06f, 0.08f, 1.0f);
+        glClearColor(0.05f, 0.06f, 0.08f, 1.0f); // Ciemnoszare t³o (mg³a)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -22,19 +29,28 @@ namespace dungeon {
         glfwSwapBuffers(window_);
     }
 
+    /**
+     * @brief G³ówna funkcja rysuj¹ca scenê 3D.
+     * Wykonuje siê co klatkê.
+     * 1. Aktualizuje logikê (puzzles, exploration).
+     * 2. Oblicza pozycjê kamery i interpoluje ruch gracza.
+     * 3. Konfiguruje shadery (œwiat³a, macierze).
+     * 4. Rysuje obiekty w kolejnoœci: Pod³oga -> Œciany -> Portale -> Pochodnie -> Wrogowie -> Przedmioty -> Broñ w rêce.
+     */
     void App::frame_render() {
-        // --- 1. LOGIKA ROZGRYWKI ---
+        // --- 1. LOGIKA ROZGRYWKI (Update w render loop dla p³ynnoœci) ---
         update_exploration();
         update_puzzles();
 
         float dt = ImGui::GetIO().DeltaTime;
 
+        // Efekt Screen Shake
         if (trauma_ > 0.0f) {
             trauma_ -= dt;
             if (trauma_ < 0.0f) trauma_ = 0.0f;
         }
 
-        // Animacja ruchu
+        // Interpolacja ruchu gracza (p³ynne przejœcie miêdzy kratkami)
         if (is_moving_) {
             move_timer_ += dt;
             float t = move_timer_ / kMoveDuration_;
@@ -62,6 +78,7 @@ namespace dungeon {
         glm::vec3 center;
         glm::vec3 up(0.0f, 1.0f, 0.0f);
 
+        // Kamera w Menu (Orbituj¹ca)
         if (state_ == GameState::MainMenu || state_ == GameState::Credits || state_ == GameState::Options) {
             float radius = 6.0f;
             float camX = std::sin(menu_timer_ * 0.2f) * radius + (level_.w / 2.0f);
@@ -69,6 +86,7 @@ namespace dungeon {
             cam_pos = glm::vec3(camX, 5.0f, camZ);
             center = glm::vec3(level_.w / 2.0f, 0.0f, level_.h / 2.0f);
         }
+        // Kamera Gracza
         else {
             float rad = glm::radians(yaw);
             glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
@@ -103,7 +121,7 @@ namespace dungeon {
         world_shader_.setVec3("uCamPos", cam_pos.x, cam_pos.y, cam_pos.z);
         world_shader_.setFloat("uTime", (float)glfwGetTime());
 
-        // PRZESY£ANIE ŒWIATE£ (ZAGADKA 1)
+        // Przesy³anie aktywnych œwiate³ (Pochodnie)
         int activeLights = 0;
         for (const auto& torch : puzzle_torches_) {
             if (torch.is_lit) {
@@ -131,16 +149,15 @@ namespace dungeon {
             glDrawArrays(GL_TRIANGLES, 0, floor_vertex_count_);
         }
 
-        // B. ŒCIANY (NAPRAWA: RESET uModel)
-        world_shader_.setMat4("uModel", &I[0][0]); // <--- TO PRZYWRACA ŒCIANY NA MIEJSCE!
-
+        // B. ŒCIANY
+        world_shader_.setMat4("uModel", &I[0][0]); // Reset modelu
         glBindTexture(GL_TEXTURE_2D, wall_texture_);
         if (wall_vertex_count_ > 0) {
             glBindVertexArray(wall_vao_);
             glDrawArrays(GL_TRIANGLES, 0, wall_vertex_count_);
         }
 
-        // C. PORTALE / WYJŒCIA (MODELE + PROMIEÑ)
+        // C. PORTALE I WYJŒCIA
         world_shader_.setInt("uUseTex", 0);
         glBindVertexArray(cube_vao_);
 
@@ -149,50 +166,41 @@ namespace dungeon {
                 auto cell = level_.cells[y * level_.w + x];
 
                 if (cell == io::Cell::NextLevel || cell == io::Cell::Exit) {
-
-                    // PROMIEÑ (TYLKO DLA EXIT)
+                    // Promieñ œwiat³a (tylko dla Exit)
                     if (cell == io::Cell::Exit) {
                         world_shader_.setInt("uUseTex", 0);
-                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.4f); // Z³oty, przezroczysty
-
+                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.4f); // Z³oty transparentny
                         glDepthMask(GL_FALSE);
                         glm::mat4 M_beam(1.0f);
                         M_beam = glm::translate(M_beam, glm::vec3(x + 0.5f, 2.0f, y + 0.5f));
                         M_beam = glm::scale(M_beam, glm::vec3(0.1f, 4.0f, 0.1f));
-
                         world_shader_.setMat4("uModel", &M_beam[0][0]);
                         glBindVertexArray(cube_vao_);
                         glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
                         glDepthMask(GL_TRUE);
                     }
 
-                    // MODEL PORTALU
-                    if (cell == io::Cell::NextLevel)
-                        world_shader_.setVec4("uColor", 0.5f, 0.8f, 1.0f, 1.0f);
-                    else
-                        world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.2f, 1.0f);
+                    // Model Portalu
+                    if (cell == io::Cell::NextLevel) world_shader_.setVec4("uColor", 0.5f, 0.8f, 1.0f, 1.0f);
+                    else world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.2f, 1.0f);
 
                     glm::mat4 M(1.0f);
-                    // Lekko nad pod³og¹ (0.55) ¿eby le¿a³ na kamieniach
                     M = glm::translate(M, glm::vec3(x + 0.5f, 0.55f, y + 0.5f));
 
                     if (portal_vertex_count_ > 0) {
                         float scale = 0.4f;
                         M = glm::scale(M, glm::vec3(scale));
                         world_shader_.setMat4("uModel", &M[0][0]);
-
                         world_shader_.setInt("uUseTex", 1);
                         glActiveTexture(GL_TEXTURE0);
                         glBindTexture(GL_TEXTURE_2D, portal_texture_);
                         world_shader_.setInt("uTex", 0);
-
                         glBindVertexArray(portal_vao_);
                         glDrawArrays(GL_TRIANGLES, 0, portal_vertex_count_);
-                        // Reset VAO dla pêtli
                         glBindVertexArray(cube_vao_);
                     }
                     else {
-                        // Fallback (P³aska kostka)
+                        // Fallback cube
                         M = glm::scale(M, glm::vec3(0.8f, 0.05f, 0.8f));
                         world_shader_.setMat4("uModel", &M[0][0]);
                         world_shader_.setInt("uUseTex", 0);
@@ -203,25 +211,12 @@ namespace dungeon {
         }
         glBindVertexArray(0);
 
-        // --- 5. RYSOWANIE POCHODNI (ZAGADKA 1) ---
+        // --- 5. POCHODNIE ---
         for (const auto& torch : puzzle_torches_) {
-            // Debug: Ró¿owy S³up
-            //{
-            //    world_shader_.setInt("uUseTex", 0);
-            //    world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f);
-            //    glm::mat4 M_debug(1.0f);
-            //    M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
-            //    M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
-            //    world_shader_.setMat4("uModel", &M_debug[0][0]);
-            //    glBindVertexArray(cube_vao_);
-            //    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            //}
-
             if (torch.is_lit) world_shader_.setVec4("uColor", 1.5f, 1.2f, 0.8f, 1.0f);
             else world_shader_.setVec4("uColor", 0.3f, 0.3f, 0.3f, 1.0f);
 
             glm::mat4 M(1.0f);
-            // Pozycja na œcianie
             M = glm::translate(M, glm::vec3(torch.x + 0.5f, 1.0f, torch.y + 1.0f));
             M = glm::rotate(M, glm::radians(30.0f), glm::vec3(1, 0, 0));
 
@@ -245,11 +240,11 @@ namespace dungeon {
             }
         }
 
-        // --- 6. RYSOWANIE P£YTEK (ZAGADKA 2) ---
+        // --- 6. P£YTY ---
         world_shader_.setInt("uUseTex", 0);
         glBindVertexArray(cube_vao_);
         for (const auto& plate : pressure_plates_) {
-            world_shader_.setVec4("uColor", 0.0f, 0.8f, 0.8f, 1.0f); // Turkusowy
+            world_shader_.setVec4("uColor", 0.0f, 0.8f, 0.8f, 1.0f);
             glm::mat4 M(1.0f);
             M = glm::translate(M, glm::vec3(plate.x + 0.5f, 0.02f, plate.y + 0.5f));
             M = glm::scale(M, glm::vec3(0.7f, 0.05f, 0.7f));
@@ -272,6 +267,7 @@ namespace dungeon {
             int currentCount = 0;
             float scale = 1.0f;
 
+            // Wybór modelu i tekstury
             if (enemy->name == "Zombie") {
                 glBindTexture(GL_TEXTURE_2D, zombie_texture_);
                 currentVAO = zombie_vao_; currentCount = zombie_vertex_count_; scale = 0.40f;
@@ -324,7 +320,7 @@ namespace dungeon {
                 glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
             }
 
-            // Pasek HP
+            // Pasek HP nad g³ow¹
             if (enemy->IsAlive() && enemy->health < enemy->maxHealth) {
                 glBindVertexArray(cube_vao_);
                 world_shader_.setInt("uUseTex", 0);
@@ -347,7 +343,7 @@ namespace dungeon {
         }
         glBindVertexArray(0);
 
-        // --- 8. ITEMY NA ZIEMI ---
+        // --- 8. PRZEDMIOTY (DROP) ---
         world_shader_.use();
         world_shader_.setInt("uUseTex", 1);
 
@@ -357,7 +353,7 @@ namespace dungeon {
 
             if (wItem.itemData->type == ItemType::Weapon) {
                 glm::vec3 pos = wItem.position;
-                pos.y = 0.9f; // Podnieœ miecz wy¿ej
+                pos.y = 0.9f;
                 M = glm::translate(M, pos);
                 M = glm::rotate(M, glm::radians(180.0f), glm::vec3(1, 0, 0));
                 M = glm::rotate(M, glm::radians(15.0f), glm::vec3(0, 0, 1));
@@ -368,21 +364,13 @@ namespace dungeon {
                 world_shader_.setMat4("uModel", &M[0][0]);
                 std::string name = wItem.itemData->name;
 
-                if (name == "MAXWELL") {
-                    world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
-                }
-                else if (name == "Rusty Sword") {
-                    world_shader_.setVec4("uColor", 0.6f, 0.4f, 0.2f, 0.9f); // Br¹zowy
-                }
-                else if (name == "Iron Sword") {
-                    world_shader_.setVec4("uColor", 0.8f, 0.9f, 1.0f, 0.9f); // Srebrny
-                }
-                else if (name == "GOD SLAYER") {
-                    world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.9f); // Z³oty
-                }
-                else {
-                    world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, 0.9f); // Domyœlny
-                }
+                // Color coding dla broni
+                if (name == "MAXWELL")          world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
+                else if (name == "Rusty Sword") world_shader_.setVec4("uColor", 0.6f, 0.4f, 0.2f, 0.9f);
+                else if (name == "Iron Sword")  world_shader_.setVec4("uColor", 0.8f, 0.9f, 1.0f, 0.9f);
+                else if (name == "GOD SLAYER")  world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.9f);
+                else                            world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, 0.9f);
+
                 world_shader_.setInt("uUseTex", 1);
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, weapon_texture_);
@@ -395,6 +383,7 @@ namespace dungeon {
                 }
             }
             else {
+                // Mikstury (Rotacja)
                 float time = (float)glfwGetTime();
                 float floatY = 0.55f + sin(time * 3.0f) * 0.03f;
                 glm::vec3 pos = wItem.position;
@@ -404,6 +393,7 @@ namespace dungeon {
                 M = glm::scale(M, glm::vec3(0.5f));
                 world_shader_.setMat4("uModel", &M[0][0]);
                 world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 1.0f);
+
                 glActiveTexture(GL_TEXTURE0);
                 if (potion_texture_ != 0) {
                     glBindTexture(GL_TEXTURE_2D, potion_texture_);
@@ -414,6 +404,7 @@ namespace dungeon {
                     world_shader_.setVec4("uColor", 1.0f, 0.2f, 0.2f, 1.0f);
                 }
                 world_shader_.setInt("uTex", 0);
+
                 if (potion_vertex_count_ > 0) {
                     glBindVertexArray(potion_vao_);
                     glDrawArrays(GL_TRIANGLES, 0, potion_vertex_count_);
@@ -427,8 +418,8 @@ namespace dungeon {
             }
         }
         glBindVertexArray(0);
-         
-        // --- 9. HELD ITEM ---
+
+        // --- 9. BROÑ W RÊCE (FPP) ---
         if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
             float rad = glm::radians((float)player_.yaw);
             glm::vec3 forward(std::sin(rad), 0.0f, -std::cos(rad));
@@ -436,6 +427,7 @@ namespace dungeon {
             glm::vec3 rightv = glm::normalize(glm::cross(forward, up));
             glm::vec3 item_pos = cam_pos + forward * 0.4f + rightv * 0.2f + up * -0.3f;
 
+            // Animacja "bujania" broni¹
             float animOffset = 0.0f;
             float animTilt = 0.0f;
             if (attack_anim_timer_ > 0.0f) {
@@ -457,9 +449,10 @@ namespace dungeon {
             glBindTexture(GL_TEXTURE_2D, weapon_texture_);
             world_shader_.setInt("uTex", 0);
 
+            // Kolor broni trzymanej
             if (player_.equippedWeapon) {
                 std::string name = player_.equippedWeapon->name;
-                if      (name == "MAXWELL")          world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
+                if (name == "MAXWELL")          world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
                 else if (name == "Rusty Sword") world_shader_.setVec4("uColor", 0.6f, 0.4f, 0.2f, 0.9f);
                 else if (name == "Iron Sword")  world_shader_.setVec4("uColor", 0.8f, 0.9f, 1.0f, 0.9f);
                 else if (name == "GOD SLAYER")  world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.9f);
@@ -485,4 +478,4 @@ namespace dungeon {
         }
     }
 
-}
+} // namespace dungeon

@@ -1,3 +1,10 @@
+/**
+ * @file App_Init.cpp
+ * @brief Modu³ inicjalizacyjny aplikacji.
+ * Zawiera kod odpowiedzialny za konfiguracjê GLFW, OpenGL, Audio oraz
+ * ³adowanie i przetwarzanie modeli 3D (TinyObjLoader).
+ */
+
 #include "dungeon/core/App.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -8,7 +15,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "tiny_obj_loader.h" 
 
-// --- KONFIGURACJA SHADERÓW (VERTEX & FRAGMENT) --- 
+ // --- KONFIGURACJA SHADERÓW GLSL ---
+
+ /**
+  * @brief Vertex Shader.
+  * Odpowiada za transformacjê wierzcho³ków z przestrzeni modelu do przestrzeni ekranu (MVP Matrix).
+  */
 static const char* kWorldVS = R"(#version 330 core
 layout(location=0) in vec3 aPos;
 layout(location=1) in vec2 aTexCoord;
@@ -24,6 +36,10 @@ void main() {
   vTexCoord = aTexCoord;
 })";
 
+/**
+ * @brief Fragment Shader.
+ * Odpowiada za kolorowanie pikseli, nak³adanie tekstur i obliczanie oœwietlenia (Latarka + Pochodnie).
+ */
 static const char* kWorldFS = R"(#version 330 core
 out vec4 FragColor;
 in vec2 vTexCoord;
@@ -40,17 +56,17 @@ void main() {
     if (uUseTex == 1) baseColor = texture(uTex, vTexCoord) * uColor;
     else baseColor = uColor;
     
-    if(baseColor.a < 0.1) discard;
+    if(baseColor.a < 0.1) discard; // Alpha test
 
-    // --- OŒWIETLENIE ---
+    // --- OŒWIETLENIE DYNAMICZNE ---
     // 1. Œwiat³o gracza (latarka/pochodnia)
     float dist = distance(vFragPos, uCamPos);
-    float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02;
+    float flicker = sin(uTime * 10.0) * 0.05 + sin(uTime * 23.0) * 0.02; // Efekt migotania
     float lightStart = 2.5 + flicker;
     float lightEnd = 8.0 + flicker * 2.0;
     float playerLight = clamp((lightEnd - dist) / (lightEnd - lightStart), 0.0, 1.0);
 
-    // 2. Œwiat³a zagadek (Pochodnie na œcianach)
+    // 2. Œwiat³a punktowe zagadek (Pochodnie na œcianach)
     float puzzleLightTotal = 0.0;
     for(int i = 0; i < uActivePuzzleLights; i++) {
         float d = distance(vFragPos, uPuzzleLights[i]);
@@ -59,8 +75,8 @@ void main() {
         puzzleLightTotal = max(puzzleLightTotal, pLight);
     }
 
-    vec3 torchColor = vec3(1.0, 0.85, 0.6);
-    vec3 ambient = vec3(0.05, 0.05, 0.1);
+    vec3 torchColor = vec3(1.0, 0.85, 0.6); // Ciep³a barwa œwiat³a
+    vec3 ambient = vec3(0.05, 0.05, 0.1);   // Ciemny niebieski ambient
     float combinedLight = max(playerLight, puzzleLightTotal);
     vec3 finalLight = (torchColor * combinedLight) + ambient;
     FragColor = vec4(baseColor.rgb * finalLight, baseColor.a);
@@ -81,7 +97,7 @@ namespace dungeon {
         window_ = glfwCreateWindow(cfg_.width, cfg_.height, cfg_.title.c_str(), nullptr, nullptr);
         if (!window_) throw std::runtime_error("Window creation failed");
         glfwMakeContextCurrent(window_);
-        glfwSwapInterval(1);
+        glfwSwapInterval(1); // V-Sync
         glfwSetWindowUserPointer(window_, this);
         glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* win, int w, int h) {
             auto* app = static_cast<App*>(glfwGetWindowUserPointer(win));
@@ -96,6 +112,8 @@ namespace dungeon {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        // Macierz projekcji
         float aspect = static_cast<float>(cfg_.width) / static_cast<float>(cfg_.height);
         proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
 
@@ -109,6 +127,7 @@ namespace dungeon {
         if (fb_w > 0 && fb_h > 0) on_resize(fb_w, fb_h);
     }
 
+    // ... (init_imgui, shutdown_imgui - standardowa implementacja) ...
     void App::init_imgui() {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -124,12 +143,15 @@ namespace dungeon {
         ImGui::DestroyContext();
     }
 
+    /**
+     * @brief Inicjalizacja silnika dŸwiêkowego miniaudio.
+     * £aduje muzykê t³a (stream) oraz efekty dŸwiêkowe (do pamiêci).
+     */
     void App::init_audio() {
         if (ma_engine_init(NULL, &audio_engine_) != MA_SUCCESS) {
             printf("Error: Audio init failed.\n");
             return;
         }
-        // [DEBUG] SprawdŸ œcie¿ki jeœli nie ma dŸwiêku
         if (ma_sound_init_from_file(&audio_engine_, "assets/audio/music.mp3", MA_SOUND_FLAG_STREAM, NULL, NULL, &bg_music_) == MA_SUCCESS) {
             ma_sound_set_looping(&bg_music_, MA_TRUE);
             ma_sound_set_volume(&bg_music_, 0.3f);
@@ -150,8 +172,12 @@ namespace dungeon {
         proj_ = glm::perspective(glm::radians(60.0f), aspect, 0.1f, 100.0f);
     }
 
+    /**
+     * @brief Generuje siatkê (mesh) szeœcianu. U¿ywane jako fallback i debug.
+     */
     void App::build_cube_mesh() {
         const float v[] = {
+            // ... (dane wierzcho³ków szeœcianu) ...
             -0.5f,-0.5f,0.5f,0,0, 0.5f,-0.5f,0.5f,1,0, 0.5f,0.5f,0.5f,1,1, -0.5f,-0.5f,0.5f,0,0, 0.5f,0.5f,0.5f,1,1, -0.5f,0.5f,0.5f,0,1,
             0.5f,-0.5f,-0.5f,0,0, -0.5f,-0.5f,-0.5f,1,0, -0.5f,0.5f,-0.5f,1,1, 0.5f,-0.5f,-0.5f,0,0, -0.5f,0.5f,-0.5f,1,1, 0.5f,0.5f,-0.5f,0,1,
             -0.5f,-0.5f,-0.5f,0,0, -0.5f,-0.5f,0.5f,1,0, -0.5f,0.5f,0.5f,1,1, -0.5f,-0.5f,-0.5f,0,0, -0.5f,0.5f,0.5f,1,1, -0.5f,0.5f,-0.5f,0,1,
@@ -168,6 +194,10 @@ namespace dungeon {
         glBindVertexArray(0);
     }
 
+    /**
+     * @brief Generuje geometriê œwiata na podstawie mapy poziomu.
+     * £aduje modele œcian i pod³ogi, a nastêpnie rozmieszcza je w odpowiednich miejscach siatki.
+     */
     void App::build_world_mesh() {
         std::vector<float> floor_vertices;
         std::vector<float> wall_vertices;
@@ -185,6 +215,7 @@ namespace dungeon {
                 if (wall_texture_) glDeleteTextures(1, &wall_texture_);
                 wall_texture_ = load_texture((base_dir + materials[0].diffuse_texname).c_str());
             }
+            // Ekstrakcja wierzcho³ków
             for (const auto& shape : shapes) {
                 for (const auto& index : shape.mesh.indices) {
                     wall_model_data.push_back(attrib.vertices[3 * index.vertex_index + 0]);
@@ -224,19 +255,20 @@ namespace dungeon {
 
         bool use_wall_model = !wall_model_data.empty();
         bool use_floor_model = !floor_model_data.empty();
-        // Funkcja pomocnicza do tworzenia Quadów (u¿ywana do sufitu)
+
         auto add_quad = [](std::vector<float>& buf, glm::vec3 a, glm::vec2 ua, glm::vec3 b, glm::vec2 ub, glm::vec3 c, glm::vec2 uc, glm::vec3 d, glm::vec2 ud) {
             auto push = [&buf](glm::vec3 v, glm::vec2 uv) { buf.push_back(v.x); buf.push_back(v.y); buf.push_back(v.z); buf.push_back(uv.x); buf.push_back(uv.y); };
             push(a, ua); push(b, ub); push(c, uc); push(a, ua); push(c, uc); push(d, ud);
             };
 
+        // Generowanie geometrii dla ka¿dego kafelka mapy
         for (int y = 0; y < level_.h; ++y) {
             for (int x = 0; x < level_.w; ++x) {
                 const auto cell = level_.cells[y * level_.w + x];
 
                 // POD£OGA i SUFIT
                 if (cell != io::Cell::Wall) {
-                    // 1. Pod³oga
+                    // 1. Pod³oga (Floor)
                     if (use_floor_model) {
                         float scale = 0.53f, offset_x = 0.5f, offset_y = 0.0f, offset_z = 0.5f;
                         for (size_t i = 0; i < floor_model_data.size(); i += 5) {
@@ -251,8 +283,7 @@ namespace dungeon {
                         add_quad(floor_vertices, { x,0,y }, { 0,0 }, { x + 1,0,y }, { 1,0 }, { x + 1,0,y + 1 }, { 1,1 }, { x,0,y + 1 }, { 0,1 });
                     }
 
-                    // 2. SUFIT (DODANO)
-                    // Rysujemy p³aski sufit na wysokoœci 1.0f u¿ywaj¹c tekstury pod³ogi
+                    // 2. SUFIT (Ceiling) - P³aski quad na wysokoœci 1.5
                     add_quad(floor_vertices,
                         { x + 1, 1.5f, y }, { 1.0f, 0.0f },
                         { x,     1.5f, y }, { 0.0f, 0.0f },
@@ -261,7 +292,7 @@ namespace dungeon {
                     );
                 }
 
-                // ŒCIANA
+                // ŒCIANA (Wall)
                 if (cell == io::Cell::Wall) {
                     if (use_wall_model) {
                         float scale = 0.5f, yscale = 1.0f, offset_x = 0.5f, offset_y = 0.5f, offset_z = 0.5f;
@@ -301,16 +332,15 @@ namespace dungeon {
         setup_vao(wall_vao_, wall_vbo_, wall_vertices);
     }
 
+    /**
+     * @brief £aduje modele broni i przedmiotów interaktywnych.
+     */
     void App::build_weapon_mesh() {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string err;
         std::string baseDir = "assets/models/";
-
-        // ------------------------------------
-        // [MOD] DODAWAJ NOWE ITEMY TUTAJ 
-        // ------------------------------------
 
         // 1. MIECZ (Sword)
         std::string swordPath = baseDir + "sword2.obj";
@@ -334,7 +364,6 @@ namespace dungeon {
             }
             weapon_vertex_count_ = (int)(vertices.size() / 5);
 
-            // Setup VAO/VBO
             if (weapon_vao_) glDeleteVertexArrays(1, &weapon_vao_); if (weapon_vbo_) glDeleteBuffers(1, &weapon_vbo_);
             glGenVertexArrays(1, &weapon_vao_); glGenBuffers(1, &weapon_vbo_);
             glBindVertexArray(weapon_vao_); glBindBuffer(GL_ARRAY_BUFFER, weapon_vbo_);
@@ -403,7 +432,6 @@ namespace dungeon {
         attrib.vertices.clear(); attrib.texcoords.clear(); shapes.clear(); materials.clear(); err.clear();
         std::string portalPath = baseDir + "portal.obj";
         if (tinyobj::LoadObj(&attrib, &shapes, &materials, &err, portalPath.c_str(), baseDir.c_str())) {
-            // [MOD] Tu ³adujemy texturê rêcznie jeœli .mtl nie dzia³a
             std::string portalTex = baseDir + "portal.jpeg";
             portal_texture_ = load_texture(portalTex.c_str());
 
@@ -428,16 +456,15 @@ namespace dungeon {
         }
     }
 
+    /**
+     * @brief £aduje modele wrogów.
+     */
     void App::build_enemy_mesh() {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
         std::string err;
         std::string baseDir = "assets/models/";
-
-        // ------------------------------------
-        // [MOD] DODAWANIE NOWYCH WROGÓW TUTAJ 
-        // ------------------------------------
 
         // 1. ZOMBIE
         std::string zombiePath = baseDir + "zombie.obj";

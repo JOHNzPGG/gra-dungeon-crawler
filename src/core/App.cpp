@@ -1,4 +1,10 @@
-﻿#include "dungeon/core/App.hpp"
+﻿/**
+ * @file App.cpp
+ * @brief Główny plik implementacji klasy App.
+ * Odpowiada za cykl życia aplikacji: inicjalizację, główną pętlę i czyszczenie zasobów.
+ */
+
+#include "dungeon/core/App.hpp"
 
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
@@ -13,14 +19,20 @@
 
 namespace dungeon {
 
+    /**
+     * @brief Konstruktor aplikacji.
+     * Inicjalizuje wszystkie podsystemy (GLFW, OpenGL, Audio, ImGui) oraz ładuje zasoby startowe.
+     * @param cfg Konfiguracja okna (wymiary, tytuł).
+     */
     App::App(const AppConfig& cfg) : cfg_(cfg), player_(1, 1, 0) {
         init_glfw();
         init_gl();
         init_imgui();
         init_audio();
 
-        render_loading_screen();
+        render_loading_screen(); // Wyświetla ekran ładowania podczas ciężkich operacji
 
+        // Ładowanie zasobów gry
         load_level();
         build_world_mesh();
         build_cube_mesh();
@@ -28,20 +40,25 @@ namespace dungeon {
         build_enemy_mesh();
         spawn_entities_from_level();
 
-        // Domyślny skill
+        // Nauka domyślnej umiejętności gracza
         player_.LearnSkill(new Skill("Strong Hit", 1, 15));
         if (!player_.skills.empty()) {
             player_.skills[0]->offsets.push_back({ 0, -1 });
         }
     }
 
+    /**
+     * @brief Destruktor aplikacji.
+     * Odpowiada za zwolnienie pamięci GPU (bufory, tekstury) oraz zamknięcie bibliotek.
+     */
     App::~App() {
         shutdown_imgui();
 
+        // Usuwanie obiektów logicznych
         for (auto* e : enemies_) delete e;
         enemies_.clear();
 
-        // Sprzątanie GPU
+        // --- Sprzątanie zasobów OpenGL (VBO/VAO) ---
         if (floor_vbo_) glDeleteBuffers(1, &floor_vbo_);
         if (floor_vao_) glDeleteVertexArrays(1, &floor_vao_);
         if (wall_vbo_)  glDeleteBuffers(1, &wall_vbo_);
@@ -58,6 +75,8 @@ namespace dungeon {
         if (potion_vbo_) glDeleteBuffers(1, &potion_vbo_);
         if (torch_vao_) glDeleteVertexArrays(1, &torch_vao_);
         if (torch_vbo_) glDeleteBuffers(1, &torch_vbo_);
+
+        // Zamknięcie okna
         if (window_) {
             glfwDestroyWindow(window_);
             glfwTerminate();
@@ -69,20 +88,32 @@ namespace dungeon {
         ma_engine_uninit(&audio_engine_);
     }
 
+    /**
+     * @brief Główna pętla gry (Game Loop).
+     * Działa do momentu zamknięcia okna. Odpowiada za:
+     * 1. Rozpoczęcie klatki (Input, Clear).
+     * 2. Aktualizację logiki (np. walka, timery).
+     * 3. Renderowanie odpowiedniego stanu gry (Menu, Gra, Pauza).
+     * 4. Zakończenie klatki (Swap Buffers).
+     */
     void App::run() {
         while (!glfwWindowShouldClose(window_)) {
-            frame_begin();
-            update_audio_state();
+            frame_begin();          // PollEvents + ImGui NewFrame
+            update_audio_state();   // Zarządzanie dźwiękiem
 
             float dt = ImGui::GetIO().DeltaTime;
+
+            // Timery dla animacji w menu
             if (state_ == GameState::MainMenu || state_ == GameState::Credits) {
                 menu_timer_ += dt;
             }
 
+            // Obsługa walki w czasie rzeczywistym (animacje)
             if (state_ == GameState::Playing && combat_lock_) {
                 update_combat();
             }
 
+            // Maszyna stanów renderowania
             switch (state_) {
             case GameState::MainMenu: frame_render(); render_main_menu(); break;
             case GameState::Credits:  frame_render(); render_credits(); break;
@@ -93,13 +124,19 @@ namespace dungeon {
             case GameState::Paused:   frame_render(); render_pause_menu(); break;
             }
 
-            frame_end();
+            frame_end(); // Render ImGui + SwapBuffers
         }
     }
 
+    /**
+     * @brief Ładuje teksturę z pliku na dysku do pamięci GPU.
+     * Używa biblioteki stb_image.
+     * @param path Ścieżka do pliku obrazka (png, jpg).
+     * @return GLuint ID tekstury w OpenGL (lub 0 w przypadku błędu).
+     */
     GLuint App::load_texture(const char* path) {
         int w, h, nrChannels;
-        stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(true); // OpenGL ma Y=0 na dole
         unsigned char* data = stbi_load(path, &w, &h, &nrChannels, 0);
 
         if (!data) {
@@ -110,6 +147,7 @@ namespace dungeon {
         GLuint tex;
         glGenTextures(1, &tex);
         glBindTexture(GL_TEXTURE_2D, tex);
+        // Ustawienia zawijania i filtrowania
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -123,6 +161,10 @@ namespace dungeon {
         return tex;
     }
 
+    /**
+     * @brief Tworzy jednokolorową teksturę 1x1 piksel.
+     * Przydatne jako fallback, gdy model nie ma tekstury.
+     */
     GLuint App::create_texture_from_color(float r, float g, float b) {
         GLuint tex;
         glGenTextures(1, &tex);
@@ -136,4 +178,4 @@ namespace dungeon {
         return tex;
     }
 
-} // namespace dungeon 
+} // namespace dungeon

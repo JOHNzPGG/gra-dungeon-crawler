@@ -1,3 +1,9 @@
+/**
+ * @file App_UI.cpp
+ * @brief Modu³ interfejsu u¿ytkownika (UI).
+ * Rysuje HUD, menu, ekrany ³adowania i koñcowe przy u¿yciu ImGui.
+ */
+
 #include "dungeon/core/App.hpp"
 #include "dungeon/ui/Hud.hpp"
 #include <imgui.h>
@@ -6,25 +12,29 @@
 
 namespace dungeon {
 
+    /**
+     * @brief G³ówna funkcja rysuj¹ca UI w trakcie gry.
+     * Wyœwietla: HUD, Pasek ¿ycia, Minimapê, Ekwipunek oraz Damage Flash.
+     */
     void App::frame_ui() {
-        ImGuiIO& io = ImGui::GetIO(); // Deklaracja raz na górze
+        ImGuiIO& io = ImGui::GetIO();
 
+        // 1. HUD (Logi i status tury)
         dungeon::ui::HudState hud;
         hud.log = "Mapa: " + current_map_name_ + "\nWidok: ";
         hud.log += (camera_mode_ == CameraMode::FirstPerson ? "FPP" : "TPP");
-
         dungeon::ui::draw_hud(hud);
 
-        // --- PASEK ¯YCIA (Lewy Górny) ---
+        // 2. PASEK ¯YCIA (Lewy Górny Róg)
         ImGui::SetNextWindowPos(ImVec2(130, 10));
         ImGui::SetNextWindowSize(ImVec2(220, 0));
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.5f));
         ImGui::Begin("HealthBar", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
         float hpFraction = (float)player_.health / (float)player_.maxHealth;
-        ImVec4 hpColor = ImVec4(0.0f, 0.8f, 0.0f, 1.0f);
-        if (hpFraction < 0.5f) hpColor = ImVec4(1.0f, 0.8f, 0.0f, 1.0f);
-        if (hpFraction < 0.25f) hpColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+        ImVec4 hpColor = ImVec4(0.0f, 0.8f, 0.0f, 1.0f); // Zielony
+        if (hpFraction < 0.5f) hpColor = ImVec4(1.0f, 0.8f, 0.0f, 1.0f); // ¯ó³ty
+        if (hpFraction < 0.25f) hpColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Czerwony
 
         ImGui::Text("ZDROWIE:");
         ImGui::SameLine();
@@ -35,28 +45,27 @@ namespace dungeon {
         ImGui::End();
         ImGui::PopStyleColor();
 
-        // --- PANEL BOCZNY (MINIMAPA) --- 
+        // 3. PANEL BOCZNY (MINIMAPA)
         float panelWidth = 200.0f;
         float padding = 10.0f;
         ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));
         ImGui::SetNextWindowSize(ImVec2(panelWidth, 0));
 
         ImGui::Begin("SidePanel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-
         ImGui::Text("Minimap");
 
-        // --- RYSOWANIE MINIMAPY ---
+        // Rysowanie Minimapy (Custom DrawList)
         ImDrawList* drawList = ImGui::GetWindowDrawList();
         ImVec2 p = ImGui::GetCursorScreenPos();
 
         float mapSize = 180.0f;
-        int   viewRange = 5;
+        int   viewRange = 5; // Zasiêg widzenia na mapie
         float tileSize = mapSize / (float)(viewRange * 2 + 1);
 
-        // 1. T³o
+        // T³o mapy
         drawList->AddRectFilled(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(0, 0, 0, 255));
 
-        // 2. Kafelki (Œciany/Pod³oga)
+        // Pêtla rysowania kafelków
         for (int dy = -viewRange; dy <= viewRange; ++dy) {
             for (int dx = -viewRange; dx <= viewRange; ++dx) {
                 int wx = player_.GameX + dx;
@@ -66,6 +75,7 @@ namespace dungeon {
 
                 if (wx >= 0 && wx < level_.w && wy >= 0 && wy < level_.h) {
                     int idx = wy * level_.w + wx;
+                    // Fog of War: Rysujemy tylko odwiedzone
                     if (!visited_cells_.empty() && visited_cells_[idx]) {
                         auto cell = level_.cells[idx];
                         ImU32 color = (cell == io::Cell::Wall) ? IM_COL32(100, 100, 100, 255) : IM_COL32(200, 200, 200, 255);
@@ -76,40 +86,29 @@ namespace dungeon {
             }
         }
 
-        // 3. PRZEDMIOTY (Literki P i M)
+        // Rysowanie przedmiotów na mapie
         for (const auto& wItem : world_items_) {
             if (!wItem.isAlive) continue;
-
-            // Obliczamy pozycjê wzglêdem gracza
             int dx = (int)wItem.position.x - player_.GameX;
-            int dy = (int)wItem.position.z - player_.GameY; // Uwaga: wItem.position.z to GameY
+            int dy = (int)wItem.position.z - player_.GameY;
 
-            // Jeœli jest w zasiêgu minimapy
             if (std::abs(dx) <= viewRange && std::abs(dy) <= viewRange) {
                 int idx = (int)wItem.position.z * level_.w + (int)wItem.position.x;
-
-                // Rysujemy tylko jeœli pole jest odkryte (Fog of War)
                 if (!visited_cells_.empty() && visited_cells_[idx]) {
                     float sx = p.x + (dx + viewRange) * tileSize;
                     float sy = p.y + (dy + viewRange) * tileSize;
-
-                    // Centrowanie tekstu w kratce
                     float textOffsetX = tileSize * 0.25f;
                     float textOffsetY = tileSize * 0.1f;
 
-                    if (wItem.itemData->type == ItemType::Weapon) {
-                        // M - Miecz (Sword) / Weapon
+                    if (wItem.itemData->type == ItemType::Weapon)
                         drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 165, 0, 255), "M");
-                    }
-                    else {
-                        // P - Potion
+                    else
                         drawList->AddText(ImVec2(sx + textOffsetX, sy + textOffsetY), IM_COL32(255, 50, 255, 255), "P");
-                    }
                 }
             }
         }
 
-        // 4. Wrogowie (Czerwone kropki)
+        // Rysowanie wrogów (tylko widoczni i odwiedzeni)
         for (const auto* enemy : enemies_) {
             if (!enemy->IsAlive()) continue;
             int dx = enemy->GameX - player_.GameX;
@@ -124,16 +123,15 @@ namespace dungeon {
             }
         }
 
-        // 5. Gracz (Zielona kropka)
+        // Gracz (centrum)
         float cx = p.x + viewRange * tileSize;
         float cy = p.y + viewRange * tileSize;
         drawList->AddRectFilled(ImVec2(cx + 3, cy + 3), ImVec2(cx + tileSize - 3, cy + tileSize - 3), IM_COL32(0, 255, 0, 255));
 
-        // Ramka
         drawList->AddRect(p, ImVec2(p.x + mapSize, p.y + mapSize), IM_COL32(255, 255, 255, 255));
         ImGui::Dummy(ImVec2(mapSize, mapSize + 10.0f));
 
-        // EKWIPUNEK I PLECAK
+        // 4. EKWIPUNEK
         ImGui::Separator();
         ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "Equipped:");
         if (player_.equippedWeapon) ImGui::BulletText("%s (DMG: %d)", player_.equippedWeapon->name.c_str(), player_.equippedWeapon->stats.damage);
@@ -154,7 +152,7 @@ namespace dungeon {
         }
         ImGui::End();
 
-        // --- MENU (bez zmian) ---
+        // 5. MA£E MENU W GRZE (Toggle 'M')
         if (show_menu_) {
             ImGui::SetNextWindowSize(ImVec2(260, 140), ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowPos(ImVec2(200, 50), ImGuiCond_FirstUseEver);
@@ -171,7 +169,7 @@ namespace dungeon {
             ImGui::End();
         }
 
-        // --- DAMAGE FLASH (bez zmian) ---
+        // 6. DAMAGE FLASH (Czerwony ekran przy obra¿eniach)
         if (player_.IsHurt()) {
             ImGui::SetNextWindowPos(ImVec2(0, 0));
             ImGui::SetNextWindowSize(io.DisplaySize);
@@ -182,40 +180,33 @@ namespace dungeon {
         }
     }
 
+    /**
+     * @brief Rysuje menu g³ówne (Start, Opcje, Wyjœcie).
+     */
     void App::render_main_menu() {
         ImGuiIO& io = ImGui::GetIO();
-
-        // Ustawiamy okno na ca³y ekran, ale przezroczyste, ¿eby widzieæ t³o 3D
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(io.DisplaySize);
-        ImGui::SetNextWindowBgAlpha(0.0f); // Ca³kowicie przezroczyste t³o okna
+        ImGui::SetNextWindowBgAlpha(0.0f);
 
         ImGui::Begin("MainMenuOverlay", nullptr,
             ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-        // --- TYTU£ GRY (Efekt cienia) ---
         float titleScale = 4.0f;
         std::string titleText = "DUNGEON CRAWLER";
-
-        // Oblicz szerokoœæ tekstu ¿eby wyœrodkowaæ
         ImGui::SetWindowFontScale(titleScale);
         float titleW = ImGui::CalcTextSize(titleText.c_str()).x;
         float titleX = (io.DisplaySize.x - titleW) * 0.5f;
         float titleY = io.DisplaySize.y * 0.15f;
 
-        // Cieñ (Czarny, przesuniêty)
+        // Cieñ tekstu
         ImGui::SetCursorPos(ImVec2(titleX + 5, titleY + 5));
         ImGui::TextColored(ImVec4(0, 0, 0, 1), titleText.c_str());
-
-        // W³aœciwy tekst (Z³oty/¯ó³ty jak w Minecraft)
         ImGui::SetCursorPos(ImVec2(titleX, titleY));
         ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), titleText.c_str());
 
-        // Reset skali czcionki dla przycisków
         ImGui::SetWindowFontScale(1.5f);
-
-        // --- PRZYCISKI (Styl Retro) ---
-        push_retro_style(); // W³¹czamy styl kamienia
+        push_retro_style();
 
         float btnW = 300.0f;
         float btnH = 50.0f;
@@ -243,7 +234,6 @@ namespace dungeon {
         if (ImGui::Button("WYJSCIE", ImVec2(btnW, btnH))) {
             glfwSetWindowShouldClose(window_, 1);
         }
-
         pop_retro_style(); // Wy³¹czamy styl kamienia
 
         ImGui::End();

@@ -7,6 +7,16 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <cmath>
 
+
+/**
+ * @class Enemy
+ * @brief Reprezentuje przeciwnika sterowanego przez komputer (AI).
+ * * Implementuje prost¹ maszynê stanów:
+ * 1. SprawdŸ czy widzê gracza (Raycasting).
+ * 2. Jeœli tak i jestem blisko -> Obróæ siê i Atakuj.
+ * 3. Jeœli tak ale jestem daleko -> IdŸ w jego stronê.
+ */
+
 class Enemy : public Entity {
 public:
     Enemy(int x, int y, int yaw,
@@ -18,6 +28,10 @@ public:
 
     // --- AI PRZECIWNIKA ---
     // Funkcja wywo³ywana raz na turê przeciwnika
+    /**
+     * @brief G³ówna logika tury przeciwnika.
+     * Wywo³ywana przez App_Logic.cpp gdy nadejdzie tura wrogów.
+     */
     void TakeTurn(Entity* target, const dungeon::io::Level& level) {
         if (!IsAlive()) return;
 
@@ -124,6 +138,11 @@ public:
         }
     }
 
+    /**
+     * @brief Rozpoczyna p³ynn¹ animacjê ruchu.
+     * Zmienia RenderPosition, aby model "przesuwa³ siê" zamiast teleportowaæ.
+     */
+
     // Funkcja startuj¹ca animacjê (wywo³amy j¹ po ruchu AI)
     void StartMoveAnimation(int oldX, int oldY, int newX, int newY) {
         // Logika 2D -> Wizualne 3D (pamiêtaj o +0.5f na œrodek kratki)
@@ -139,6 +158,9 @@ public:
     }
 
 private:
+    /**
+     * @brief Obraca wroga w stronê celu (najprostszy obrót o 90 stopni).
+     */
     void RotateTowards(int tx, int ty) {
         if (ty < GameY) yaw = 0;
         else if (ty > GameY) yaw = 180;
@@ -147,6 +169,10 @@ private:
         UpdateOrientation();
     }
 
+    /**
+     * @brief Algorytm ruchu w stronê celu (prostoliniowy).
+     * Próbuje najpierw wyrównaæ oœ z wiêksz¹ ró¿nic¹.
+     */
     void MoveTowards(int tx, int ty, const dungeon::io::Level& level) {
         int dx = (tx > GameX) ? 1 : (tx < GameX) ? -1 : 0;
         int dy = (ty > GameY) ? 1 : (ty < GameY) ? -1 : 0;
