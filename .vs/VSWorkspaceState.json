@@ -13,13 +13,14 @@
     "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\gfx",
-    "\\include\\dungeon\\io",
-    "\\include\\dungeon\\ui",
+    "\\include\\dungeon\\core",
     "\\src",
     "\\src\\core",
-    "\\src\\io"
+    "\\src\\game",
+    "\\src\\gfx",
+    "\\src\\io",
+    "\\src\\ui"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\assets\\maps\\level5.map",
   "PreviewInSolutionExplorer": false
 }
