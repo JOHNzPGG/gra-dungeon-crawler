@@ -11,15 +11,14 @@
     "",
     "\\assets",
     "\\assets\\maps",
+    "\\external",
     "\\include",
     "\\include\\dungeon",
     "\\include\\dungeon\\gfx",
     "\\include\\dungeon\\io",
     "\\include\\dungeon\\ui",
     "\\src",
-    "\\src\\core",
-    "\\src\\io"
+    "\\src\\ui"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }
