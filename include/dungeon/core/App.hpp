@@ -123,12 +123,13 @@ namespace dungeon {
         void build_enemy_mesh();
 
         std::vector<std::string> map_list_ = {
-            "assets/maps/levelPuzzle1.map",
             "assets/maps/level1.map",
+            "assets/maps/levelPuzzle1.map",
             "assets/maps/level2.map",
             "assets/maps/level3.map",
             "assets/maps/level4.map",
-            "assets/maps/level5.map"
+            "assets/maps/level5.map",
+            "assets/maps/level6.map"
         };
         int current_level_idx_ = 0;
 

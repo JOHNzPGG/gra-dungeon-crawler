@@ -79,20 +79,21 @@ namespace dungeon {
             }
             else if (t == '1') {
                 // POZIOM 1: S³aby miecz
-                ItemStats stats; stats.damage = 25;
+                ItemStats stats; stats.damage = 20;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
             }
             else if (t == '2') {
                 // POZIOM 2: Solidny miecz
-                ItemStats stats; stats.damage = 50;
+                ItemStats stats; stats.damage = 45;
                 newItem = new Item("Iron Sword", ItemType::Weapon, false, stats);
             }
             else if (t == '3') {
 				// POZIOM 3: Najlepszy miecz
-                ItemStats stats; stats.damage = 120;
+                ItemStats stats; stats.damage = 80;
                 newItem = new Item("GOD SLAYER", ItemType::Weapon, false, stats);
             }
             else if (t == 'I') {
+                // Atefakt
                 ItemStats stats; stats.damage = 100;
                 newItem = new Item("Artifact", ItemType::Weapon, false, stats);
             }
