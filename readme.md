@@ -170,9 +170,3 @@ Super, mogę Ci zrobić przegląd całego projektu tak, jak wygląda teraz i jak
     * Dodawanie XP graczowi
     * Upuszczanie itemów
 * **Zarządzanie wieloma instancjami przeciwników** z `GameData`
-
----
-
-Jeżeli chcesz, mogę Ci teraz zrobić **pełny schemat klasy `App` + handle_input + ruch, ataki i skille**, pokazując jak wszystko łączyć, żeby gra była w pełni grywalna w turach, z wieloma wrogami, itemami i skillem.
-
-Chcesz, żebym to zrobił?
