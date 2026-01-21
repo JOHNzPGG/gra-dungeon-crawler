@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
 
-# ### POPRAWKA 1: Dodalem 'C', zeby CMake umial obsluzyc plik glad.c
 project(dungeon LANGUAGES CXX C)
 
 if(MSVC)
@@ -45,8 +44,6 @@ FetchContent_MakeAvailable(imgui)
 add_library(glad external/glad/src/glad.c "include/stb_image.h")
 target_include_directories(glad PUBLIC external/glad/include)
 
-# --- USUN��EM ST�D LINI� Z GLM_ENABLE_EXPERIMENTAL ---
-
 if(MSVC)
   set_property(TARGET glad PROPERTY
     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
@@ -72,18 +69,13 @@ target_link_libraries(imgui_lib PUBLIC glfw glad glm)
 
 
 # ===== Glowne zrodla gry =====
-# Ta komenda znajduje WSZYSTKIE pliki .cpp w folderze src
 file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 
-# ### POPRAWKA 2: Usunalem reczne wypisywanie plikow, bo ${SRC} juz je zawiera.
-# Dzieki temu nie bedzie bledow "multiple definition".
 add_executable(dungeon
   ${SRC}
  "include/stb_image.h"
 )
 
-# ===== TU JEST POPRAWIONE MIEJSCE DLA GLM =====
-# Definicja dodana DOPIERO PO stworzeniu 'dungeon'
 target_compile_definitions(dungeon PRIVATE GLM_ENABLE_EXPERIMENTAL)
 # ==============================================
 

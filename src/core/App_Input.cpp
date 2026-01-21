@@ -42,6 +42,7 @@ namespace dungeon {
                     move_target_pos_ = glm::vec3(target.x, 0.0f, target.y);
                     player_.GameX = target.x;
                     player_.GameY = target.y;
+                    weapon_swap_lock_ = false;
                     update_puzzles();
 
                     int idx = target.y * level_.w + target.x;
@@ -62,19 +63,28 @@ namespace dungeon {
         // Auto-pickup
         for (auto& wItem : world_items_) {
             if (!wItem.isAlive) continue;
+
             if ((int)wItem.position.x == player_.GameX && (int)wItem.position.z == player_.GameY) {
                 Item* item = wItem.itemData;
+
                 if (item->type == ItemType::Weapon) {
+                    if (weapon_swap_lock_) continue;
+
                     if (player_.equippedWeapon) {
-                        WorldItem dropped; dropped.itemData = player_.equippedWeapon;
+                        WorldItem dropped;
+                        dropped.itemData = player_.equippedWeapon;
                         dropped.position = glm::vec3(player_.GameX + 0.5f, 0.7f, player_.GameY + 0.5f);
                         dropped.isAlive = true;
                         world_items_.push_back(dropped);
                     }
                     player_.Equip(item);
                     has_held_item_ = true;
+                    weapon_swap_lock_ = true;
                 }
-                else player_.AddToInventory(item);
+                else {
+                    player_.AddToInventory(item);
+                }
+
                 wItem.isAlive = false;
                 break;
             }

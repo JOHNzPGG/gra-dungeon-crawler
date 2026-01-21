@@ -366,7 +366,23 @@ namespace dungeon {
                 M = glm::scale(M, glm::vec3(scale));
 
                 world_shader_.setMat4("uModel", &M[0][0]);
-                world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f);
+                std::string name = wItem.itemData->name;
+
+                if (name == "MAXWELL") {
+                    world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
+                }
+                else if (name == "Rusty Sword") {
+                    world_shader_.setVec4("uColor", 0.6f, 0.4f, 0.2f, 0.9f); // Br¹zowy
+                }
+                else if (name == "Iron Sword") {
+                    world_shader_.setVec4("uColor", 0.8f, 0.9f, 1.0f, 0.9f); // Srebrny
+                }
+                else if (name == "GOD SLAYER") {
+                    world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.9f); // Z³oty
+                }
+                else {
+                    world_shader_.setVec4("uColor", 0.5f, 0.5f, 0.5f, 0.9f); // Domyœlny
+                }
                 world_shader_.setInt("uUseTex", 1);
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, weapon_texture_);
@@ -440,7 +456,15 @@ namespace dungeon {
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, weapon_texture_);
             world_shader_.setInt("uTex", 0);
-            world_shader_.setVec4("uColor", 0.2f, 0.2f, 0.2f, 0.8f);
+
+            if (player_.equippedWeapon) {
+                std::string name = player_.equippedWeapon->name;
+                if      (name == "MAXWELL")          world_shader_.setVec4("uColor", 1.0f, 1.0f, 1.0f, 0.9f);
+                else if (name == "Rusty Sword") world_shader_.setVec4("uColor", 0.6f, 0.4f, 0.2f, 0.9f);
+                else if (name == "Iron Sword")  world_shader_.setVec4("uColor", 0.8f, 0.9f, 1.0f, 0.9f);
+                else if (name == "GOD SLAYER")  world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.0f, 0.9f);
+                else world_shader_.setVec4("uColor", 0.7f, 0.7f, 0.7f, 1.0f);
+            }
 
             glm::mat4 M(1.0f);
             M = glm::translate(M, item_pos);

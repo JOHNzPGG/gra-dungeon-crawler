@@ -17,7 +17,6 @@ public:
     Item* equippedWeapon = nullptr;
     Item* equippedArmor = nullptr;
 
-    // NOWOŒÆ: Plecak na przedmioty
     std::vector<Item*> inventory;
 
     Player(int x, int y, int yaw)

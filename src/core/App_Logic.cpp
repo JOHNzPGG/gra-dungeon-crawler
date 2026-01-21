@@ -73,8 +73,24 @@ namespace dungeon {
                 newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
             }
             else if (t == 'M') {
-                ItemStats stats; stats.damage = 35;
+                // EASTER EGG: MAXWELL
+                ItemStats stats; stats.damage = 150;
+                newItem = new Item("MAXWELL", ItemType::Weapon, false, stats);
+            }
+            else if (t == '1') {
+                // POZIOM 1: S³aby miecz
+                ItemStats stats; stats.damage = 25;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
+            }
+            else if (t == '2') {
+                // POZIOM 2: Solidny miecz
+                ItemStats stats; stats.damage = 50;
+                newItem = new Item("Iron Sword", ItemType::Weapon, false, stats);
+            }
+            else if (t == '3') {
+				// POZIOM 3: Najlepszy miecz
+                ItemStats stats; stats.damage = 120;
+                newItem = new Item("GOD SLAYER", ItemType::Weapon, false, stats);
             }
             else if (t == 'I') {
                 ItemStats stats; stats.damage = 100;
@@ -82,8 +98,7 @@ namespace dungeon {
             }
 
             if (newItem) {
-                // Dodajemy do œwiata na wysokoœci 0.7f
-                world_items_.push_back({ newItem, glm::vec3(x, 0.7f, z), true });
+                world_items_.push_back({ newItem, glm::vec3(x, 0.8f, z), true });
             }
         }
 

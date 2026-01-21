@@ -11,8 +11,8 @@ namespace dungeon::ui {
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_AlwaysAutoResize |
             ImGuiWindowFlags_NoTitleBar)) {
-            ImGui::Text("HP: %d  AP: %d", s.hp, s.ap);
-            ImGui::Separator();
+            //ImGui::Text("HP: %d  AP: %d", s.hp, s.ap);
+            //ImGui::Separator();
             ImGui::Text("%s", s.in_turn ? "Tryb tury: TAK" : "Tryb tury: NIE");
             ImGui::Separator();
             ImGui::TextWrapped("%s", s.log.c_str());

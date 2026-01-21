@@ -2,9 +2,9 @@
 #define GRA_DUNGEON_CRAWLER_ENEMY_H
 
 #include "Entity.h"
-#include "dungeon/io/MapLoader.hpp" // Potrzebujemy definicji Level
+#include "dungeon/io/MapLoader.hpp"
 #include <glm/glm.hpp>
-#include <glm/gtx/vector_angle.hpp> // Do obliczania k¹tów
+#include <glm/gtx/vector_angle.hpp>
 #include <cmath>
 
 class Enemy : public Entity {
@@ -16,7 +16,7 @@ public:
         : Entity(x, y, yaw, hp, maxHp, ap, damage, true, name) {
     }
 
-    // --- MÓZG PRZECIWNIKA ---
+    // --- AI PRZECIWNIKA ---
     // Funkcja wywo³ywana raz na turê przeciwnika
     void TakeTurn(Entity* target, const dungeon::io::Level& level) {
         if (!IsAlive()) return;
@@ -25,13 +25,13 @@ public:
         bool seesTarget = CanSee(target, level);
 
         if (seesTarget) {
-            // A. Jeœli jestem blisko -> Atakuj
+            // A. Jeœli gracz jest blisko atakuj
             float dist = glm::distance(glm::vec2(GameX, GameY), glm::vec2(target->GameX, target->GameY));
-            if (dist <= 1.5f) { // 1.5 wystarczy by z³apaæ przek¹tn¹ (1.41)
+			if (dist <= 1.5f) { // 1.5 wystarczy by z³apaæ przek¹tn¹ kratki
                 RotateTowards(target->GameX, target->GameY);
                 Attack(target);
             }
-            // B. Jeœli jestem daleko -> Goñ
+			// B. Jeœli jestem daleko goñ za mn¹
             else {
                 MoveTowards(target->GameX, target->GameY, level);
 
@@ -54,7 +54,7 @@ public:
         float dist = glm::distance(glm::vec2(GameX, GameY), glm::vec2(target->GameX, target->GameY));
         if (dist > 6.0f) return false;
 
-        // 2. Kierunek (Dot product)
+        // 2. Kierunek
         glm::vec2 toTarget = glm::vec2(target->GameX - GameX, target->GameY - GameY);
         glm::vec2 dir = glm::vec2(orientation.x, orientation.z); // orientation z Object.h
 
@@ -63,7 +63,7 @@ public:
         if (glm::length(dir) > 0.1f) dir = glm::normalize(dir);
 
         float dot = glm::dot(dir, toTarget);
-        // dot > 0.5 oznacza k¹t widzenia ok. 120 stopni (szeroki sto¿ek)
+        // dot > 0.5 oznacza k¹t widzenia ok. 120 stopni
         // dot > 0.7 oznacza ok 90 stopni.
         if (dot < 0.5f) return false;
 
@@ -88,7 +88,7 @@ public:
             int checkX = (int)std::round(cx);
             int checkY = (int)std::round(cy);
 
-            // Jeœli trafimy w cel, to OK
+            // Jeœli trafi w cel, to OK
             if (checkX == x2 && checkY == y2) return true;
 
             // SprawdŸ kolizjê ze œcian¹
@@ -99,9 +99,9 @@ public:
     }
 
     // --- ANIMACJA RUCHU ---
-    glm::vec3 VisualPos;       // Tutaj stoi model (p³ynne)
-    glm::vec3 AnimStartPos;    // Sk¹d wyruszyliœmy
-    glm::vec3 AnimTargetPos;   // Dok¹d idziemy (cel animacji)
+    glm::vec3 VisualPos;       // Tutaj stoi model
+    glm::vec3 AnimStartPos;    // Sk¹d wyruszy³
+    glm::vec3 AnimTargetPos;   // Dok¹d idzie
     float AnimTimer = 0.0f;
     bool IsMoving = false;
     const float AnimDuration = 0.15f; // Czas trwania (bardzo szybki suw)

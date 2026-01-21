@@ -43,7 +43,7 @@ namespace dungeon {
         Paused
     };
 
-    // Struktura reprezentująca przedmiot leżący na ziemi w świecie 3D
+    // Struktura reprezentująca przedmiot leżący na ziemi
     struct WorldItem {
         Item* itemData;     // Wskaźnik do danych przedmiotu (statystyki, nazwa)
         glm::vec3 position; // Gdzie leży
@@ -186,9 +186,8 @@ namespace dungeon {
         GLuint torch_texture_ = 0;
         int torch_vertex_count_ = 0;
 
-        //PORTAL
-
         // PORTAL
+
         GLuint portal_vao_ = 0;
         GLuint portal_vbo_ = 0;
         GLuint portal_texture_ = 0;
@@ -210,6 +209,7 @@ namespace dungeon {
         bool k1_was_down_  = false;
         bool k2_was_down_  = false;
         bool k3_was_down_  = false;
+        bool weapon_swap_lock_ = false; // Blokada podnoszenia broni po wymianie
 
         bool show_menu_ = false;
         GameState state_ = GameState::MainMenu;
@@ -219,7 +219,7 @@ namespace dungeon {
         int cube_vertex_count_ = 0;
         std::vector<glm::vec3> enemies_world_pos_;
         bool has_held_item_ = false;
-        GLuint item_texture_ = 0; // kiedy� tekstura
+        GLuint item_texture_ = 0;
         std::vector<WorldItem> world_items_;
         float attack_anim_timer_ = 0.0f;       // Obecny czas animacji (0 = brak ataku)
         const float kAttackDuration_ = 0.25f;  // Jak długo trwa cios (w sekundach)

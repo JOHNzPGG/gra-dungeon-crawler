@@ -13,8 +13,6 @@ namespace dungeon::io {
         std::vector<std::string> lines;
         std::string line;
         while (std::getline(f, line)) {
-            // Usuwamy znak powrotu karetki '\r' (problem Windows vs Linux), 
-            // kt�ry czasem psuje czytanie mapy
             if (!line.empty() && line.back() == '\r') line.pop_back();
             if (!line.empty()) lines.push_back(line);
         }
@@ -23,7 +21,6 @@ namespace dungeon::io {
         L.h = (int)lines.size();
         L.w = L.h ? (int)lines[0].size() : 0;
 
-        // Domy�lne warto�ci (�eby nie l�dowa� w nico�ci w razie b��du)
         L.cells.assign(L.w * L.h, Cell::Wall);
         L.player_x = 1;
         L.player_y = 1;
@@ -35,8 +32,6 @@ namespace dungeon::io {
 
                 char c = lines[y][x];
 
-                // 1. Domy�lnie zak�adamy, �e to pod�oga (chyba �e trafimy na #)
-                // Wcze�niej by�o odwrotnie i to powodowa�o b��d!
                 if (c == '#') {
                     L.cells[y * L.w + x] = Cell::Wall;
                 }
@@ -55,11 +50,10 @@ namespace dungeon::io {
                     L.cells[y * L.w + x] = Cell::Exit;
                 }
                 else {
-                    // Kropka, Spacja, Wrogowie, Gracz -> Wszystko stoi na pod�odze
                     L.cells[y * L.w + x] = Cell::Floor;
                 }
 
-                // 2. Parsowanie obiekt�w
+				// gracz i jego położenie
                 if (c == '@' || c == 'v') {
                     L.player_x = x; L.player_y = y; L.player_start_yaw = 180.0f;
                 }
@@ -73,7 +67,7 @@ namespace dungeon::io {
                     L.player_x = x; L.player_y = y; L.player_start_yaw = 270.0f;
                 }
 
-                // --- TU BY� B��D: Teraz 'S' i 'Z' s� ju� oznaczone jako Floor wy�ej ---
+                // --- ENEMY I ITEMY ---
                 else if (c == 'S') {
                     L.enemy_spawns.push_back({ x, y, 'S' });
                 }
@@ -81,13 +75,16 @@ namespace dungeon::io {
                     L.enemy_spawns.push_back({ x, y, 'Z' });
                 }
                 else if (c == 'I') {
-                    L.item_spawns.push_back({ x, y, 'I' });  // Przedmiot -> item_spawns!
+                    L.item_spawns.push_back({ x, y, 'I' });
+                }
+                else if (c == '1' || c == '2' || c == '3') {
+                    L.item_spawns.push_back({ x, y, c });
                 }
                 else if (c == 'P') {
-                    L.item_spawns.push_back({ x, y, 'P' });  // Przedmiot -> item_spawns!
+                    L.item_spawns.push_back({ x, y, 'P' });
                 }
                 else if (c == 'M') {
-                    L.item_spawns.push_back({ x, y, 'M' });  // Miecz -> item_spawns!
+                    L.item_spawns.push_back({ x, y, 'M' });
                 }
             }
         }

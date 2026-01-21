@@ -1,8 +1,0 @@
-//
-// Created by wdzik on 29.11.2025.
-//
-
-#ifndef GRA_DUNGEON_CRAWLER_GAME_H
-#define GRA_DUNGEON_CRAWLER_GAME_H
-
-#endif //GRA_DUNGEON_CRAWLER_GAME_H

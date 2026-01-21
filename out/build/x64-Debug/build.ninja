@@ -294,16 +294,6 @@ build CMakeFiles\dungeon.dir\src\game\clases\Skill.cpp.obj: CXX_COMPILER__dungeo
   TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
   TARGET_PDB = dungeon.pdb
 
-build CMakeFiles\dungeon.dir\src\game\game.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\game\game.cpp || cmake_object_order_depends_target_dungeon
-  CONFIG = Debug
-  DEFINES = -DGLM_ENABLE_EXPERIMENTAL -DIMGUI_IMPL_OPENGL_LOADER_GLAD
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd
-  INCLUDES = -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\assets" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glfw-src\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\external\glad\include" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\imgui-src\backends" -I"D:\Pliki\gra dungeon projekt\gra-dungeon-crawler\out\build\x64-Debug\_deps\glm-src"
-  OBJECT_DIR = CMakeFiles\dungeon.dir
-  OBJECT_FILE_DIR = CMakeFiles\dungeon.dir\src\game
-  TARGET_COMPILE_PDB = CMakeFiles\dungeon.dir\
-  TARGET_PDB = dungeon.pdb
-
 build CMakeFiles\dungeon.dir\src\gfx\Shader.cpp.obj: CXX_COMPILER__dungeon_unscanned_Debug D$:\Pliki\gra$ dungeon$ projekt\gra-dungeon-crawler\src\gfx\Shader.cpp || cmake_object_order_depends_target_dungeon
   CONFIG = Debug
   DEFINES = -DGLM_ENABLE_EXPERIMENTAL -DIMGUI_IMPL_OPENGL_LOADER_GLAD
@@ -352,7 +342,7 @@ build CMakeFiles\dungeon.dir\src\ui\Hud.cpp.obj: CXX_COMPILER__dungeon_unscanned
 #############################################
 # Link the executable dungeon.exe
 
-build dungeon.exe: CXX_EXECUTABLE_LINKER__dungeon_Debug CMakeFiles\dungeon.dir\src\core\App.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Init.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Input.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Logic.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Render.cpp.obj CMakeFiles\dungeon.dir\src\core\App_UI.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Enemy.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Entity.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Item.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Object.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Player.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Skill.cpp.obj CMakeFiles\dungeon.dir\src\game\game.cpp.obj CMakeFiles\dungeon.dir\src\gfx\Shader.cpp.obj CMakeFiles\dungeon.dir\src\io\MapLoader.cpp.obj CMakeFiles\dungeon.dir\src\main.cpp.obj CMakeFiles\dungeon.dir\src\ui\Hud.cpp.obj | _deps\glfw-build\src\glfw3.lib glad.lib imgui_lib.lib _deps\glfw-build\src\glfw3.lib glad.lib _deps\glm-build\glm\glm.lib || _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib glad.lib imgui_lib.lib
+build dungeon.exe: CXX_EXECUTABLE_LINKER__dungeon_Debug CMakeFiles\dungeon.dir\src\core\App.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Init.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Input.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Logic.cpp.obj CMakeFiles\dungeon.dir\src\core\App_Render.cpp.obj CMakeFiles\dungeon.dir\src\core\App_UI.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Enemy.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Entity.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Item.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Object.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Player.cpp.obj CMakeFiles\dungeon.dir\src\game\clases\Skill.cpp.obj CMakeFiles\dungeon.dir\src\gfx\Shader.cpp.obj CMakeFiles\dungeon.dir\src\io\MapLoader.cpp.obj CMakeFiles\dungeon.dir\src\main.cpp.obj CMakeFiles\dungeon.dir\src\ui\Hud.cpp.obj | _deps\glfw-build\src\glfw3.lib glad.lib imgui_lib.lib _deps\glfw-build\src\glfw3.lib glad.lib _deps\glm-build\glm\glm.lib || _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib glad.lib imgui_lib.lib
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
