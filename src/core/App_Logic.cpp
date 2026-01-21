@@ -30,7 +30,7 @@ namespace dungeon {
         update_exploration();
     }
 
-    // --- SPAWNOWANIE JEDNOSTEK (Dziêki temu s¹ ikony i modele) --- 
+    // --- SPAWNOWANIE JEDNOSTEK (Dziï¿½ki temu sï¿½ ikony i modele) --- 
     void App::spawn_entities_from_level() {
         for (auto* e : enemies_) delete e;
         enemies_.clear();
@@ -78,7 +78,7 @@ namespace dungeon {
                 newItem = new Item("MAXWELL", ItemType::Weapon, false, stats);
             }
             else if (t == '1') {
-                // POZIOM 1: S³aby miecz
+                // POZIOM 1: Sï¿½aby miecz
                 ItemStats stats; stats.damage = 20;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
             }
@@ -103,9 +103,10 @@ namespace dungeon {
             }
         }
 
-        // 3. ZAGADKI (Pochodnie i P³yty)
+        // 3. ZAGADKI (Pochodnie i Pï¿½yty)
         for (const auto& spawn : level_.puzzle_torches) {
-            puzzle_torches_.push_back({ spawn.x, spawn.y, false });
+            if (spawn.x==5||spawn.x==7) puzzle_torches_.push_back({ spawn.x, spawn.y, true });
+            else puzzle_torches_.push_back({ spawn.x, spawn.y, false });
         }
         for (const auto& spawn : level_.pressure_plates) {
             int id = (int)pressure_plates_.size() + 1;
@@ -167,12 +168,12 @@ namespace dungeon {
                 }
             }
         }
-        int lit_count = 0;
+        int lit_count = 2;
         for (const auto& t : puzzle_torches_) if (t.y == 0 && t.is_lit) lit_count++;
         if (lit_count == 6) {
-            printf("Pochodnie zapalone! Otwieram tajne przejœcie.\n");
+            printf("Pochodnie zapalone! Otwieram tajne przejï¿½cie.\n");
             level_.cells[4 * level_.w + 5] = io::Cell::Floor;
-            build_world_mesh(); // Przebuduj œwiat ¿eby usun¹æ œcianê
+            build_world_mesh(); // Przebuduj ï¿½wiat ï¿½eby usunï¿½ï¿½ ï¿½cianï¿½
             trauma_ = 0.5f;
         }
     }
