@@ -24,7 +24,7 @@ namespace dungeon {
     struct AppConfig {
         int width = 1280;
         int height = 720;
-        std::string title = "Dungeon Starter";
+        std::string title = "Dungeon Crawler 3D";
     };
 
 
