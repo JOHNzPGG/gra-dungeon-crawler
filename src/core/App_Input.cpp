@@ -60,7 +60,7 @@ namespace dungeon {
             }
         }
 
-        // Auto-pickup
+        // Auto-pickup 
         for (auto& wItem : world_items_) {
             if (!wItem.isAlive) continue;
 

@@ -13,7 +13,7 @@ namespace dungeon::io {
         Exit = 3
     };
 
-    // Nowa struktura: Trzyma pozycje ORAZ typ wroga (np. 'S', 'Z')
+    // Nowa struktura: Trzyma pozycje ORAZ typ wroga (np. 'S', 'Z') 
     struct EnemySpawn {
         int x, y;
         char type;

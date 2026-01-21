@@ -9,7 +9,7 @@ int main() {
     }
     catch (const std::exception& e) {
         std::fprintf(stderr, "Fatal error: %s\n", e.what());
-        std::getchar(); // czekaj na Enter, ¿eby okno konsoli nie znik³o od razu
+        std::getchar();
         return 1;
     }
     return 0;

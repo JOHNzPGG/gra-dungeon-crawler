@@ -427,7 +427,7 @@ namespace dungeon {
             }
         }
         glBindVertexArray(0);
-
+         
         // --- 9. HELD ITEM ---
         if (state_ == GameState::Playing && camera_mode_ == CameraMode::FirstPerson && has_held_item_) {
             float rad = glm::radians((float)player_.yaw);

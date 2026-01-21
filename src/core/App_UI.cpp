@@ -35,7 +35,7 @@ namespace dungeon {
         ImGui::End();
         ImGui::PopStyleColor();
 
-        // --- PANEL BOCZNY (MINIMAPA) ---
+        // --- PANEL BOCZNY (MINIMAPA) --- 
         float panelWidth = 200.0f;
         float padding = 10.0f;
         ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x - panelWidth - padding, padding));

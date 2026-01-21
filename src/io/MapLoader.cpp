@@ -36,7 +36,7 @@ namespace dungeon::io {
                     L.cells[y * L.w + x] = Cell::Wall;
                 }
                 else if (c == 'L') {
-                    L.cells[y * L.w + x] = Cell::Wall; // POCHODNIA = ŚCIANA
+                    L.cells[y * L.w + x] = Cell::Wall; // POCHODNIA = ŚCIANA 
                     L.puzzle_torches.push_back({ x, y, 'L' });
                 }
                 else if (c == 'T') {

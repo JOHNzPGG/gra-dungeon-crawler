@@ -30,7 +30,7 @@ namespace dungeon {
         update_exploration();
     }
 
-    // --- SPAWNOWANIE JEDNOSTEK (Dziêki temu s¹ ikony i modele) ---
+    // --- SPAWNOWANIE JEDNOSTEK (Dziêki temu s¹ ikony i modele) --- 
     void App::spawn_entities_from_level() {
         for (auto* e : enemies_) delete e;
         enemies_.clear();

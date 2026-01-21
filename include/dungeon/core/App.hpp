@@ -43,7 +43,7 @@ namespace dungeon {
         Paused
     };
 
-    // Struktura reprezentująca przedmiot leżący na ziemi
+    // Struktura reprezentująca przedmiot leżący na ziemi 
     struct WorldItem {
         Item* itemData;     // Wskaźnik do danych przedmiotu (statystyki, nazwa)
         glm::vec3 position; // Gdzie leży

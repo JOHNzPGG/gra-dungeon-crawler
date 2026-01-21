@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "tiny_obj_loader.h" 
 
-// --- KONFIGURACJA SHADERÓW (VERTEX & FRAGMENT) ---
+// --- KONFIGURACJA SHADERÓW (VERTEX & FRAGMENT) --- 
 static const char* kWorldVS = R"(#version 330 core
 layout(location=0) in vec3 aPos;
 layout(location=1) in vec2 aTexCoord;
