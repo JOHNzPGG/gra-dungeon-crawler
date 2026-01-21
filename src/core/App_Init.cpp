@@ -436,7 +436,7 @@ namespace dungeon {
         std::string baseDir = "assets/models/";
 
         // ------------------------------------
-        // [MOD] DODAWAJ NOWYCH WROGÓW TUTAJ 
+        // [MOD] DODAWANIE NOWYCH WROGÓW TUTAJ 
         // ------------------------------------
 
         // 1. ZOMBIE

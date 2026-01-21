@@ -173,7 +173,7 @@ namespace dungeon {
                         world_shader_.setVec4("uColor", 1.0f, 0.8f, 0.2f, 1.0f);
 
                     glm::mat4 M(1.0f);
-                    // Lekko nad pod³og¹ (0.05) ¿eby le¿a³ na kamieniach
+                    // Lekko nad pod³og¹ (0.55) ¿eby le¿a³ na kamieniach
                     M = glm::translate(M, glm::vec3(x + 0.5f, 0.55f, y + 0.5f));
 
                     if (portal_vertex_count_ > 0) {
@@ -206,16 +206,16 @@ namespace dungeon {
         // --- 5. RYSOWANIE POCHODNI (ZAGADKA 1) ---
         for (const auto& torch : puzzle_torches_) {
             // Debug: Ró¿owy S³up
-            {
-                world_shader_.setInt("uUseTex", 0);
-                world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f);
-                glm::mat4 M_debug(1.0f);
-                M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
-                M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
-                world_shader_.setMat4("uModel", &M_debug[0][0]);
-                glBindVertexArray(cube_vao_);
-                glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
-            }
+            //{
+            //    world_shader_.setInt("uUseTex", 0);
+            //    world_shader_.setVec4("uColor", 1.0f, 0.0f, 1.0f, 0.8f);
+            //    glm::mat4 M_debug(1.0f);
+            //    M_debug = glm::translate(M_debug, glm::vec3(torch.x + 0.5f, 2.0f, torch.y + 0.5f));
+            //    M_debug = glm::scale(M_debug, glm::vec3(0.05f, 4.0f, 0.05f));
+            //    world_shader_.setMat4("uModel", &M_debug[0][0]);
+            //    glBindVertexArray(cube_vao_);
+            //    glDrawArrays(GL_TRIANGLES, 0, cube_vertex_count_);
+            //}
 
             if (torch.is_lit) world_shader_.setVec4("uColor", 1.5f, 1.2f, 0.8f, 1.0f);
             else world_shader_.setVec4("uColor", 0.3f, 0.3f, 0.3f, 1.0f);
