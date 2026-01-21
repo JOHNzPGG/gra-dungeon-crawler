@@ -9,16 +9,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\assets",
-    "\\assets\\maps",
-    "\\external",
     "\\include",
     "\\include\\dungeon",
-    "\\include\\dungeon\\gfx",
-    "\\include\\dungeon\\io",
-    "\\include\\dungeon\\ui",
+    "\\include\\dungeon\\core",
     "\\src",
+    "\\src\\core",
+    "\\src\\game",
+    "\\src\\gfx",
+    "\\src\\io",
     "\\src\\ui"
   ],
+  "SelectedNode": "\\assets\\maps\\level1.map",
   "PreviewInSolutionExplorer": false
 }

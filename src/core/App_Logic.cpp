@@ -69,7 +69,7 @@ namespace dungeon {
             char t = spawn.type;
 
             if (t == 'P') {
-                ItemStats stats; stats.health = 40;
+                ItemStats stats; stats.health = 25;
                 newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
             }
             else if (t == 'M') {
