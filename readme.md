@@ -3,8 +3,6 @@ cmake -S . -B build -G "Visual Studio 17 2022"                          # budowa
 cmake --build build --config Release                                    # budowanie projektu
 build\Release\dungeon.exe                                               # odpalanie projektu z tej ścieżki z widoku najlepiej terminala
 
-Super, mogę Ci zrobić przegląd całego projektu tak, jak wygląda teraz i jak wszystko ze sobą współgra. Pokażę strukturę, zależności i przepływ działania. Dzięki temu będziesz dokładnie wiedział, co jest gotowe, a co jeszcze trzeba dodać.
-
 ---
 
 ## 1️⃣ Struktura klas
