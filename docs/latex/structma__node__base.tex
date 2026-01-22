@@ -1,0 +1,67 @@
+\doxysection{ma\+\_\+node\+\_\+base Struct Reference}
+\hypertarget{structma__node__base}{}\label{structma__node__base}\index{ma\_node\_base@{ma\_node\_base}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__node__base_ae1d393766c0e11f04785ad258d8df3bd}\label{structma__node__base_ae1d393766c0e11f04785ad258d8df3bd} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+node\+\_\+state) state
+\item 
+\Hypertarget{structma__node__base_a1b27b9cbc36fcb0e5aba40909dbc2bb5}\label{structma__node__base_a1b27b9cbc36fcb0e5aba40909dbc2bb5} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) state\+Times\+[2]\+
+\item 
+\Hypertarget{structma__node__base_a102c104f74caf3d6cd415dad7accff76}\label{structma__node__base_a102c104f74caf3d6cd415dad7accff76} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) local\+Time
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__node__base_a3197bb769738f33ff78a37ea12d6ce5b}\label{structma__node__base_a3197bb769738f33ff78a37ea12d6ce5b} 
+\doxymbox{\hyperlink{structma__node__graph}{ma\+\_\+node\+\_\+graph}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Node\+Graph}
+\item 
+\Hypertarget{structma__node__base_a9a72c2f856971f22c84ac906115d6559}\label{structma__node__base_a9a72c2f856971f22c84ac906115d6559} 
+const \doxymbox{\hyperlink{structma__node__vtable}{ma\+\_\+node\+\_\+vtable}} \texorpdfstring{$\ast$}{*} {\bfseries vtable}
+\item 
+\Hypertarget{structma__node__base_aa30b44c8fa72c32dca7cb603662df6f1}\label{structma__node__base_aa30b44c8fa72c32dca7cb603662df6f1} 
+ma\+\_\+uint32 {\bfseries input\+Bus\+Count}
+\item 
+\Hypertarget{structma__node__base_a9aaf084458ad4bf4c5c20b81feeba06a}\label{structma__node__base_a9aaf084458ad4bf4c5c20b81feeba06a} 
+ma\+\_\+uint32 {\bfseries output\+Bus\+Count}
+\item 
+\Hypertarget{structma__node__base_adbea33e242f37b9106a941978328f4a3}\label{structma__node__base_adbea33e242f37b9106a941978328f4a3} 
+\doxymbox{\hyperlink{structma__node__input__bus}{ma\+\_\+node\+\_\+input\+\_\+bus}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Input\+Buses}
+\item 
+\Hypertarget{structma__node__base_ae4db1e20f5ea1ad9430a2f6142169596}\label{structma__node__base_ae4db1e20f5ea1ad9430a2f6142169596} 
+\doxymbox{\hyperlink{structma__node__output__bus}{ma\+\_\+node\+\_\+output\+\_\+bus}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Output\+Buses}
+\item 
+\Hypertarget{structma__node__base_acfe67bedd9c136534f3132189754465e}\label{structma__node__base_acfe67bedd9c136534f3132189754465e} 
+float \texorpdfstring{$\ast$}{*} {\bfseries p\+Cached\+Data}
+\item 
+\Hypertarget{structma__node__base_ab3a827e5813efa1897d676600aadf095}\label{structma__node__base_ab3a827e5813efa1897d676600aadf095} 
+ma\+\_\+uint16 {\bfseries cached\+Data\+Cap\+In\+Frames\+Per\+Bus}
+\item 
+\Hypertarget{structma__node__base_ab4d09d45dbb7d5ffe982f7005772c84d}\label{structma__node__base_ab4d09d45dbb7d5ffe982f7005772c84d} 
+ma\+\_\+uint16 {\bfseries cached\+Frame\+Count\+Out}
+\item 
+\Hypertarget{structma__node__base_a34c12ad8e7ce3a507cd23a3038f484c6}\label{structma__node__base_a34c12ad8e7ce3a507cd23a3038f484c6} 
+ma\+\_\+uint16 {\bfseries cached\+Frame\+Count\+In}
+\item 
+\Hypertarget{structma__node__base_a591b0012a501b7b44087c29ab7cbc8fb}\label{structma__node__base_a591b0012a501b7b44087c29ab7cbc8fb} 
+ma\+\_\+uint16 {\bfseries consumed\+Frame\+Count\+In}
+\item 
+\Hypertarget{structma__node__base_a0dbe97868cd74ab473d5c3365b584f6b}\label{structma__node__base_a0dbe97868cd74ab473d5c3365b584f6b} 
+\doxymbox{\hyperlink{structma__node__input__bus}{ma\+\_\+node\+\_\+input\+\_\+bus}} {\bfseries \+\_\+input\+Buses} \+[MA\+\_\+\+MAX\+\_\+\+NODE\+\_\+\+LOCAL\+\_\+\+BUS\+\_\+\+COUNT]\+
+\item 
+\Hypertarget{structma__node__base_aabc84309e93192f30ae4b5920454b18a}\label{structma__node__base_aabc84309e93192f30ae4b5920454b18a} 
+\doxymbox{\hyperlink{structma__node__output__bus}{ma\+\_\+node\+\_\+output\+\_\+bus}} {\bfseries \+\_\+output\+Buses} \+[MA\+\_\+\+MAX\+\_\+\+NODE\+\_\+\+LOCAL\+\_\+\+BUS\+\_\+\+COUNT]\+
+\item 
+\Hypertarget{structma__node__base_a6c5ec9629577967b89e25646b00149bc}\label{structma__node__base_a6c5ec9629577967b89e25646b00149bc} 
+void \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+p\+Heap}
+\item 
+\Hypertarget{structma__node__base_a2ceaa969d626be977a7d1db5a6b23a18}\label{structma__node__base_a2ceaa969d626be977a7d1db5a6b23a18} 
+ma\+\_\+bool32 {\bfseries \+\_\+owns\+Heap}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

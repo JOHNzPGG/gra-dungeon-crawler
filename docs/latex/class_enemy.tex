@@ -1,0 +1,163 @@
+\doxysection{Enemy Class Reference}
+\hypertarget{class_enemy}{}\label{class_enemy}\index{Enemy@{Enemy}}
+
+
+Reprezentuje przeciwnika sterowanego przez komputer (AI).  
+
+
+
+
+{\ttfamily \+\#include $<$Enemy.\+h$>$}
+
+Inheritance diagram for Enemy:\+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_enemy}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_enemy_a54636cde6f7c992e99ebe9a04b2320d2}\label{class_enemy_a54636cde6f7c992e99ebe9a04b2320d2} 
+{\bfseries Enemy} (int x, int y, int yaw, int hp, int max\+Hp, int ap, float damage, const std::\+string \&name)
+\item 
+\Hypertarget{class_enemy_a0c8675ee551bbe25cb97b83d08a46fa2}\label{class_enemy_a0c8675ee551bbe25cb97b83d08a46fa2} 
+void {\bfseries Take\+Turn} (\doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*}target, const \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{dungeon::\+io::\+\+Level}} \&level)
+\begin{DoxyCompactList}\small\item\em G³ówna logika tury przeciwnika. Wywo³ywana przez \doxylink{_app___logic_8cpp}{App\+\_\+\+Logic.\+cpp} gdy nadejdzie tura wrogów. \end{DoxyCompactList}\item 
+\Hypertarget{class_enemy_ac984284a6b26f4b7b61d2e411565608a}\label{class_enemy_ac984284a6b26f4b7b61d2e411565608a} 
+bool {\bfseries Can\+See} (\doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*}target, const \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{dungeon::\+io::\+\+Level}} \&level)
+\item 
+\Hypertarget{class_enemy_a4faaf0159b40645d6b540e46df7b7024}\label{class_enemy_a4faaf0159b40645d6b540e46df7b7024} 
+bool {\bfseries Check\+Line\+Of\+Sight} (int x1, int y1, int x2, int y2, const \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{dungeon::\+io::\+\+Level}} \&level)
+\item 
+\Hypertarget{class_enemy_a9959adfa2a1799c776bc60537ef70746}\label{class_enemy_a9959adfa2a1799c776bc60537ef70746} 
+void {\bfseries Update\+Animation} (float dt)
+\item 
+\Hypertarget{class_enemy_acab7856f7438c0c17158574d20e7937f}\label{class_enemy_acab7856f7438c0c17158574d20e7937f} 
+void {\bfseries Start\+Move\+Animation} (int oldX, int oldY, int newX, int newY)
+\begin{DoxyCompactList}\small\item\em Rozpoczyna p³ynn¹ animacjê ruchu. Zmienia Render\+Position, aby model "{}przesuwa³ siê"{} zamiast teleportowaæ. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{class_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Entity} (int x, int y, int yaw\+Angle, int hp, int max\+Hp, int ap, int damage, bool has\+Collision=true, const std::\+string \&entity\+Name="{}"{})
+\item 
+glm::\+ivec2 \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{Get\+Move\+Target}} (int offset\+Steps=0) const
+\begin{DoxyCompactList}\small\item\em Oblicza wspó³rzêdne s¹siedniego pola w danym kierunku. \end{DoxyCompactList}\item 
+glm::\+ivec2 {\bfseries Get\+Forward\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Right\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Back\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Left\+Tile} () const
+\item 
+void {\bfseries Take\+Damage} (int amount)
+\begin{DoxyCompactList}\small\item\em Zadaje obra¿enia tej jednostce. Rejestruje czas trafienia, aby wywo³aæ efekt wizualny (flash). \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a4909305125a6d7643860aa6d79ca2b7a}{Is\+Hurt}} () const
+\begin{DoxyCompactList}\small\item\em Sprawdza, czy jednostka jest w trakcie animacji otrzymywania obra¿eñ. \end{DoxyCompactList}\item 
+void {\bfseries Heal} (int amount)
+\item 
+bool {\bfseries Is\+Alive} () const
+\item 
+void \doxymbox{\hyperlink{class_entity_ade99d386aae9b3a8c3cafe4464104e49}{Update\+Death}} (float dt)
+\begin{DoxyCompactList}\small\item\em Aktualizuje licznik animacji œmierci. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}{Use\+Action\+Points}} (int ap\+\_\+used=1)
+\begin{DoxyCompactList}\small\item\em Próbuje zu¿yæ punkty akcji. \end{DoxyCompactList}\item 
+void {\bfseries Reset\+Action\+Points} (int ap)
+\item 
+bool {\bfseries Attack} (\doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*}target)
+\begin{DoxyCompactList}\small\item\em Atakuje cel stoj¹cy na wprost. \end{DoxyCompactList}\item 
+void {\bfseries Turn\+Left} ()
+\item 
+void {\bfseries Turn\+Right} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} (int x=0, int y=0, int yaw\+Angle=0)
+\item 
+void {\bfseries Update\+Orientation} ()
+\item 
+void {\bfseries Update\+Orientation} (int new\+\_\+yaw)
+\item 
+void {\bfseries Set\+Position} (int x, int y)
+\item 
+int {\bfseries Get\+Dir\+Index} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Tile\+In\+Direction} (int offset\+Steps=0) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_enemy_a16c3f6fbf0d155080cf259fd4a23d8a2}\label{class_enemy_a16c3f6fbf0d155080cf259fd4a23d8a2} 
+glm::\+vec3 {\bfseries Visual\+Pos}
+\item 
+\Hypertarget{class_enemy_a245cfb8292ba3d1ba945f5e6ef3a1328}\label{class_enemy_a245cfb8292ba3d1ba945f5e6ef3a1328} 
+glm::\+vec3 {\bfseries Anim\+Start\+Pos}
+\item 
+\Hypertarget{class_enemy_ab47721a811ee18694bc6b8ae761ee9c0}\label{class_enemy_ab47721a811ee18694bc6b8ae761ee9c0} 
+glm::\+vec3 {\bfseries Anim\+Target\+Pos}
+\item 
+\Hypertarget{class_enemy_a556d5cd4c36d14486c0606e133c7497b}\label{class_enemy_a556d5cd4c36d14486c0606e133c7497b} 
+float {\bfseries Anim\+Timer} = 0.\+0f
+\item 
+\Hypertarget{class_enemy_adf2f0e74032e68948371487f1c7ee689}\label{class_enemy_adf2f0e74032e68948371487f1c7ee689} 
+bool {\bfseries Is\+Moving} = false
+\item 
+\Hypertarget{class_enemy_a6292ce34ae3a680e7503cc56043faec7}\label{class_enemy_a6292ce34ae3a680e7503cc56043faec7} 
+const float {\bfseries Anim\+Duration} = 0.\+15f
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \doxymbox{\hyperlink{class_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries max\+Health}
+\item 
+int {\bfseries health}
+\item 
+int {\bfseries Action\+Points}
+\item 
+int {\bfseries base\+\_\+damage}
+\item 
+bool {\bfseries colision} = true
+\item 
+float {\bfseries last\+Hit\+Time} = -\/100.\+0f
+\begin{DoxyCompactList}\small\item\em Znacznik czasu ostatniego otrzymania obra¿eñ (do migania na czerwono). \end{DoxyCompactList}\item 
+float {\bfseries death\+Timer} = 0.\+0f
+\begin{DoxyCompactList}\small\item\em Licznik czasu animacji œmierci. \end{DoxyCompactList}\item 
+bool {\bfseries death\+Anim\+Finished} = false
+\begin{DoxyCompactList}\small\item\em Czy animacja œmierci dobieg³a koñca? \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+glm::\+vec3 {\bfseries Render\+Position}
+\item 
+int {\bfseries GameX}
+\item 
+int {\bfseries GameY}
+\item 
+std::\+string {\bfseries name}
+\item 
+int {\bfseries yaw}
+\item 
+float {\bfseries yaw\+Rad}
+\item 
+glm::\+vec3 {\bfseries orientation}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reprezentuje przeciwnika sterowanego przez komputer (AI). 
+
+
+\begin{DoxyItemize}
+\item Implementuje prost¹ maszynê stanów:\+
+\end{DoxyItemize}
+\begin{DoxyEnumerate}
+\item SprawdŸ czy widzê gracza (Raycasting).
+\item Jeœli tak i jestem blisko -\/\texorpdfstring{$>$}{>} Obróæ siê i Atakuj.
+\item Jeœli tak ale jestem daleko -\/\texorpdfstring{$>$}{>} IdŸ w jego stronê. 
+\end{DoxyEnumerate}
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+game/\+clases/\+Enemy.\+h\end{DoxyCompactItemize}

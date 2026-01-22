@@ -9,16 +9,16 @@
   },
   "ExpandedNodes": [
     "",
+    "\\assets",
+    "\\assets\\maps",
     "\\include",
     "\\include\\dungeon",
     "\\include\\dungeon\\core",
+    "\\include\\dungeon\\gfx",
+    "\\include\\dungeon\\io",
     "\\src",
-    "\\src\\core",
-    "\\src\\game",
-    "\\src\\gfx",
-    "\\src\\io",
     "\\src\\ui"
   ],
-  "SelectedNode": "\\assets\\maps\\level1.map",
+  "SelectedNode": "\\CMakeLists.txt",
   "PreviewInSolutionExplorer": false
 }

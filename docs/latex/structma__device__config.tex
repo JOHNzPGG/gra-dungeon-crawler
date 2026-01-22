@@ -1,0 +1,150 @@
+\doxysection{ma\+\_\+device\+\_\+config Struct Reference}
+\hypertarget{structma__device__config}{}\label{structma__device__config}\index{ma\_device\_config@{ma\_device\_config}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__device__config_a176ed17b7a55d2df5bd4fc034332c204}\label{structma__device__config_a176ed17b7a55d2df5bd4fc034332c204} 
+ma\+\_\+device\+\_\+type {\bfseries device\+Type}
+\item 
+\Hypertarget{structma__device__config_a6aa474f1db915567f81c0151acdc3c6c}\label{structma__device__config_a6aa474f1db915567f81c0151acdc3c6c} 
+ma\+\_\+uint32 {\bfseries sample\+Rate}
+\item 
+\Hypertarget{structma__device__config_a9a39d7bdd9b3db3dc3cfe9e7d6acea2a}\label{structma__device__config_a9a39d7bdd9b3db3dc3cfe9e7d6acea2a} 
+ma\+\_\+uint32 {\bfseries period\+Size\+In\+Frames}
+\item 
+\Hypertarget{structma__device__config_aa4e911fbd74ab8ca38f3ac60bcf5b48d}\label{structma__device__config_aa4e911fbd74ab8ca38f3ac60bcf5b48d} 
+ma\+\_\+uint32 {\bfseries period\+Size\+In\+Milliseconds}
+\item 
+\Hypertarget{structma__device__config_aca9f945e436eceae921aef035e982ab7}\label{structma__device__config_aca9f945e436eceae921aef035e982ab7} 
+ma\+\_\+uint32 {\bfseries periods}
+\item 
+\Hypertarget{structma__device__config_a3e194444c1d0600e32a80956c975dda5}\label{structma__device__config_a3e194444c1d0600e32a80956c975dda5} 
+ma\+\_\+performance\+\_\+profile {\bfseries performance\+Profile}
+\item 
+\Hypertarget{structma__device__config_aeefdb958746bcb9dc8871b51ba0b8d5a}\label{structma__device__config_aeefdb958746bcb9dc8871b51ba0b8d5a} 
+ma\+\_\+bool8 {\bfseries no\+Pre\+Silenced\+Output\+Buffer}
+\item 
+\Hypertarget{structma__device__config_abcf59661199f2681d3b0762bb0ddf455}\label{structma__device__config_abcf59661199f2681d3b0762bb0ddf455} 
+ma\+\_\+bool8 {\bfseries no\+Clip}
+\item 
+\Hypertarget{structma__device__config_add8e64ad6cf1882164f5d2283b4fd5e3}\label{structma__device__config_add8e64ad6cf1882164f5d2283b4fd5e3} 
+ma\+\_\+bool8 {\bfseries no\+Disable\+Denormals}
+\item 
+\Hypertarget{structma__device__config_abaebc55fad512e56b40eb29c438fe5e1}\label{structma__device__config_abaebc55fad512e56b40eb29c438fe5e1} 
+ma\+\_\+bool8 {\bfseries no\+Fixed\+Sized\+Callback}
+\item 
+\Hypertarget{structma__device__config_a53d07568b9486c7288af08c2870a3ba1}\label{structma__device__config_a53d07568b9486c7288af08c2870a3ba1} 
+ma\+\_\+device\+\_\+data\+\_\+proc {\bfseries data\+Callback}
+\item 
+\Hypertarget{structma__device__config_a5ef500b365704c73f16413b9d5dd3c2c}\label{structma__device__config_a5ef500b365704c73f16413b9d5dd3c2c} 
+ma\+\_\+device\+\_\+notification\+\_\+proc {\bfseries notification\+Callback}
+\item 
+\Hypertarget{structma__device__config_aa63a1fad8d16b162a01c502d0e755488}\label{structma__device__config_aa63a1fad8d16b162a01c502d0e755488} 
+ma\+\_\+stop\+\_\+proc {\bfseries stop\+Callback}
+\item 
+\Hypertarget{structma__device__config_a4c8e35691e3c777e6033c8d9e0dc8ed7}\label{structma__device__config_a4c8e35691e3c777e6033c8d9e0dc8ed7} 
+void \texorpdfstring{$\ast$}{*} {\bfseries p\+User\+Data}
+\item 
+\Hypertarget{structma__device__config_a361f17516a20c0480a3d4b04dfedfa35}\label{structma__device__config_a361f17516a20c0480a3d4b04dfedfa35} 
+\doxymbox{\hyperlink{structma__resampler__config}{ma\+\_\+resampler\+\_\+config}} {\bfseries resampling}
+\item 
+\Hypertarget{structma__device__config_a9c62e974f860f97f64065d164d7d8e22}\label{structma__device__config_a9c62e974f860f97f64065d164d7d8e22} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>const \doxymbox{\hyperlink{unionma__device__id}{ma\_device\_id}} \texorpdfstring{$\ast$}{*} {\bfseries pDeviceID}\\
+\>ma\_format {\bfseries format}\\
+\>ma\_uint32 {\bfseries channels}\\
+\>ma\_channel \texorpdfstring{$\ast$}{*} {\bfseries pChannelMap}\\
+\>ma\_channel\_mix\_mode {\bfseries channelMixMode}\\
+\>ma\_bool32 {\bfseries calculateLFEFromSpatialChannels}\\
+\>ma\_share\_mode {\bfseries shareMode}\\
+\} {\bfseries playback}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_a76de437da2c0496b0ac236cd4bd97be3}\label{structma__device__config_a76de437da2c0496b0ac236cd4bd97be3} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>const \doxymbox{\hyperlink{unionma__device__id}{ma\_device\_id}} \texorpdfstring{$\ast$}{*} {\bfseries pDeviceID}\\
+\>ma\_format {\bfseries format}\\
+\>ma\_uint32 {\bfseries channels}\\
+\>ma\_channel \texorpdfstring{$\ast$}{*} {\bfseries pChannelMap}\\
+\>ma\_channel\_mix\_mode {\bfseries channelMixMode}\\
+\>ma\_bool32 {\bfseries calculateLFEFromSpatialChannels}\\
+\>ma\_share\_mode {\bfseries shareMode}\\
+\} {\bfseries capture}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_a839c381b1a21f0127c5d43600b61a759}\label{structma__device__config_a839c381b1a21f0127c5d43600b61a759} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ma\_wasapi\_usage {\bfseries usage}\\
+\>ma\_bool8 {\bfseries noAutoConvertSRC}\\
+\>ma\_bool8 {\bfseries noDefaultQualitySRC}\\
+\>ma\_bool8 {\bfseries noAutoStreamRouting}\\
+\>ma\_bool8 {\bfseries noHardwareOffloading}\\
+\>ma\_uint32 {\bfseries loopbackProcessID}\\
+\>ma\_bool8 {\bfseries loopbackProcessExclude}\\
+\} {\bfseries wasapi}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_add446658e4fee4a44c187b924808a871}\label{structma__device__config_add446658e4fee4a44c187b924808a871} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ma\_bool32 {\bfseries noMMap}\\
+\>ma\_bool32 {\bfseries noAutoFormat}\\
+\>ma\_bool32 {\bfseries noAutoChannels}\\
+\>ma\_bool32 {\bfseries noAutoResample}\\
+\} {\bfseries alsa}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_a815166630dbfc0aefd92119a1ad261ec}\label{structma__device__config_a815166630dbfc0aefd92119a1ad261ec} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>const char \texorpdfstring{$\ast$}{*} {\bfseries pStreamNamePlayback}\\
+\>const char \texorpdfstring{$\ast$}{*} {\bfseries pStreamNameCapture}\\
+\>int {\bfseries channelMap}\\
+\} {\bfseries pulse}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_ad9a7e08ccb096240f0177763af0054a4}\label{structma__device__config_ad9a7e08ccb096240f0177763af0054a4} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ma\_bool32 {\bfseries allowNominalSampleRateChange}\\
+\} {\bfseries coreaudio}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_ab71f8e715a5e99e37e4fb96963ea027a}\label{structma__device__config_ab71f8e715a5e99e37e4fb96963ea027a} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ma\_opensl\_stream\_type {\bfseries streamType}\\
+\>ma\_opensl\_recording\_preset {\bfseries recordingPreset}\\
+\>ma\_bool32 {\bfseries enableCompatibilityWorkarounds}\\
+\} {\bfseries opensl}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__device__config_a46718ecc734b04c75f2c6804effc8ec3}\label{structma__device__config_a46718ecc734b04c75f2c6804effc8ec3} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>ma\_aaudio\_usage {\bfseries usage}\\
+\>ma\_aaudio\_content\_type {\bfseries contentType}\\
+\>ma\_aaudio\_input\_preset {\bfseries inputPreset}\\
+\>ma\_aaudio\_allowed\_capture\_policy {\bfseries allowedCapturePolicy}\\
+\>ma\_bool32 {\bfseries noAutoStartAfterReroute}\\
+\>ma\_bool32 {\bfseries enableCompatibilityWorkarounds}\\
+\>ma\_bool32 {\bfseries allowSetBufferCapacity}\\
+\} {\bfseries aaudio}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

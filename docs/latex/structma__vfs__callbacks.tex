@@ -1,0 +1,34 @@
+\doxysection{ma\+\_\+vfs\+\_\+callbacks Struct Reference}
+\hypertarget{structma__vfs__callbacks}{}\label{structma__vfs__callbacks}\index{ma\_vfs\_callbacks@{ma\_vfs\_callbacks}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__vfs__callbacks_a1cd6877f4bbc9d850af3e2111e362c2a}\label{structma__vfs__callbacks_a1cd6877f4bbc9d850af3e2111e362c2a} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Open} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, const char \texorpdfstring{$\ast$}{*}p\+File\+Path, ma\+\_\+uint32 open\+Mode, ma\+\_\+vfs\+\_\+file \texorpdfstring{$\ast$}{*}p\+File)
+\item 
+\Hypertarget{structma__vfs__callbacks_a6be95fe0728418b57f1d45325ee97331}\label{structma__vfs__callbacks_a6be95fe0728418b57f1d45325ee97331} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+OpenW} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, const wchar\+\_\+t \texorpdfstring{$\ast$}{*}p\+File\+Path, ma\+\_\+uint32 open\+Mode, ma\+\_\+vfs\+\_\+file \texorpdfstring{$\ast$}{*}p\+File)
+\item 
+\Hypertarget{structma__vfs__callbacks_ad64e094cc7904fa0b4e2b0d9f23b529b}\label{structma__vfs__callbacks_ad64e094cc7904fa0b4e2b0d9f23b529b} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Close} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file)
+\item 
+\Hypertarget{structma__vfs__callbacks_a5a90cad6d8fda3686a6333b932241ee8}\label{structma__vfs__callbacks_a5a90cad6d8fda3686a6333b932241ee8} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Read} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file, void \texorpdfstring{$\ast$}{*}p\+Dst, size\+\_\+t size\+In\+Bytes, size\+\_\+t \texorpdfstring{$\ast$}{*}p\+Bytes\+Read)
+\item 
+\Hypertarget{structma__vfs__callbacks_a0dd6912aadc09a5601b0b323cd7687d2}\label{structma__vfs__callbacks_a0dd6912aadc09a5601b0b323cd7687d2} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Write} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file, const void \texorpdfstring{$\ast$}{*}p\+Src, size\+\_\+t size\+In\+Bytes, size\+\_\+t \texorpdfstring{$\ast$}{*}p\+Bytes\+Written)
+\item 
+\Hypertarget{structma__vfs__callbacks_a21f219ae8479a26f1905cf232ef427b1}\label{structma__vfs__callbacks_a21f219ae8479a26f1905cf232ef427b1} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Seek} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file, ma\+\_\+int64 offset, ma\+\_\+seek\+\_\+origin origin)
+\item 
+\Hypertarget{structma__vfs__callbacks_a1d60f51b4133016fe1ccd2bbfd9c3d19}\label{structma__vfs__callbacks_a1d60f51b4133016fe1ccd2bbfd9c3d19} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Tell} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file, ma\+\_\+int64 \texorpdfstring{$\ast$}{*}p\+Cursor)
+\item 
+\Hypertarget{structma__vfs__callbacks_a120dfb3446cbfd9e8ac91a10a10fa664}\label{structma__vfs__callbacks_a120dfb3446cbfd9e8ac91a10a10fa664} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Info} )(ma\+\_\+vfs \texorpdfstring{$\ast$}{*}p\+VFS, ma\+\_\+vfs\+\_\+file file, \doxymbox{\hyperlink{structma__file__info}{ma\+\_\+file\+\_\+info}} \texorpdfstring{$\ast$}{*}p\+Info)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

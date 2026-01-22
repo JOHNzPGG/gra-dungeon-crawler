@@ -1,0 +1,276 @@
+\doxysection{App.\+hpp}
+\hypertarget{_app_8hpp_source}{}\label{_app_8hpp_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/include/dungeon/core/App.hpp@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/include/dungeon/core/App.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ DUNGEON\_CORE\_APP\_HPP}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ DUNGEON\_CORE\_APP\_HPP}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <glad/glad.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <GLFW/glfw3.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <glm/mat4x4.hpp>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}dungeon/gfx/Shader.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}dungeon/io/MapLoader.hpp"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}game/clases/Player.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}game/clases/Enemy.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}game/clases/Skill.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}miniaudio.h"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{namespace\ }dungeon\ \{}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1_app_config}{AppConfig}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ width\ =\ 1280;}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ height\ =\ 720;}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::string\ title\ =\ \textcolor{stringliteral}{"{}Dungeon\ Crawler\ 3D"{}};}
+\DoxyCodeLine{00028\ \ \ \ \ \};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{enum\ class}\ CameraMode\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ FirstPerson,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ ThirdPerson}
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{enum\ class}\ GameState\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ MainMenu,}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ Options,}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ Credits,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ Playing,}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ GameOver,}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ Victory,}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ Paused}
+\DoxyCodeLine{00044\ \ \ \ \ \};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ Struktura\ reprezentująca\ przedmiot\ leżący\ na\ ziemi\ }}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1_world_item}{WorldItem}}\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_item}{Item}}*\ itemData;\ \ \ \ \ \textcolor{comment}{//\ Wskaźnik\ do\ danych\ przedmiotu\ (statystyki,\ nazwa)}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ glm::vec3\ position;\ \textcolor{comment}{//\ Gdzie\ leży}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isAlive;\ \ \ \ \ \ \ \textcolor{comment}{//\ Czy\ jeszcze\ nie\ został\ podniesiony}}
+\DoxyCodeLine{00051\ \ \ \ \ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1_puzzle_torch}{PuzzleTorch}}\ \{\ \textcolor{keywordtype}{int}\ x,\ y;\ \textcolor{keywordtype}{bool}\ is\_lit;\ \};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1_pressure_plate}{PressurePlate}}\ \{\ \textcolor{keywordtype}{int}\ x,\ y;\ \textcolor{keywordtype}{int}\ id;\ \textcolor{keywordtype}{int}\ count;\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{classdungeon_1_1_app_a2fbffdc86084290e98dbf40dbeb68198}{App}}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \doxymbox{\hyperlink{classdungeon_1_1_app_a2fbffdc86084290e98dbf40dbeb68198}{App}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdungeon_1_1_app_config}{AppConfig}}\&\ cfg);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classdungeon_1_1_app_aa0feb0cdab1ec0dded681f0d0e4e4876}{\string~App}}();}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{classdungeon_1_1_app_ab3d7d45207443db8927d2c3b62eb1199}{run}}();}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ std::vector<PuzzleTorch>\ puzzle\_torches\_;}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::vector<PressurePlate>\ pressure\_plates\_;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ last\_puzzle\_x\_\ =\ -\/1,\ last\_puzzle\_y\_\ =\ -\/1;}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ puzzles\_solved\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ current\_stage\_idx\_\ =\ 0;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init\_glfw();}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init\_gl();}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init\_imgui();}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ shutdown\_imgui();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ load\_level();}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ can\_move\_to(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//void\ check\_sequence\_step(int\ x,\ int\ y);}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ build\_world\_mesh();}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handle\_input();}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity}{Entity}}*\ GetEnemyInFront(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{class_entity}{Entity}}\&\ unit);}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ std::vector<Entity*>\ ResolveSkillTarget(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{class_entity}{Entity}}\&\ unit,\ \doxymbox{\hyperlink{class_skill}{Skill}}*\ skill);}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ EnemiesTurn();}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ toggle\_puzzle\_torch(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_puzzles();}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{comment}{//void\ update\_step\_puzzle();}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ frame\_begin();}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ frame\_render();}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ frame\_ui();}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ frame\_end();}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_main\_menu();}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_options\_menu();}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init\_puzzles(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{io::Level}}\ \&L);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ on\_resize(\textcolor{keywordtype}{int}\ width,\ \textcolor{keywordtype}{int}\ height);}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ GLuint\ load\_texture(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ path);}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ build\_cube\_mesh();}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ spawn\_entities\_from\_level();}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ reset\_game();\ \ \ \ \ \ \ \textcolor{comment}{//\ Czyści\ mapę\ i\ EQ}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_game\_over();\ \textcolor{comment}{//\ Rysuje\ ekran\ śmierci}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_combat();\ \ \ \ \textcolor{comment}{//\ Obsługuje\ sekwencję\ 1-\/sekundową}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ std::vector<bool>\ visited\_cells\_;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_exploration();}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ check\_los(\textcolor{keywordtype}{int}\ x1,\ \textcolor{keywordtype}{int}\ y1,\ \textcolor{keywordtype}{int}\ x2,\ \textcolor{keywordtype}{int}\ y2)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ build\_weapon\_mesh();}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ build\_enemy\_mesh();}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ std::vector<std::string>\ map\_list\_\ =\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level1.map"{}},}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/levelPuzzle1.map"{}},}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level2.map"{}},}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level3.map"{}},}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level4.map"{}},}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level5.map"{}},}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}assets/maps/level6.map"{}}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ current\_level\_idx\_\ =\ 0;}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ load\_next\_level();}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_victory\_screen();}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structdungeon_1_1_puzzle_torch}{PuzzleTorch}}*\ get\_puzzle\_torch(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structdungeon_1_1_app_config}{AppConfig}}\ \ \ cfg\_;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ GLFWwindow*\ window\_\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{classdungeon_1_1gfx_1_1_shader}{gfx::Shader}}\ world\_shader\_;}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ glm::mat4\ \ \ proj\_\{\ 1.0f\ \};}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ glm::mat4\ \ \ view\_\{\ 1.0f\ \};}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{io::Level}}\ \ \ level\_\{\};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ std::string\ current\_map\_name\_;}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ GLuint\ floor\_vao\_\ =\ 0;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ GLuint\ floor\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ GLuint\ wall\_vao\_\ =\ 0;}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ GLuint\ wall\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ floor\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ wall\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ GLuint\ weapon\_vao\_\ =\ 0;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ GLuint\ weapon\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ GLuint\ weapon\_texture\_\ =\ 0;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ weapon\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ ZOMBIE}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ GLuint\ zombie\_vao\_\ =\ 0;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ GLuint\ zombie\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ GLuint\ zombie\_texture\_\ =\ 0;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ zombie\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SZKIELET}}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ GLuint\ skeleton\_vao\_\ =\ 0;}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ GLuint\ skeleton\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ GLuint\ skeleton\_texture\_\ =\ 0;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ skeleton\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{comment}{//POTION}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ GLuint\ potion\_vao\_\ =\ 0;}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ GLuint\ potion\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ GLuint\ potion\_texture\_\ =\ 0;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ potion\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ h\_was\_down\_\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ Do\ picia\ mikstur}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TORCH}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ GLuint\ torch\_vao\_\ =\ 0;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ GLuint\ torch\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ GLuint\ torch\_texture\_\ =\ 0;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ torch\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ PORTAL}}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ GLuint\ portal\_vao\_\ =\ 0;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ GLuint\ portal\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ GLuint\ portal\_texture\_\ =\ 0;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ portal\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ GLuint\ wall\_texture\_\ =\ 0;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ GLuint\ floor\_texture\_\ =\ 0;}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player}{::Player}}\ \ \ player\_;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ std::vector<Enemy*>\ enemies\_;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ CameraMode\ camera\_mode\_\ =\ CameraMode::FirstPerson;}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ left\_was\_down\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ right\_was\_down\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ up\_was\_down\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ esc\_was\_down\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ atk\_was\_down\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ k1\_was\_down\_\ \ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ k2\_was\_down\_\ \ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ k3\_was\_down\_\ \ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ weapon\_swap\_lock\_\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ Blokada\ podnoszenia\ broni\ po\ wymianie}}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ show\_menu\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ GameState\ state\_\ =\ GameState::MainMenu;}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ GLuint\ cube\_vao\_\ =\ 0;}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ GLuint\ cube\_vbo\_\ =\ 0;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ cube\_vertex\_count\_\ =\ 0;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ std::vector<glm::vec3>\ enemies\_world\_pos\_;}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ has\_held\_item\_\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ GLuint\ item\_texture\_\ =\ 0;}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ std::vector<WorldItem>\ world\_items\_;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ attack\_anim\_timer\_\ =\ 0.0f;\ \ \ \ \ \ \ \textcolor{comment}{//\ Obecny\ czas\ animacji\ (0\ =\ brak\ ataku)}}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kAttackDuration\_\ =\ 0.25f;\ \ \textcolor{comment}{//\ Jak\ długo\ trwa\ cios\ (w\ sekundach)}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ combat\_lock\_\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \textcolor{comment}{//\ Czy\ sterowanie\ jest\ zablokowane?}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ combat\_timer\_\ =\ 0.0f;\ \ \ \ \ \ \textcolor{comment}{//\ Licznik\ czasu\ sekwencji\ (1.0s\ -\/>\ 0.0s)}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ enemy\_riposte\_pending\_\ =\ \textcolor{keyword}{false};\ \textcolor{comment}{//\ Czy\ wróg\ ma\ nam\ oddać\ w\ połowie\ sekwencji?}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity}{Entity}}*\ current\_combat\_target\_\ =\ \textcolor{keyword}{nullptr};\ \textcolor{comment}{//\ Kogo\ bijemy\ (żeby\ wiedział\ kto\ oddaje)}}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_moving\_\ =\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Czy\ gracz\ jest\ w\ trakcie\ kroku?}}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ glm::vec3\ move\_start\_pos\_;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ Skąd\ wyruszyliśmy\ (wizualnie)}}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ glm::vec3\ move\_target\_pos\_;\ \ \ \ \ \ \ \textcolor{comment}{//\ Dokąd\ idziemy\ (wizualnie)}}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ move\_timer\_\ =\ 0.0f;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Licznik\ czasu}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kMoveDuration\_\ =\ 0.25f;\ \textcolor{comment}{//\ Czas\ trwania\ kroku\ (0.25s\ jest\ idealne)}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ trauma\_\ =\ 0.1f;\ \textcolor{comment}{//\ Poziom\ trzęsienia\ ekranu\ (od\ 0.0\ do\ 1.0)}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ AUDIO\ -\/-\/-\/}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structma__engine}{ma\_engine}}\ audio\_engine\_;\ \textcolor{comment}{//\ Silnik\ dźwiękowy}}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structma__sound}{ma\_sound}}\ bg\_music\_;\ \ \ \ \ \ \textcolor{comment}{//\ Muzyka\ w\ tle}}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{structma__sound}{ma\_sound}}\ sfx\_torch\_;\ \ \ \ \ \textcolor{comment}{//\ Dźwięk\ pochodni}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ init\_audio();\ \ \ \ \ \ \ \textcolor{comment}{//\ Funkcja\ inicjalizująca}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update\_audio\_state();\ \textcolor{comment}{//\ Funkcja\ sprawdzająca\ czy\ włączyć/wyłączyć\ ogień}}
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ AUDIO\ \&\ SETTINGS\ -\/-\/-\/}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ master\_volume\_\ =\ 0.5f;\ \textcolor{comment}{//\ Domyślna\ głośność\ 50\%}}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ FUNKCJE\ RENDERUJĄCE\ -\/-\/-\/}}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_pause\_menu();\ \ \ \ \textcolor{comment}{//\ Nowe\ menu\ pod\ ESC}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ GameState\ previous\_state\_\ =\ GameState::MainMenu;}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_loading\_screen();}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ menu\_timer\_\ =\ 0.0f;\ \textcolor{comment}{//\ Do\ obracania\ kamery\ w\ menu}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render\_credits();\ \ \ \ \textcolor{comment}{//\ Funkcja\ rysująca\ ekran\ autorów}}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Funkcja\ pomocnicza\ do\ stylu\ przycisków}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ push\_retro\_style();}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ pop\_retro\_style();}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ GLuint\ create\_texture\_from\_color(\textcolor{keywordtype}{float}\ r,\ \textcolor{keywordtype}{float}\ g,\ \textcolor{keywordtype}{float}\ b);}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \};}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \}\ \textcolor{comment}{//\ namespace\ dungeon}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ DUNGEON\_CORE\_APP\_HPP}}
+
+\end{DoxyCode}

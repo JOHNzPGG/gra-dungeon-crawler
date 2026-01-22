@@ -1,0 +1,88 @@
+\doxysection{Player.\+h}
+\hypertarget{_player_8h_source}{}\label{_player_8h_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Player.h@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Player.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GRA\_DUNGEON\_CRAWLER\_PLAYER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GRA\_DUNGEON\_CRAWLER\_PLAYER\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}Entity.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}Item.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}skill.h"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_player_a5fb7c73a781bbdb4fe59b758ecf9dc68}{Player}}\ :\ \textcolor{keyword}{public}\ Entity\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \doxymbox{\hyperlink{class_item}{Item}}*\ \doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}}\ =\ \textcolor{keyword}{nullptr};\ }
+\DoxyCodeLine{00019\ \ \ \ \ \doxymbox{\hyperlink{class_item}{Item}}*\ \doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}}\ =\ \textcolor{keyword}{nullptr};\ \ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ std::vector<Item*>\ \doxymbox{\hyperlink{class_player_a010915fef49c1cffcc22156141cc714c}{inventory}};\ \ \ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00029\ \ \ \ \ \doxymbox{\hyperlink{class_player_a5fb7c73a781bbdb4fe59b758ecf9dc68}{Player}}(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int}\ yaw)}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ :\ Entity(x,\ y,\ yaw,\ 100,\ 100,\ 2,\ 10,\ true,\ \textcolor{stringliteral}{"{}Player"{}})\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ std::vector<Skill*>\ \doxymbox{\hyperlink{class_player_add5ba21fb59a5819c50eabb120112913}{skills}};\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_af88d1376d8b8d684f6a817cf0d58ce63}{LearnSkill}}(\doxymbox{\hyperlink{class_skill}{Skill}}*\ skill)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (skill)\ \doxymbox{\hyperlink{class_player_add5ba21fb59a5819c50eabb120112913}{skills}}.push\_back(skill);}
+\DoxyCodeLine{00040\ \ \ \ \ \}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_a6beb8f581ef9982d73b4820cfb10f4cb}{UseSkill}}(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ std::vector<Entity*>\&\ targets)\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ 0\ ||\ index\ >=\ \doxymbox{\hyperlink{class_player_add5ba21fb59a5819c50eabb120112913}{skills}}.size())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_add5ba21fb59a5819c50eabb120112913}{skills}}[index]-\/>Use(\textcolor{keyword}{this},\ targets);}
+\DoxyCodeLine{00048\ \ \ \ \ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_ad3294bc73a3cdff3ad8de13a58d1edec}{Equip}}(\doxymbox{\hyperlink{class_item}{Item}}*\ item)\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!item)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item-\/>type\ ==\ ItemType::Weapon\ \&\&\ \doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_a7e17bbb1bb04ab6f0f00659e2090802c}{Unequip}}(\doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}});}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item-\/>type\ ==\ ItemType::Armor\ \&\&\ \doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}})\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_a7e17bbb1bb04ab6f0f00659e2090802c}{Unequip}}(\doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}});}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (item-\/>type)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ItemType::Weapon:}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}}\ =\ item;}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_ae8398db8d8cf2b9de4fe11843b66a5ac}{ApplyItemStats}}(item);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ ItemType::Armor:}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}}\ =\ item;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_ae8398db8d8cf2b9de4fe11843b66a5ac}{ApplyItemStats}}(item);}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00078\ \ \ \ \ \}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_ac662c5fbdf13dde9fccc7a513c25bd19}{AddToInventory}}(\doxymbox{\hyperlink{class_item}{Item}}*\ item)\ \{}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_player_a010915fef49c1cffcc22156141cc714c}{inventory}}.push\_back(item);}
+\DoxyCodeLine{00085\ \ \ \ \ \}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_ae8398db8d8cf2b9de4fe11843b66a5ac}{ApplyItemStats}}(\doxymbox{\hyperlink{class_item}{Item}}*\ item)\ \{}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!item)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ maxHealth\ +=\ item-\/>stats.maxHealth;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ health\ +=\ item-\/>stats.health;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ base\_damage\ +=\ item-\/>stats.damage;}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ ActionPoints\ +=\ item-\/>stats.actionPoints;}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_player_a7e17bbb1bb04ab6f0f00659e2090802c}{Unequip}}(\doxymbox{\hyperlink{class_item}{Item}}*\ item)\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!item)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ maxHealth\ -\/=\ item-\/>stats.maxHealth;}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (health\ >\ maxHealth)\ health\ =\ maxHealth;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ base\_damage\ -\/=\ item-\/>stats.damage;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ ActionPoints\ -\/=\ item-\/>stats.actionPoints;}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item\ ==\ \doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}})\ \doxymbox{\hyperlink{class_player_a56d6fda760d003f71f6a168674c3b950}{equippedWeapon}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (item\ ==\ \doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}})\ \ \doxymbox{\hyperlink{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}{equippedArmor}}\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00112\ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GRA\_DUNGEON\_CRAWLER\_PLAYER\_H}}
+
+\end{DoxyCode}

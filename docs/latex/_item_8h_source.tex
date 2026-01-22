@@ -1,0 +1,55 @@
+\doxysection{Item.\+h}
+\hypertarget{_item_8h_source}{}\label{_item_8h_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Item.h@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Item.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ wdzik\ on\ 29.11.2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ GRA\_DUNGEON\_CRAWLER\_ITEM\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ GRA\_DUNGEON\_CRAWLER\_ITEM\_H}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}Entity.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{enum\ class}\ ItemType\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ Weapon,}
+\DoxyCodeLine{00013\ \ \ \ \ Armor,}
+\DoxyCodeLine{00014\ \ \ \ \ Consumable,}
+\DoxyCodeLine{00015\ \ \ \ \ Misc}
+\DoxyCodeLine{00016\ \};}
+\DoxyCodeLine{00017\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_item_stats}{ItemStats}}\ \{}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ health\ =\ 0;}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{int}\ maxHealth\ =\ 0;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ actionPoints\ =\ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ damage\ =\ 0;}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }Item\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ std::string\ name;}
+\DoxyCodeLine{00028\ \ \ \ \ ItemType\ type;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ isUsable;}
+\DoxyCodeLine{00030\ \ \ \ \ \doxymbox{\hyperlink{struct_item_stats}{ItemStats}}\ stats;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ Item(\textcolor{keyword}{const}\ std::string\&\ itemName,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ ItemType\ itemType,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ usable,}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_item_stats}{ItemStats}}\&\ itemStats\ =\ \{\})}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ :\ name(itemName),\ type(itemType),\ isUsable(usable),\ stats(itemStats)\ \{\}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ Use(\doxymbox{\hyperlink{class_entity}{Entity}}*\ target)\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!isUsable\ ||\ !target)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stats.health\ !=\ 0)\ target-\/>Heal(stats.health);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stats.actionPoints\ !=\ 0)\ target-\/>ActionPoints\ +=\ stats.actionPoints;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stats.damage\ !=\ 0)\ target-\/>base\_damage\ +=\ stats.damage;}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GRA\_DUNGEON\_CRAWLER\_ITEM\_H}}
+
+\end{DoxyCode}

@@ -1,0 +1,197 @@
+\doxysection{Player Class Reference}
+\hypertarget{class_player}{}\label{class_player}\index{Player@{Player}}
+
+
+Reprezentuje postaæ sterowan¹ przez u¿ytkownika.  
+
+
+
+
+{\ttfamily \+\#include $<$Player.\+h$>$}
+
+Inheritance diagram for Player:\+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_player}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_player_a5fb7c73a781bbdb4fe59b758ecf9dc68}{Player}} (int x, int y, int yaw)
+\begin{DoxyCompactList}\small\item\em Tworzy gracza w zadanej pozycji. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_af88d1376d8b8d684f6a817cf0d58ce63}\label{class_player_af88d1376d8b8d684f6a817cf0d58ce63} 
+void {\bfseries Learn\+Skill} (\doxymbox{\hyperlink{class_skill}{Skill}} \texorpdfstring{$\ast$}{*}skill)
+\begin{DoxyCompactList}\small\item\em Dodaje now¹ umiejêtnoœæ do listy. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_a6beb8f581ef9982d73b4820cfb10f4cb}\label{class_player_a6beb8f581ef9982d73b4820cfb10f4cb} 
+void {\bfseries Use\+Skill} (int index, const std::\+vector$<$ \doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*} $>$ \&targets)
+\begin{DoxyCompactList}\small\item\em U¿ywa umiejêtnoœci o danym indeksie na grupie celów. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{class_player_ad3294bc73a3cdff3ad8de13a58d1edec}{Equip}} (\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Zak³ada przedmiot i aplikuje jego statystyki. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_ac662c5fbdf13dde9fccc7a513c25bd19}\label{class_player_ac662c5fbdf13dde9fccc7a513c25bd19} 
+void {\bfseries Add\+To\+Inventory} (\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Dodaje przedmiot do plecaka (bez zak³adania). \end{DoxyCompactList}\item 
+\Hypertarget{class_player_ae8398db8d8cf2b9de4fe11843b66a5ac}\label{class_player_ae8398db8d8cf2b9de4fe11843b66a5ac} 
+void {\bfseries Apply\+Item\+Stats} (\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Modyfikuje statystyki gracza o wartoœci przedmiotu. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_a7e17bbb1bb04ab6f0f00659e2090802c}\label{class_player_a7e17bbb1bb04ab6f0f00659e2090802c} 
+void {\bfseries Unequip} (\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*}item)
+\begin{DoxyCompactList}\small\item\em Zdejmuje przedmiot i cofa jego bonusy do statystyk. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{class_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Entity} (int x, int y, int yaw\+Angle, int hp, int max\+Hp, int ap, int damage, bool has\+Collision=true, const std::\+string \&entity\+Name="{}"{})
+\item 
+glm::\+ivec2 \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{Get\+Move\+Target}} (int offset\+Steps=0) const
+\begin{DoxyCompactList}\small\item\em Oblicza wspó³rzêdne s¹siedniego pola w danym kierunku. \end{DoxyCompactList}\item 
+glm::\+ivec2 {\bfseries Get\+Forward\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Right\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Back\+Tile} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Left\+Tile} () const
+\item 
+void {\bfseries Take\+Damage} (int amount)
+\begin{DoxyCompactList}\small\item\em Zadaje obra¿enia tej jednostce. Rejestruje czas trafienia, aby wywo³aæ efekt wizualny (flash). \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a4909305125a6d7643860aa6d79ca2b7a}{Is\+Hurt}} () const
+\begin{DoxyCompactList}\small\item\em Sprawdza, czy jednostka jest w trakcie animacji otrzymywania obra¿eñ. \end{DoxyCompactList}\item 
+void {\bfseries Heal} (int amount)
+\item 
+bool {\bfseries Is\+Alive} () const
+\item 
+void \doxymbox{\hyperlink{class_entity_ade99d386aae9b3a8c3cafe4464104e49}{Update\+Death}} (float dt)
+\begin{DoxyCompactList}\small\item\em Aktualizuje licznik animacji œmierci. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}{Use\+Action\+Points}} (int ap\+\_\+used=1)
+\begin{DoxyCompactList}\small\item\em Próbuje zu¿yæ punkty akcji. \end{DoxyCompactList}\item 
+void {\bfseries Reset\+Action\+Points} (int ap)
+\item 
+bool {\bfseries Attack} (\doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*}target)
+\begin{DoxyCompactList}\small\item\em Atakuje cel stoj¹cy na wprost. \end{DoxyCompactList}\item 
+void {\bfseries Turn\+Left} ()
+\item 
+void {\bfseries Turn\+Right} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} (int x=0, int y=0, int yaw\+Angle=0)
+\item 
+void {\bfseries Update\+Orientation} ()
+\item 
+void {\bfseries Update\+Orientation} (int new\+\_\+yaw)
+\item 
+void {\bfseries Set\+Position} (int x, int y)
+\item 
+int {\bfseries Get\+Dir\+Index} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Tile\+In\+Direction} (int offset\+Steps=0) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_player_a56d6fda760d003f71f6a168674c3b950}\label{class_player_a56d6fda760d003f71f6a168674c3b950} 
+\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*} {\bfseries equipped\+Weapon} = nullptr
+\begin{DoxyCompactList}\small\item\em Aktualnie trzymana broñ. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_ae68a0fb5a1706ab8ed93c8e27d250221}\label{class_player_ae68a0fb5a1706ab8ed93c8e27d250221} 
+\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*} {\bfseries equipped\+Armor} = nullptr
+\begin{DoxyCompactList}\small\item\em Aktualnie za³o¿ona zbroja (opcjonalne). \end{DoxyCompactList}\item 
+\Hypertarget{class_player_a010915fef49c1cffcc22156141cc714c}\label{class_player_a010915fef49c1cffcc22156141cc714c} 
+std::\+vector$<$ \doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries inventory}
+\begin{DoxyCompactList}\small\item\em Lista przedmiotów w plecaku. \end{DoxyCompactList}\item 
+\Hypertarget{class_player_add5ba21fb59a5819c50eabb120112913}\label{class_player_add5ba21fb59a5819c50eabb120112913} 
+std::\+vector$<$ \doxymbox{\hyperlink{class_skill}{Skill}} \texorpdfstring{$\ast$}{*} $>$ {\bfseries skills}
+\begin{DoxyCompactList}\small\item\em Lista nauczonych umiejêtnoœci. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \doxymbox{\hyperlink{class_entity}{Entity}}}
+\begin{DoxyCompactItemize}
+\item 
+int {\bfseries max\+Health}
+\item 
+int {\bfseries health}
+\item 
+int {\bfseries Action\+Points}
+\item 
+int {\bfseries base\+\_\+damage}
+\item 
+bool {\bfseries colision} = true
+\item 
+float {\bfseries last\+Hit\+Time} = -\/100.\+0f
+\begin{DoxyCompactList}\small\item\em Znacznik czasu ostatniego otrzymania obra¿eñ (do migania na czerwono). \end{DoxyCompactList}\item 
+float {\bfseries death\+Timer} = 0.\+0f
+\begin{DoxyCompactList}\small\item\em Licznik czasu animacji œmierci. \end{DoxyCompactList}\item 
+bool {\bfseries death\+Anim\+Finished} = false
+\begin{DoxyCompactList}\small\item\em Czy animacja œmierci dobieg³a koñca? \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+glm::\+vec3 {\bfseries Render\+Position}
+\item 
+int {\bfseries GameX}
+\item 
+int {\bfseries GameY}
+\item 
+std::\+string {\bfseries name}
+\item 
+int {\bfseries yaw}
+\item 
+float {\bfseries yaw\+Rad}
+\item 
+glm::\+vec3 {\bfseries orientation}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reprezentuje postaæ sterowan¹ przez u¿ytkownika. 
+
+Dziedziczy po klasie \doxylink{class_entity}{Entity}. Rozszerza j¹ o system ekwipunku (broñ, zbroja), plecak (inventory) oraz system umiejêtnoœci (Skills). 
+
+\label{doc-constructors}
+\Hypertarget{class_player_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_player_a5fb7c73a781bbdb4fe59b758ecf9dc68}\index{Player@{Player}!Player@{Player}}
+\index{Player@{Player}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{Player()}{Player()}}
+{\footnotesize\ttfamily \label{class_player_a5fb7c73a781bbdb4fe59b758ecf9dc68} 
+Player::\+\+Player (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{y}{, }\item[{int}]{yaw}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Tworzy gracza w zadanej pozycji. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Pozycja X na siatce. \\
+\hline
+{\em y} & Pozycja Y na siatce. \\
+\hline
+{\em yaw} & Pocz¹tkowy k¹t obrotu. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_player_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_player_ad3294bc73a3cdff3ad8de13a58d1edec}\index{Player@{Player}!Equip@{Equip}}
+\index{Equip@{Equip}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{Equip()}{Equip()}}
+{\footnotesize\ttfamily \label{class_player_ad3294bc73a3cdff3ad8de13a58d1edec} 
+void Player::\+\+Equip (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{class_item}{Item}} \texorpdfstring{$\ast$}{*}}]{item}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Zak³ada przedmiot i aplikuje jego statystyki. 
+
+
+\begin{DoxyItemize}
+\item Jeœli slot jest zajêty, najpierw zdejmuje stary przedmiot. Aktualizuje statystyki (HP, DMG, AP) na podstawie przedmiotu. 
+\begin{DoxyParams}{Parameters}
+{\em item} & WskaŸnik na przedmiot do za³o¿enia. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+game/\+clases/\+Player.\+h\end{DoxyCompactItemize}

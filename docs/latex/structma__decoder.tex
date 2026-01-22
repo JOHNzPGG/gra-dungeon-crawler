@@ -1,0 +1,80 @@
+\doxysection{ma\+\_\+decoder Struct Reference}
+\hypertarget{structma__decoder}{}\label{structma__decoder}\index{ma\_decoder@{ma\_decoder}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__decoder_aef41b93577f834c065045a9cc66a25e1}\label{structma__decoder_aef41b93577f834c065045a9cc66a25e1} 
+\doxymbox{\hyperlink{structma__data__source__base}{ma\+\_\+data\+\_\+source\+\_\+base}} {\bfseries ds}
+\item 
+\Hypertarget{structma__decoder_aa8b0e6b44bb854ee1ed6dbf4dc21a809}\label{structma__decoder_aa8b0e6b44bb854ee1ed6dbf4dc21a809} 
+ma\+\_\+data\+\_\+source \texorpdfstring{$\ast$}{*} {\bfseries p\+Backend}
+\item 
+\Hypertarget{structma__decoder_a3273945625f6c13a8e8e2eba3014d5e8}\label{structma__decoder_a3273945625f6c13a8e8e2eba3014d5e8} 
+const \doxymbox{\hyperlink{structma__decoding__backend__vtable}{ma\+\_\+decoding\+\_\+backend\+\_\+vtable}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Backend\+VTable}
+\item 
+\Hypertarget{structma__decoder_aa12ffa02ba6ff79d3b254563854feb6f}\label{structma__decoder_aa12ffa02ba6ff79d3b254563854feb6f} 
+void \texorpdfstring{$\ast$}{*} {\bfseries p\+Backend\+User\+Data}
+\item 
+\Hypertarget{structma__decoder_ad14a7f9e20dfd46e238f96d51d46f18f}\label{structma__decoder_ad14a7f9e20dfd46e238f96d51d46f18f} 
+ma\+\_\+decoder\+\_\+read\+\_\+proc {\bfseries on\+Read}
+\item 
+\Hypertarget{structma__decoder_ae6cd5588325e161775a5456ff66cf302}\label{structma__decoder_ae6cd5588325e161775a5456ff66cf302} 
+ma\+\_\+decoder\+\_\+seek\+\_\+proc {\bfseries on\+Seek}
+\item 
+\Hypertarget{structma__decoder_aace6b40b97bebfe2f972903421845934}\label{structma__decoder_aace6b40b97bebfe2f972903421845934} 
+ma\+\_\+decoder\+\_\+tell\+\_\+proc {\bfseries on\+Tell}
+\item 
+\Hypertarget{structma__decoder_ade170d8580cf3f2ce9b1fa00076fd183}\label{structma__decoder_ade170d8580cf3f2ce9b1fa00076fd183} 
+void \texorpdfstring{$\ast$}{*} {\bfseries p\+User\+Data}
+\item 
+\Hypertarget{structma__decoder_a6df76f9277a13ea48b90f6f2d71ee30a}\label{structma__decoder_a6df76f9277a13ea48b90f6f2d71ee30a} 
+ma\+\_\+uint64 {\bfseries read\+Pointer\+In\+PCMFrames}
+\item 
+\Hypertarget{structma__decoder_a99e75664cebea3a92fc07d2458fb4bbf}\label{structma__decoder_a99e75664cebea3a92fc07d2458fb4bbf} 
+ma\+\_\+format {\bfseries output\+Format}
+\item 
+\Hypertarget{structma__decoder_a66e891518697e7226936c04cce589a8c}\label{structma__decoder_a66e891518697e7226936c04cce589a8c} 
+ma\+\_\+uint32 {\bfseries output\+Channels}
+\item 
+\Hypertarget{structma__decoder_a9d4f0e1242f5faf1fb1614c619fbd6f0}\label{structma__decoder_a9d4f0e1242f5faf1fb1614c619fbd6f0} 
+ma\+\_\+uint32 {\bfseries output\+Sample\+Rate}
+\item 
+\Hypertarget{structma__decoder_a806b41008c3c3e9557557b615b1e5910}\label{structma__decoder_a806b41008c3c3e9557557b615b1e5910} 
+\doxymbox{\hyperlink{structma__data__converter}{ma\+\_\+data\+\_\+converter}} {\bfseries converter}
+\item 
+\Hypertarget{structma__decoder_a52f2b557d37cdd399bc99b3993665967}\label{structma__decoder_a52f2b557d37cdd399bc99b3993665967} 
+void \texorpdfstring{$\ast$}{*} {\bfseries p\+Input\+Cache}
+\item 
+\Hypertarget{structma__decoder_ad2485f39cde3c7ee2ce32be99158950e}\label{structma__decoder_ad2485f39cde3c7ee2ce32be99158950e} 
+ma\+\_\+uint64 {\bfseries input\+Cache\+Cap}
+\item 
+\Hypertarget{structma__decoder_a4db047eef9c82112600de0106baa0807}\label{structma__decoder_a4db047eef9c82112600de0106baa0807} 
+ma\+\_\+uint64 {\bfseries input\+Cache\+Consumed}
+\item 
+\Hypertarget{structma__decoder_a922f51e7139c132e89358c2233113e77}\label{structma__decoder_a922f51e7139c132e89358c2233113e77} 
+ma\+\_\+uint64 {\bfseries input\+Cache\+Remaining}
+\item 
+\Hypertarget{structma__decoder_ac16bdca633503f68044e30ce46ea35cc}\label{structma__decoder_ac16bdca633503f68044e30ce46ea35cc} 
+\doxymbox{\hyperlink{structma__allocation__callbacks}{ma\+\_\+allocation\+\_\+callbacks}} {\bfseries allocation\+Callbacks}
+\item 
+\Hypertarget{structma__decoder_a371aa49b71d01a42301351a6610f4d9a}\label{structma__decoder_a371aa49b71d01a42301351a6610f4d9a} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>ma\_vfs \texorpdfstring{$\ast$}{*} {\bfseries pVFS}\\
+\>\>ma\_vfs\_file {\bfseries file}\\
+\>\} {\bfseries vfs}\\
+\>struct \{\\
+\>\>const ma\_uint8 \texorpdfstring{$\ast$}{*} {\bfseries pData}\\
+\>\>size\_t {\bfseries dataSize}\\
+\>\>size\_t {\bfseries currentReadPos}\\
+\>\} {\bfseries memory}\\
+\} {\bfseries data}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

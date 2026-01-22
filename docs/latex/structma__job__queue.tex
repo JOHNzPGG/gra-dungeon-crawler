@@ -1,0 +1,43 @@
+\doxysection{ma\+\_\+job\+\_\+queue Struct Reference}
+\hypertarget{structma__job__queue}{}\label{structma__job__queue}\index{ma\_job\_queue@{ma\_job\_queue}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__job__queue_a1ade38529ba65d06f3893bc85dd52b1e}\label{structma__job__queue_a1ade38529ba65d06f3893bc85dd52b1e} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) head
+\item 
+\Hypertarget{structma__job__queue_a659324f703f418d8c4ffea5f8c7ca977}\label{structma__job__queue_a659324f703f418d8c4ffea5f8c7ca977} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) tail
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__job__queue_a09b6940ab8b8f1a2e4b149bff41fb80f}\label{structma__job__queue_a09b6940ab8b8f1a2e4b149bff41fb80f} 
+ma\+\_\+uint32 {\bfseries flags}
+\item 
+\Hypertarget{structma__job__queue_ae8eba4b3dbae6d50607445739e880a1d}\label{structma__job__queue_ae8eba4b3dbae6d50607445739e880a1d} 
+ma\+\_\+uint32 {\bfseries capacity}
+\item 
+\Hypertarget{structma__job__queue_a9ec9c9f01b77ba6b922e0044fb83fb85}\label{structma__job__queue_a9ec9c9f01b77ba6b922e0044fb83fb85} 
+\doxymbox{\hyperlink{structma__semaphore}{ma\+\_\+semaphore}} {\bfseries sem}
+\item 
+\Hypertarget{structma__job__queue_af60bb193da0cac969e3b68d9a745544a}\label{structma__job__queue_af60bb193da0cac969e3b68d9a745544a} 
+\doxymbox{\hyperlink{structma__slot__allocator}{ma\+\_\+slot\+\_\+allocator}} {\bfseries allocator}
+\item 
+\Hypertarget{structma__job__queue_aa451ed367f2b32c7290478552e6bed72}\label{structma__job__queue_aa451ed367f2b32c7290478552e6bed72} 
+\doxymbox{\hyperlink{structma__job}{ma\+\_\+job}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Jobs}
+\item 
+\Hypertarget{structma__job__queue_aad5ffd5f116c21453dcd23f032de199b}\label{structma__job__queue_aad5ffd5f116c21453dcd23f032de199b} 
+ma\+\_\+spinlock {\bfseries lock}
+\item 
+\Hypertarget{structma__job__queue_a547c59b2e2f93511036563fc1d1ca8ea}\label{structma__job__queue_a547c59b2e2f93511036563fc1d1ca8ea} 
+void \texorpdfstring{$\ast$}{*} {\bfseries \+\_\+p\+Heap}
+\item 
+\Hypertarget{structma__job__queue_abd7ab645d2e8c4bf337cfc60ed923ea6}\label{structma__job__queue_abd7ab645d2e8c4bf337cfc60ed923ea6} 
+ma\+\_\+bool32 {\bfseries \+\_\+owns\+Heap}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,64 @@
+\doxysection{dungeon::\+App Class Reference}
+\hypertarget{classdungeon_1_1_app}{}\label{classdungeon_1_1_app}\index{dungeon::App@{dungeon::App}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classdungeon_1_1_app_a2fbffdc86084290e98dbf40dbeb68198}{App}} (const \doxymbox{\hyperlink{structdungeon_1_1_app_config}{App\+Config}} \&cfg)
+\begin{DoxyCompactList}\small\item\em Konstruktor aplikacji. Inicjalizuje wszystkie podsystemy (GLFW, Open\+GL, Audio, Im\+Gui) oraz ładuje zasoby startowe. \end{DoxyCompactList}\item 
+\Hypertarget{classdungeon_1_1_app_aa0feb0cdab1ec0dded681f0d0e4e4876}\label{classdungeon_1_1_app_aa0feb0cdab1ec0dded681f0d0e4e4876} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+App} ()
+\begin{DoxyCompactList}\small\item\em Destruktor aplikacji. Odpowiada za zwolnienie pamięci GPU (bufory, tekstury) oraz zamknięcie bibliotek. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{classdungeon_1_1_app_ab3d7d45207443db8927d2c3b62eb1199}{run}} ()
+\begin{DoxyCompactList}\small\item\em Główna pętla gry (Game Loop). Działa do momentu zamknięcia okna. Odpowiada za:\+ \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classdungeon_1_1_app_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdungeon_1_1_app_a2fbffdc86084290e98dbf40dbeb68198}\index{dungeon::App@{dungeon::App}!App@{App}}
+\index{App@{App}!dungeon::App@{dungeon::App}}
+\doxysubsubsection{\texorpdfstring{App()}{App()}}
+{\footnotesize\ttfamily \label{classdungeon_1_1_app_a2fbffdc86084290e98dbf40dbeb68198} 
+dungeon::\+\+App::\+\+App (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structdungeon_1_1_app_config}{App\+Config}} \&}]{cfg}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Konstruktor aplikacji. Inicjalizuje wszystkie podsystemy (GLFW, Open\+GL, Audio, Im\+Gui) oraz ładuje zasoby startowe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cfg} & Konfiguracja okna (wymiary, tytuł). \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{classdungeon_1_1_app_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classdungeon_1_1_app_ab3d7d45207443db8927d2c3b62eb1199}\index{dungeon::App@{dungeon::App}!run@{run}}
+\index{run@{run}!dungeon::App@{dungeon::App}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily \label{classdungeon_1_1_app_ab3d7d45207443db8927d2c3b62eb1199} 
+void dungeon::\+\+App::\+run (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Główna pętla gry (Game Loop). Działa do momentu zamknięcia okna. Odpowiada za:\+ 
+
+
+\begin{DoxyEnumerate}
+\item Rozpoczęcie klatki (Input, Clear).
+\item Aktualizację logiki (np. walka, timery).
+\item Renderowanie odpowiedniego stanu gry (Menu, Gra, Pauza).
+\item Zakończenie klatki (Swap Buffers). 
+\end{DoxyEnumerate}
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+dungeon/\+core/\+App.\+hpp\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app_8cpp}{App.\+cpp}}\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app___init_8cpp}{App\+\_\+\+Init.\+cpp}}\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app___input_8cpp}{App\+\_\+\+Input.\+cpp}}\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app___logic_8cpp}{App\+\_\+\+Logic.\+cpp}}\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app___render_8cpp}{App\+\_\+\+Render.\+cpp}}\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+core/\+\doxymbox{\hyperlink{_app___u_i_8cpp}{App\+\_\+\+UI.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,84 @@
+\doxysection{Object.\+h}
+\hypertarget{_object_8h_source}{}\label{_object_8h_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Object.h@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Object.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ wdzik\ on\ 29.11.2025.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ GRA\_DUNGEON\_CRAWLER\_OBJECT\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ GRA\_DUNGEON\_CRAWLER\_OBJECT\_H}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <glm/vec2.hpp>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <glm/vec3.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ glm::ivec2\ DIR8[8]\ =\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \{\ 0,\ -\/1\ \},\ \textcolor{comment}{//\ 0:\ N\ /\ przód}}
+\DoxyCodeLine{00013\ \ \ \ \{\ 1,\ -\/1\ \},\ \textcolor{comment}{//\ 1:\ NE\ /\ przód-\/prawo}}
+\DoxyCodeLine{00014\ \ \ \ \{\ 1,\ \ 0\ \},\ \textcolor{comment}{//\ 2:\ E\ /\ prawo}}
+\DoxyCodeLine{00015\ \ \ \ \{\ 1,\ \ 1\ \},\ \textcolor{comment}{//\ 3:\ SE\ /\ tył-\/prawo}}
+\DoxyCodeLine{00016\ \ \ \ \{\ 0,\ \ 1\ \},\ \textcolor{comment}{//\ 4:\ S\ /\ tył}}
+\DoxyCodeLine{00017\ \ \ \ \{\ -\/1,\ 1\ \},\ \textcolor{comment}{//\ 5:\ SW\ /\ tył-\/lewo}}
+\DoxyCodeLine{00018\ \ \ \ \{\ -\/1,\ 0\ \},\ \textcolor{comment}{//\ 6:\ W\ /\ lewo}}
+\DoxyCodeLine{00019\ \ \ \ \{\ -\/1,-\/1\ \}\ \ \textcolor{comment}{//\ 7:\ NW\ /\ przód-\/lewo}}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }Object\ \{}
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ glm::vec3\ RenderPosition;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ GameX;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ GameY;}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \ \ \ \ std::string\ name;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{int}\ yaw;\ \textcolor{comment}{//\ 0\ =\ przód,\ 90\ =\ prawo,\ 180\ =\ tył,\ 270\ =\ lewo}}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{float}\ yawRad;}
+\DoxyCodeLine{00035\ \ \ \ \ glm::vec3\ orientation;\ \textcolor{comment}{//+X\ =\ prawo\ −X\ =\ lewo\ +Z\ =\ przód\ −Z\ =\ tył}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ Object(\textcolor{keywordtype}{int}\ x=0,\ \textcolor{keywordtype}{int}\ y=0,\ \textcolor{keywordtype}{int}\ yawAngle=0)}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ :\ GameX(x),\ GameY(y),\ yaw(yawAngle)}
+\DoxyCodeLine{00039\ \ \ \ \ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ UpdateOrientation();}
+\DoxyCodeLine{00041\ \ \ \ \ \}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateOrientation()\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ yawRad\ =\ yaw\ *\ 3.14159265f\ /\ 180.0f;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ orientation\ =\ glm::vec3(sin(yawRad),\ 0,\ cos(yawRad));\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateOrientation(\textcolor{keywordtype}{int}\ new\_yaw)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ yaw=new\_yaw;}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ yawRad\ =\ yaw\ *\ 3.14159265f\ /\ 180.0f;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ orientation\ =\ glm::vec3(sin(yawRad),\ 0,\ cos(yawRad));}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ SetPosition(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ GameX\ =\ x;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ GameY\ =\ y;}
+\DoxyCodeLine{00054\ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ GetDirIndex()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ (int)round(yaw\ /\ 45.0f)\ \%\ 8;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ 0)\ index\ +=\ 8;}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ index;}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ glm::ivec2\ GetTileInDirection(\textcolor{keywordtype}{int}\ offsetSteps\ =\ 0)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(round(yaw\ /\ 45.0f))\ \%\ 8;}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ 0)\ index\ +=\ 8;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ index\ =\ (index\ +\ offsetSteps)\ \%\ 8;}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (index\ <\ 0)\ index\ +=\ 8;}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ glm::ivec2\ d\ =\ DIR8[index];}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ glm::ivec2(GameX\ +\ d.x,\ GameY\ +\ d.y);}
+\DoxyCodeLine{00071\ \ \ \ \ \}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GRA\_DUNGEON\_CRAWLER\_OBJECT\_H}}
+
+\end{DoxyCode}

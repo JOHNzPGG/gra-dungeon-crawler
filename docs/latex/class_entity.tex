@@ -1,0 +1,201 @@
+\doxysection{Entity Class Reference}
+\hypertarget{class_entity}{}\label{class_entity}\index{Entity@{Entity}}
+
+
+Klasa bazowa dla wszystkich ¿ywych obiektów w grze (Gracz, Wrogowie).  
+
+
+
+
+{\ttfamily \+\#include $<$Entity.\+h$>$}
+
+Inheritance diagram for Entity:\+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_entity}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_entity_ad611cda8331f582d9a3666247cabe4bf}\label{class_entity_ad611cda8331f582d9a3666247cabe4bf} 
+{\bfseries Entity} (int x, int y, int yaw\+Angle, int hp, int max\+Hp, int ap, int damage, bool has\+Collision=true, const std::\+string \&entity\+Name="{}"{})
+\item 
+glm::\+ivec2 \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{Get\+Move\+Target}} (int offset\+Steps=0) const
+\begin{DoxyCompactList}\small\item\em Oblicza wspó³rzêdne s¹siedniego pola w danym kierunku. \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_ad0ae0f208dfe6ead25cab9b3b98f9a9f}\label{class_entity_ad0ae0f208dfe6ead25cab9b3b98f9a9f} 
+glm::\+ivec2 {\bfseries Get\+Forward\+Tile} () const
+\item 
+\Hypertarget{class_entity_a06ed99d8478eee9cb32c63fd5a4b3097}\label{class_entity_a06ed99d8478eee9cb32c63fd5a4b3097} 
+glm::\+ivec2 {\bfseries Get\+Right\+Tile} () const
+\item 
+\Hypertarget{class_entity_a1a18d153226c90ff3afb2775822b1018}\label{class_entity_a1a18d153226c90ff3afb2775822b1018} 
+glm::\+ivec2 {\bfseries Get\+Back\+Tile} () const
+\item 
+\Hypertarget{class_entity_a995caf4ce8160b3ea7ccf61f2d3b84ff}\label{class_entity_a995caf4ce8160b3ea7ccf61f2d3b84ff} 
+glm::\+ivec2 {\bfseries Get\+Left\+Tile} () const
+\item 
+\Hypertarget{class_entity_a799568ca49f1ae3e5cd3a486cb1f819c}\label{class_entity_a799568ca49f1ae3e5cd3a486cb1f819c} 
+void {\bfseries Take\+Damage} (int amount)
+\begin{DoxyCompactList}\small\item\em Zadaje obra¿enia tej jednostce. Rejestruje czas trafienia, aby wywo³aæ efekt wizualny (flash). \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a4909305125a6d7643860aa6d79ca2b7a}{Is\+Hurt}} () const
+\begin{DoxyCompactList}\small\item\em Sprawdza, czy jednostka jest w trakcie animacji otrzymywania obra¿eñ. \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_ae0e2eda738fffc136829d5a3a87cb487}\label{class_entity_ae0e2eda738fffc136829d5a3a87cb487} 
+void {\bfseries Heal} (int amount)
+\item 
+\Hypertarget{class_entity_ab8b29a839fc138101e8a9936ec7bcb85}\label{class_entity_ab8b29a839fc138101e8a9936ec7bcb85} 
+bool {\bfseries Is\+Alive} () const
+\item 
+void \doxymbox{\hyperlink{class_entity_ade99d386aae9b3a8c3cafe4464104e49}{Update\+Death}} (float dt)
+\begin{DoxyCompactList}\small\item\em Aktualizuje licznik animacji œmierci. \end{DoxyCompactList}\item 
+bool \doxymbox{\hyperlink{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}{Use\+Action\+Points}} (int ap\+\_\+used=1)
+\begin{DoxyCompactList}\small\item\em Próbuje zu¿yæ punkty akcji. \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_a49043077f69668945095b3f1d4837c5f}\label{class_entity_a49043077f69668945095b3f1d4837c5f} 
+void {\bfseries Reset\+Action\+Points} (int ap)
+\item 
+\Hypertarget{class_entity_a5a1f94c6636ee666ff406594b006ff43}\label{class_entity_a5a1f94c6636ee666ff406594b006ff43} 
+bool {\bfseries Attack} (\doxymbox{\hyperlink{class_entity}{Entity}} \texorpdfstring{$\ast$}{*}target)
+\begin{DoxyCompactList}\small\item\em Atakuje cel stoj¹cy na wprost. \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_a9b5ca2dfd37454cf08a7886e0225bd76}\label{class_entity_a9b5ca2dfd37454cf08a7886e0225bd76} 
+void {\bfseries Turn\+Left} ()
+\item 
+\Hypertarget{class_entity_a0ce086b78162d046f086e337ed89395f}\label{class_entity_a0ce086b78162d046f086e337ed89395f} 
+void {\bfseries Turn\+Right} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Object} (int x=0, int y=0, int yaw\+Angle=0)
+\item 
+void {\bfseries Update\+Orientation} ()
+\item 
+void {\bfseries Update\+Orientation} (int new\+\_\+yaw)
+\item 
+void {\bfseries Set\+Position} (int x, int y)
+\item 
+int {\bfseries Get\+Dir\+Index} () const
+\item 
+glm::\+ivec2 {\bfseries Get\+Tile\+In\+Direction} (int offset\+Steps=0) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{class_entity_a6e20c965f14c04d09be06d07a471565d}\label{class_entity_a6e20c965f14c04d09be06d07a471565d} 
+int {\bfseries max\+Health}
+\item 
+\Hypertarget{class_entity_ab5bf0c97620636e04b271601e2133884}\label{class_entity_ab5bf0c97620636e04b271601e2133884} 
+int {\bfseries health}
+\item 
+\Hypertarget{class_entity_a3235e844bee749b7ccd0e35782ae4add}\label{class_entity_a3235e844bee749b7ccd0e35782ae4add} 
+int {\bfseries Action\+Points}
+\item 
+\Hypertarget{class_entity_acbc76ad7b63f55243090f12373ce2011}\label{class_entity_acbc76ad7b63f55243090f12373ce2011} 
+int {\bfseries base\+\_\+damage}
+\item 
+\Hypertarget{class_entity_a0f4bb1eaf3f6fb593e887aadd69fb412}\label{class_entity_a0f4bb1eaf3f6fb593e887aadd69fb412} 
+bool {\bfseries colision} = true
+\item 
+\Hypertarget{class_entity_a5878397f0f220072ebc9d6b4d3a86ea4}\label{class_entity_a5878397f0f220072ebc9d6b4d3a86ea4} 
+float {\bfseries last\+Hit\+Time} = -\/100.\+0f
+\begin{DoxyCompactList}\small\item\em Znacznik czasu ostatniego otrzymania obra¿eñ (do migania na czerwono). \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_a0c0c1303ca00b329ab8537ae5aa0440b}\label{class_entity_a0c0c1303ca00b329ab8537ae5aa0440b} 
+float {\bfseries death\+Timer} = 0.\+0f
+\begin{DoxyCompactList}\small\item\em Licznik czasu animacji œmierci. \end{DoxyCompactList}\item 
+\Hypertarget{class_entity_a7002f96d437466565d4490a1eafb6063}\label{class_entity_a7002f96d437466565d4490a1eafb6063} 
+bool {\bfseries death\+Anim\+Finished} = false
+\begin{DoxyCompactList}\small\item\em Czy animacja œmierci dobieg³a koñca? \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes inherited from \doxymbox{\hyperlink{class_object}{Object}}}
+\begin{DoxyCompactItemize}
+\item 
+glm::\+vec3 {\bfseries Render\+Position}
+\item 
+int {\bfseries GameX}
+\item 
+int {\bfseries GameY}
+\item 
+std::\+string {\bfseries name}
+\item 
+int {\bfseries yaw}
+\item 
+float {\bfseries yaw\+Rad}
+\item 
+glm::\+vec3 {\bfseries orientation}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Klasa bazowa dla wszystkich ¿ywych obiektów w grze (Gracz, Wrogowie). 
+
+
+\begin{DoxyItemize}
+\item Odpowiada za:\+
+\item Zarz¹dzanie ¿yciem (HP) i œmierci¹
+\item System Punktów Akcji (Action Points)
+\item Pozycjonowanie na siatce (Grid)
+\item Odbieranie obra¿eñ i animacjê "{}\+Hurt"{} 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{class_entity_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}\index{Entity@{Entity}!GetMoveTarget@{GetMoveTarget}}
+\index{GetMoveTarget@{GetMoveTarget}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{GetMoveTarget()}{GetMoveTarget()}}
+{\footnotesize\ttfamily \label{class_entity_adb50a98189d327b5dd4ea615e44fd8e6} 
+glm::\+ivec2 Entity::\+\+Get\+Move\+Target (\begin{DoxyParamCaption}\item[{int}]{offset\+Steps}{ = {\ttfamily 0}}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Oblicza wspó³rzêdne s¹siedniego pola w danym kierunku. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset\+Steps} & Przesuniêcie w tablicy kierunków (np. 0=przód, 2=prawo, 4=ty³). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_entity_a4909305125a6d7643860aa6d79ca2b7a}\index{Entity@{Entity}!IsHurt@{IsHurt}}
+\index{IsHurt@{IsHurt}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{IsHurt()}{IsHurt()}}
+{\footnotesize\ttfamily \label{class_entity_a4909305125a6d7643860aa6d79ca2b7a} 
+bool Entity::\+\+Is\+Hurt (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Sprawdza, czy jednostka jest w trakcie animacji otrzymywania obra¿eñ. 
+
+\begin{DoxyReturn}{Returns}
+true jeœli minê³o mniej ni¿ 0.\+2s od uderzenia. 
+\end{DoxyReturn}
+\Hypertarget{class_entity_ade99d386aae9b3a8c3cafe4464104e49}\index{Entity@{Entity}!UpdateDeath@{UpdateDeath}}
+\index{UpdateDeath@{UpdateDeath}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{UpdateDeath()}{UpdateDeath()}}
+{\footnotesize\ttfamily \label{class_entity_ade99d386aae9b3a8c3cafe4464104e49} 
+void Entity::\+\+Update\+Death (\begin{DoxyParamCaption}\item[{float}]{dt}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Aktualizuje licznik animacji œmierci. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dt} & Czas klatki (delta time). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}\index{Entity@{Entity}!UseActionPoints@{UseActionPoints}}
+\index{UseActionPoints@{UseActionPoints}!Entity@{Entity}}
+\doxysubsubsection{\texorpdfstring{UseActionPoints()}{UseActionPoints()}}
+{\footnotesize\ttfamily \label{class_entity_a27d0d9d6623e3b557c9400bcdaaff803} 
+bool Entity::\+\+Use\+Action\+Points (\begin{DoxyParamCaption}\item[{int}]{ap\+\_\+used}{ = {\ttfamily 1}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Próbuje zu¿yæ punkty akcji. 
+
+\begin{DoxyReturn}{Returns}
+true jeœli akcja jest mo¿liwa (mia³ wystarczaj¹co AP). 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+game/\+clases/\+Entity.\+h\end{DoxyCompactItemize}

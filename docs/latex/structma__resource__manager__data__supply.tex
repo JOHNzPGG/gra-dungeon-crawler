@@ -1,0 +1,40 @@
+\doxysection{ma\+\_\+resource\+\_\+manager\+\_\+data\+\_\+supply Struct Reference}
+\hypertarget{structma__resource__manager__data__supply}{}\label{structma__resource__manager__data__supply}\index{ma\_resource\_manager\_data\_supply@{ma\_resource\_manager\_data\_supply}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__resource__manager__data__supply_a9e31139de7942c69c9faf489e37183c6}\label{structma__resource__manager__data__supply_a9e31139de7942c69c9faf489e37183c6} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+resource\+\_\+manager\+\_\+data\+\_\+supply\+\_\+type) type
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__resource__manager__data__supply_a0f332fdb064041dbcfbdad3ece1e227e}\label{structma__resource__manager__data__supply_a0f332fdb064041dbcfbdad3ece1e227e} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>const void \texorpdfstring{$\ast$}{*} {\bfseries pData}\\
+\>\>size\_t {\bfseries sizeInBytes}\\
+\>\} {\bfseries encoded}\\
+\>struct \{\\
+\>\>const void \texorpdfstring{$\ast$}{*} {\bfseries pData}\\
+\>\>ma\_uint64 {\bfseries totalFrameCount}\\
+\>\>ma\_uint64 {\bfseries decodedFrameCount}\\
+\>\>ma\_format {\bfseries format}\\
+\>\>ma\_uint32 {\bfseries channels}\\
+\>\>ma\_uint32 {\bfseries sampleRate}\\
+\>\} {\bfseries decoded}\\
+\>struct \{\\
+\>\>\doxymbox{\hyperlink{structma__paged__audio__buffer__data}{ma\_paged\_audio\_buffer\_data}} {\bfseries data}\\
+\>\>ma\_uint64 {\bfseries decodedFrameCount}\\
+\>\>ma\_uint32 {\bfseries sampleRate}\\
+\>\} {\bfseries decodedPaged}\\
+\} {\bfseries backend}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

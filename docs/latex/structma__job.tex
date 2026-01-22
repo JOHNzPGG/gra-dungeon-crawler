@@ -1,0 +1,116 @@
+\doxysection{ma\+\_\+job Struct Reference}
+\hypertarget{structma__job}{}\label{structma__job}\index{ma\_job@{ma\_job}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__job_ad1e13e5048d49920611e1d22a160e149}\label{structma__job_ad1e13e5048d49920611e1d22a160e149} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) next
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__job_a60f5dafd606714b63fcad7be5d56b09e}\label{structma__job_a60f5dafd606714b63fcad7be5d56b09e} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>ma\_uint16 {\bfseries code}\\
+\>\>ma\_uint16 {\bfseries slot}\\
+\>\>ma\_uint32 {\bfseries refcount}\\
+\>\} {\bfseries breakup}\\
+\>ma\_uint64 {\bfseries allocation}\\
+\} {\bfseries toc}\\
+
+\end{tabbing}\item 
+\Hypertarget{structma__job_a9eb5675943e10862096c72de1ab83da2}\label{structma__job_a9eb5675943e10862096c72de1ab83da2} 
+ma\+\_\+uint32 {\bfseries order}
+\item 
+\Hypertarget{structma__job_a16854c937fc600a27f97ccca6e7a4acc}\label{structma__job_a16854c937fc600a27f97ccca6e7a4acc} 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>struct \{\\
+\>\>ma\_job\_proc {\bfseries proc}\\
+\>\>ma\_uintptr {\bfseries data0}\\
+\>\>ma\_uintptr {\bfseries data1}\\
+\>\} {\bfseries custom}\\
+\>union \{\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pResourceManager}\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataBufferNode}\\
+\>\>\>char \texorpdfstring{$\ast$}{*} {\bfseries pFilePath}\\
+\>\>\>wchar\_t \texorpdfstring{$\ast$}{*} {\bfseries pFilePathW}\\
+\>\>\>ma\_uint32 {\bfseries flags}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pInitNotification}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pInitFence}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\} {\bfseries loadDataBufferNode}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pResourceManager}\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataBufferNode}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\} {\bfseries freeDataBufferNode}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pResourceManager}\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataBufferNode}\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDecoder}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\} {\bfseries pageDataBufferNode}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataBuffer}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pInitNotification}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pInitFence}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\>ma\_uint64 {\bfseries rangeBegInPCMFrames}\\
+\>\>\>ma\_uint64 {\bfseries rangeEndInPCMFrames}\\
+\>\>\>ma\_uint64 {\bfseries loopPointBegInPCMFrames}\\
+\>\>\>ma\_uint64 {\bfseries loopPointEndInPCMFrames}\\
+\>\>\>ma\_uint32 {\bfseries isLooping}\\
+\>\>\} {\bfseries loadDataBuffer}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataBuffer}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\} {\bfseries freeDataBuffer}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataStream}\\
+\>\>\>char \texorpdfstring{$\ast$}{*} {\bfseries pFilePath}\\
+\>\>\>wchar\_t \texorpdfstring{$\ast$}{*} {\bfseries pFilePathW}\\
+\>\>\>ma\_uint64 {\bfseries initialSeekPoint}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pInitNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pInitFence}\\
+\>\>\} {\bfseries loadDataStream}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataStream}\\
+\>\>\>ma\_async\_notification \texorpdfstring{$\ast$}{*} {\bfseries pDoneNotification}\\
+\>\>\>\doxymbox{\hyperlink{structma__fence}{ma\_fence}} \texorpdfstring{$\ast$}{*} {\bfseries pDoneFence}\\
+\>\>\} {\bfseries freeDataStream}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataStream}\\
+\>\>\>ma\_uint32 {\bfseries pageIndex}\\
+\>\>\} {\bfseries pageDataStream}\\
+\>\>struct \{\\
+\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDataStream}\\
+\>\>\>ma\_uint64 {\bfseries frameIndex}\\
+\>\>\} {\bfseries seekDataStream}\\
+\>\} {\bfseries resourceManager}\\
+\>union \{\\
+\>\>union \{\\
+\>\>\>struct \{\\
+\>\>\>\>void \texorpdfstring{$\ast$}{*} {\bfseries pDevice}\\
+\>\>\>\>ma\_uint32 {\bfseries deviceType}\\
+\>\>\>\} {\bfseries reroute}\\
+\>\>\} {\bfseries aaudio}\\
+\>\} {\bfseries device}\\
+\} {\bfseries data}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

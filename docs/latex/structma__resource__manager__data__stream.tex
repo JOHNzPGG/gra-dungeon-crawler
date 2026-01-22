@@ -1,0 +1,67 @@
+\doxysection{ma\+\_\+resource\+\_\+manager\+\_\+data\+\_\+stream Struct Reference}
+\hypertarget{structma__resource__manager__data__stream}{}\label{structma__resource__manager__data__stream}\index{ma\_resource\_manager\_data\_stream@{ma\_resource\_manager\_data\_stream}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a9d5a96685f3f71d465248baed6313950}\label{structma__resource__manager__data__stream_a9d5a96685f3f71d465248baed6313950} 
+{\bfseries MA\+\_\+\+ATOMIC} (8, ma\+\_\+uint64) absolute\+Cursor
+\item 
+\Hypertarget{structma__resource__manager__data__stream_afd8f6e3aefcf311fd49b0fb934b12413}\label{structma__resource__manager__data__stream_afd8f6e3aefcf311fd49b0fb934b12413} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+uint32) execution\+Counter
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a0601a262ccaef4f123604636ec90cccb}\label{structma__resource__manager__data__stream_a0601a262ccaef4f123604636ec90cccb} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+uint32) execution\+Pointer
+\item 
+\Hypertarget{structma__resource__manager__data__stream_af7ac6acf9bec6e034af7b39851608ed4}\label{structma__resource__manager__data__stream_af7ac6acf9bec6e034af7b39851608ed4} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+bool32) is\+Looping
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a169090fd09cc6dc835c54775916afeaa}\label{structma__resource__manager__data__stream_a169090fd09cc6dc835c54775916afeaa} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+uint32) page\+Frame\+Count\+[2]\+
+\item 
+\Hypertarget{structma__resource__manager__data__stream_ac58c355c6db297b034789c72e4645761}\label{structma__resource__manager__data__stream_ac58c355c6db297b034789c72e4645761} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+result) result
+\item 
+\Hypertarget{structma__resource__manager__data__stream_ad47b4a1910217f8ea31e055b8ae8ab47}\label{structma__resource__manager__data__stream_ad47b4a1910217f8ea31e055b8ae8ab47} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+bool32) is\+Decoder\+At\+End
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a0e6eb0f3971c92940d0ba9da47373911}\label{structma__resource__manager__data__stream_a0e6eb0f3971c92940d0ba9da47373911} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+bool32) is\+Page\+Valid\+[2]\+
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a5ba03f08715a356e80ce9a3d05f6593b}\label{structma__resource__manager__data__stream_a5ba03f08715a356e80ce9a3d05f6593b} 
+{\bfseries MA\+\_\+\+ATOMIC} (4, ma\+\_\+bool32) seek\+Counter
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a918cf2011b54cefccd0964da21aab39b}\label{structma__resource__manager__data__stream_a918cf2011b54cefccd0964da21aab39b} 
+\doxymbox{\hyperlink{structma__data__source__base}{ma\+\_\+data\+\_\+source\+\_\+base}} {\bfseries ds}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a1e4c46fead0a7b6284254b8686a5d03d}\label{structma__resource__manager__data__stream_a1e4c46fead0a7b6284254b8686a5d03d} 
+\doxymbox{\hyperlink{structma__resource__manager}{ma\+\_\+resource\+\_\+manager}} \texorpdfstring{$\ast$}{*} {\bfseries p\+Resource\+Manager}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_add163e7846d458c87294825b4db782d9}\label{structma__resource__manager__data__stream_add163e7846d458c87294825b4db782d9} 
+ma\+\_\+uint32 {\bfseries flags}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a794b10d001d40708dbe8d4eafdd4d16f}\label{structma__resource__manager__data__stream_a794b10d001d40708dbe8d4eafdd4d16f} 
+\doxymbox{\hyperlink{structma__decoder}{ma\+\_\+decoder}} {\bfseries decoder}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a03c94a6543403df0a7baa3f29aa6641f}\label{structma__resource__manager__data__stream_a03c94a6543403df0a7baa3f29aa6641f} 
+ma\+\_\+bool32 {\bfseries is\+Decoder\+Initialized}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a315e7654a602af849590235022dc2be7}\label{structma__resource__manager__data__stream_a315e7654a602af849590235022dc2be7} 
+ma\+\_\+uint64 {\bfseries total\+Length\+In\+PCMFrames}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a2a10106f1d546c472ab82df452d1bcd3}\label{structma__resource__manager__data__stream_a2a10106f1d546c472ab82df452d1bcd3} 
+ma\+\_\+uint32 {\bfseries relative\+Cursor}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a73baa138c5bf8d0eb36cfda0ec2ef07f}\label{structma__resource__manager__data__stream_a73baa138c5bf8d0eb36cfda0ec2ef07f} 
+ma\+\_\+uint32 {\bfseries current\+Page\+Index}
+\item 
+\Hypertarget{structma__resource__manager__data__stream_a89cfb369755e189bc4b9ac7fc7ee2b78}\label{structma__resource__manager__data__stream_a89cfb369755e189bc4b9ac7fc7ee2b78} 
+void \texorpdfstring{$\ast$}{*} {\bfseries p\+Page\+Data}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

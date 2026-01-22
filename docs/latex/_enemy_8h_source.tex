@@ -1,0 +1,195 @@
+\doxysection{Enemy.\+h}
+\hypertarget{_enemy_8h_source}{}\label{_enemy_8h_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Enemy.h@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Enemy.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GRA\_DUNGEON\_CRAWLER\_ENEMY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GRA\_DUNGEON\_CRAWLER\_ENEMY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Entity.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}dungeon/io/MapLoader.hpp"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <glm/gtx/vector\_angle.hpp>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }Enemy\ :\ \textcolor{keyword}{public}\ Entity\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ Enemy(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int}\ yaw,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ hp,\ \textcolor{keywordtype}{int}\ maxHp,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ap,\ \textcolor{keywordtype}{float}\ damage,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ name)}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ :\ Entity(x,\ y,\ yaw,\ hp,\ maxHp,\ ap,\ damage,\ \textcolor{keyword}{true},\ name)\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ AI\ PRZECIWNIKA\ -\/-\/-\/}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{comment}{//\ Funkcja\ wywo³ywana\ raz\ na\ turê przeciwnika}}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_enemy_a0c8675ee551bbe25cb97b83d08a46fa2}{TakeTurn}}(Entity*\ target,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{dungeon::io::Level}}\&\ level)\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!IsAlive())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1.\ SprawdŸ\ czy\ widzê gracza}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ seesTarget\ =\ CanSee(target,\ level);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (seesTarget)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ A.\ Jeœli\ gracz\ jest\ blisko\ atakuj}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dist\ =\ glm::distance(glm::vec2(GameX,\ GameY),\ glm::vec2(target-\/>GameX,\ target-\/>GameY));}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dist\ <=\ 1.5f)\ \{\ \textcolor{comment}{//\ 1.5\ wystarczy\ by\ z³apaæ przek¹tn¹\ kratki}}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RotateTowards(target-\/>GameX,\ target-\/>GameY);}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity_a5a1f94c6636ee666ff406594b006ff43}{Attack}}(target);}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ B.\ Jeœli\ jestem\ daleko\ goñ za\ mn¹}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MoveTowards(target-\/>GameX,\ target-\/>GameY,\ level);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Po\ ruchu\ sprawdŸ,\ czy\ teraz\ mogê zaatakowaæ (jeœli\ podszed³em)}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dist\ =\ glm::distance(glm::vec2(GameX,\ GameY),\ glm::vec2(target-\/>GameX,\ target-\/>GameY));}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dist\ <=\ 1.5f)\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity_a5a1f94c6636ee666ff406594b006ff43}{Attack}}(target);}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ C.\ Nie\ widzê gracza\ -\/>\ IDLE\ (stój lub\ losowy\ obrót)}}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Opcjonalnie:\ Patroluj}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ ZMYS£Y\ -\/-\/-\/}}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{bool}\ CanSee(\doxymbox{\hyperlink{class_entity}{Entity}}*\ target,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{dungeon::io::Level}}\&\ level)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1.\ Dystans}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dist\ =\ glm::distance(glm::vec2(GameX,\ GameY),\ glm::vec2(target-\/>GameX,\ target-\/>GameY));}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dist\ >\ 6.0f)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 2.\ Kierunek}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ glm::vec2\ toTarget\ =\ glm::vec2(target-\/>GameX\ -\/\ GameX,\ target-\/>GameY\ -\/\ GameY);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ glm::vec2\ dir\ =\ glm::vec2(orientation.x,\ orientation.z);\ \textcolor{comment}{//\ orientation\ z\ Object.h}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Normalizacja}}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (glm::length(toTarget)\ >\ 0.1f)\ toTarget\ =\ glm::normalize(toTarget);}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (glm::length(dir)\ >\ 0.1f)\ dir\ =\ glm::normalize(dir);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ dot\ =\ glm::dot(dir,\ toTarget);}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ dot\ >\ 0.5\ oznacza\ k¹t\ widzenia\ ok.\ 120\ stopni}}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ dot\ >\ 0.7\ oznacza\ ok\ 90\ stopni.}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dot\ <\ 0.5f)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 3.\ Raycast\ (Œciany)}}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ CheckLineOfSight(GameX,\ GameY,\ target-\/>GameX,\ target-\/>GameY,\ level);}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{comment}{//\ Funkcja\ pomocnicza\ -\/\ sprawdza\ czy\ miêdzy\ A\ i\ B\ s¹\ œciany}}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keywordtype}{bool}\ CheckLineOfSight(\textcolor{keywordtype}{int}\ x1,\ \textcolor{keywordtype}{int}\ y1,\ \textcolor{keywordtype}{int}\ x2,\ \textcolor{keywordtype}{int}\ y2,\ \textcolor{keyword}{const}\ dungeon::io::Level\&\ level)\ \{}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ steps\ =\ std::max(std::abs(x2\ -\/\ x1),\ std::abs(y2\ -\/\ y1));}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (steps\ ==\ 0)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ stepX\ =\ (x2\ -\/\ x1)\ /\ steps;}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ stepY\ =\ (y2\ -\/\ y1)\ /\ steps;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ cx\ =\ (float)x1;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ cy\ =\ (float)y1;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ (int)steps;\ ++i)\ \{}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ cx\ +=\ stepX;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ cy\ +=\ stepY;}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ checkX\ =\ (int)std::round(cx);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ checkY\ =\ (int)std::round(cy);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Jeœli\ trafi\ w\ cel,\ to\ OK}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (checkX\ ==\ x2\ \&\&\ checkY\ ==\ y2)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ SprawdŸ\ kolizjê ze\ œcian¹}}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (checkX\ <\ 0\ ||\ checkY\ <\ 0\ ||\ checkX\ >=\ level.w\ ||\ checkY\ >=\ level.h)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (level.cells[checkY\ *\ level.w\ +\ checkX]\ ==\ dungeon::io::Cell::Wall)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00113\ \ \ \ \ \}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ ANIMACJA\ RUCHU\ -\/-\/-\/}}
+\DoxyCodeLine{00116\ \ \ \ \ glm::vec3\ VisualPos;\ \ \ \ \ \ \ \textcolor{comment}{//\ Tutaj\ stoi\ model}}
+\DoxyCodeLine{00117\ \ \ \ \ glm::vec3\ AnimStartPos;\ \ \ \ \textcolor{comment}{//\ Sk¹d\ wyruszy³}}
+\DoxyCodeLine{00118\ \ \ \ \ glm::vec3\ AnimTargetPos;\ \ \ \textcolor{comment}{//\ Dok¹d\ idzie}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keywordtype}{float}\ AnimTimer\ =\ 0.0f;}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsMoving\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ AnimDuration\ =\ 0.15f;\ \textcolor{comment}{//\ Czas\ trwania\ (bardzo\ szybki\ suw)}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{comment}{//\ Funkcja\ do\ aktualizacji\ animacji\ (dodaj\ j¹\ te¿\ w\ .cpp\ lub\ zostaw\ w\ .h\ jak\ tutaj)}}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordtype}{void}\ UpdateAnimation(\textcolor{keywordtype}{float}\ dt)\ \{}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (IsMoving)\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ AnimTimer\ +=\ dt;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ t\ =\ AnimTimer\ /\ AnimDuration;}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (t\ >=\ 1.0f)\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ t\ =\ 1.0f;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IsMoving\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VisualPos\ =\ AnimTargetPos;\ \textcolor{comment}{//\ Doci¹gnij\ do\ celu}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Interpolacja\ (Lerp)}}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ VisualPos\ =\ AnimStartPos\ +\ (AnimTargetPos\ -\/\ AnimStartPos)\ *\ t;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \ \ \ \ \}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{comment}{//\ Funkcja\ startuj¹ca\ animacjê (wywo³amy\ j¹\ po\ ruchu\ AI)}}
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_enemy_acab7856f7438c0c17158574d20e7937f}{StartMoveAnimation}}(\textcolor{keywordtype}{int}\ oldX,\ \textcolor{keywordtype}{int}\ oldY,\ \textcolor{keywordtype}{int}\ newX,\ \textcolor{keywordtype}{int}\ newY)\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Logika\ 2D\ -\/>\ Wizualne\ 3D\ (pamiêtaj\ o\ +0.5f\ na\ œrodek\ kratki)}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ AnimStartPos\ =\ glm::vec3(oldX\ +\ 0.5f,\ 0.0f,\ oldY\ +\ 0.5f);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ AnimTargetPos\ =\ glm::vec3(newX\ +\ 0.5f,\ 0.0f,\ newY\ +\ 0.5f);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zabezpieczenie:\ Startujemy\ z\ obecnej\ wizualnej,\ ¿eby\ nie\ by³o\ skoku}}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ jeœli\ poprzednia\ animacja\ siê nie\ skoñczy³a\ (choæ przy\ turach\ to\ rzadkie)}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ VisualPos\ =\ AnimStartPos;}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ IsMoving\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ AnimTimer\ =\ 0.0f;}
+\DoxyCodeLine{00158\ \ \ \ \ \}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordtype}{void}\ RotateTowards(\textcolor{keywordtype}{int}\ tx,\ \textcolor{keywordtype}{int}\ ty)\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ty\ <\ GameY)\ yaw\ =\ 0;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ty\ >\ GameY)\ yaw\ =\ 180;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tx\ >\ GameX)\ yaw\ =\ 90;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (tx\ <\ GameX)\ yaw\ =\ 270;}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ UpdateOrientation();}
+\DoxyCodeLine{00170\ \ \ \ \ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{void}\ MoveTowards(\textcolor{keywordtype}{int}\ tx,\ \textcolor{keywordtype}{int}\ ty,\ \textcolor{keyword}{const}\ dungeon::io::Level\&\ level)\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ dx\ =\ (tx\ >\ GameX)\ ?\ 1\ :\ (tx\ <\ GameX)\ ?\ -\/1\ :\ 0;}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ dy\ =\ (ty\ >\ GameY)\ ?\ 1\ :\ (ty\ <\ GameY)\ ?\ -\/1\ :\ 0;}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Prosty\ ruch:\ najpierw\ próbuj\ jedn¹\ oœ,\ potem\ drug¹}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nextX\ =\ GameX\ +\ dx;}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nextY\ =\ GameY;}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Helper\ lokalny\ do\ sprawdzania\ ruchu}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ isWalkable\ =\ [\&](\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y)\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (x\ <\ 0\ ||\ y\ <\ 0\ ||\ x\ >=\ level.w\ ||\ y\ >=\ level.h)\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ level.cells[y\ *\ level.w\ +\ x]\ !=\ dungeon::io::Cell::Wall;}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Preferuj\ oœ\ z\ wiêkszym\ dystansem}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(tx\ -\/\ GameX)\ <\ std::abs(ty\ -\/\ GameY))\ \{}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ nextX\ =\ GameX;\ nextY\ =\ GameY\ +\ dy;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!isWalkable(nextX,\ nextY))\ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Zablokowane?\ Spróbuj\ drug¹\ oœ}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ nextX\ =\ GameX\ +\ dx;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ nextY\ =\ GameY\ +\ dy;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ (Tu\ mo¿na\ dodaæ lepszy\ pathfinding\ A*,\ ale\ na\ razie\ wystarczy)}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (isWalkable(nextX,\ nextY))\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Rusz\ siê}}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ RotateTowards(nextX,\ nextY);\ \textcolor{comment}{//\ Patrz\ gdzie\ idziesz}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ GameX\ =\ nextX;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ GameY\ =\ nextY;}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ RenderPosition\ =\ glm::vec3(GameX,\ 0.f,\ GameY);}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00209\ \ \ \ \ \}}
+\DoxyCodeLine{00210\ \};}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,50 @@
+\doxysection{Map\+Loader.\+hpp}
+\hypertarget{_map_loader_8hpp_source}{}\label{_map_loader_8hpp_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/include/dungeon/io/MapLoader.hpp@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/include/dungeon/io/MapLoader.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <glm/glm.hpp>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }dungeon::io\ \{}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{enum\ class}\ Cell\ :\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ Floor\ =\ 0,\ \ \ \ \ }
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ Wall\ =\ 1,\ \ \ \ \ \ }
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ NextLevel\ =\ 2,\ }
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ Exit\ =\ 3\ \ \ \ \ \ \ }
+\DoxyCodeLine{00016\ \ \ \ \ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1io_1_1_enemy_spawn}{EnemySpawn}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_enemy_spawn_aae1fa8b1f9a926972d7413b29e9f72fe}{x}};\ \ \ \ \ }
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_enemy_spawn_ab70b43c29f5586f61be5a9d47bc1fbfc}{y}};\ \ \ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_enemy_spawn_abdf0d820e01dd4c02e0459fbaf3efe87}{type}};\ }
+\DoxyCodeLine{00025\ \ \ \ \ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1io_1_1_item_spawn}{ItemSpawn}}\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_item_spawn_addad932d99fb715331ea3269333964c9}{x}};\ \ \ \ \ }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_item_spawn_aa5ea4aa4bff5dd5e996572c08fce5573}{y}};\ \ \ \ \ }
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_item_spawn_a128060d1d05979d39e0c695899691a1b}{type}};\ }
+\DoxyCodeLine{00034\ \ \ \ \ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{Level}}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_a5a7775edbd79f5802397120f93f023ec}{w}}\ =\ 0;\ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_af5cd144c6f8014facef95eb5fc741f7f}{h}}\ =\ 0;\ }
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ std::vector<Cell>\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_ae7439527f0958dbb759409abf8a7b693}{cells}};\ }
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_a8ecf66855a4394364f0784541148a1a4}{player\_x}}\ =\ 1;\ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_ad9bc4953abc580a61151a292c89d8370}{player\_y}}\ =\ 1;\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_af60b58769d09a1f96b74ea04e62da508}{player\_start\_yaw}}\ =\ 180.0f;\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ std::vector<EnemySpawn>\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_ad2da642c313d10a648d981a46587476d}{enemy\_spawns}};\ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ std::vector<ItemSpawn>\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_a3fe7228448c67d24e8cabf1ed19f4fda}{item\_spawns}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::vector<ItemSpawn>\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_a9331d6a1cdb6d202189f936b636d3f61}{puzzle\_torches}};\ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ std::vector<ItemSpawn>\ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level_ab37813aad1a0c3a2a739ad9cb3060207}{pressure\_plates}};\ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00060\ \ \ \ \ \doxymbox{\hyperlink{structdungeon_1_1io_1_1_level}{Level}}\ load\_map\_ascii(\textcolor{keyword}{const}\ std::string\&\ path);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \}\ \textcolor{comment}{//\ namespace\ dungeon::io}}
+
+\end{DoxyCode}

@@ -1,0 +1,128 @@
+\doxysection{Entity.\+h}
+\hypertarget{_entity_8h_source}{}\label{_entity_8h_source}\index{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Entity.h@{D:/Pliki/gra dungeon projekt/G3DiPKG2\_24\_SZKUTNIK\_KACPER\_DZIK\_WIKTOR\_KANTOR\_JAN/gra-\/dungeon-\/crawler/src/game/clases/Entity.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GRA\_DUNGEON\_CRAWLER\_ENTITY\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GRA\_DUNGEON\_CRAWLER\_ENTITY\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}Object.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <GLFW/glfw3.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MAP\_WIDTH\_MAX\ \ 20}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#define\ MAP\_HEIGHT\_MAX\ 20}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }Entity\ :\ \textcolor{keyword}{public}\ Object\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ maxHealth;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ health;}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{int}\ ActionPoints;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{int}\ base\_damage;}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ colision\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ ZMIENNE\ ANIMACJI\ -\/-\/-\/}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_entity_a5878397f0f220072ebc9d6b4d3a86ea4}{lastHitTime}}\ =\ -\/100.0f;\ \ \ \ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{class_entity_a0c0c1303ca00b329ab8537ae5aa0440b}{deathTimer}}\ =\ 0.0f;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_entity_a7002f96d437466565d4490a1eafb6063}{deathAnimFinished}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ Entity(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \textcolor{keywordtype}{int}\ yawAngle,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ hp,\ \textcolor{keywordtype}{int}\ maxHp,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ ap,\ \textcolor{keywordtype}{int}\ damage,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ hasCollision\ =\ \textcolor{keyword}{true},}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ entityName\ =\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ :\ Object(x,\ y,\ yawAngle),}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ health(hp),}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ maxHealth(maxHp),}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ ActionPoints(ap),}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ base\_damage(damage),}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ colision(hasCollision)}
+\DoxyCodeLine{00042\ \ \ \ \ \{}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ name\ =\ entityName;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ RenderPosition\ =\ glm::vec3(GameX,\ 0,\ GameY);}
+\DoxyCodeLine{00045\ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/\ LOGIKA\ SIATKI\ (GRID)\ -\/-\/-\/}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00053\ \ \ \ \ glm::ivec2\ \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{GetMoveTarget}}(\textcolor{keywordtype}{int}\ offsetSteps\ =\ 0)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ dirIndex\ =\ (GetDirIndex()\ +\ offsetSteps)\ \%\ 8;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ GameX\ +\ DIR8[dirIndex].x,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ GameY\ +\ DIR8[dirIndex].y}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00059\ \ \ \ \ \}}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ glm::ivec2\ GetForwardTile()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{GetMoveTarget}}(0);\ \}}
+\DoxyCodeLine{00062\ \ \ \ \ glm::ivec2\ GetRightTile()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{GetMoveTarget}}(2);\ \}}
+\DoxyCodeLine{00063\ \ \ \ \ glm::ivec2\ GetBackTile()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{GetMoveTarget}}(4);\ \}}
+\DoxyCodeLine{00064\ \ \ \ \ glm::ivec2\ GetLeftTile()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{class_entity_adb50a98189d327b5dd4ea615e44fd8e6}{GetMoveTarget}}(6);\ \}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_entity_a799568ca49f1ae3e5cd3a486cb1f819c}{TakeDamage}}(\textcolor{keywordtype}{int}\ amount)\ \{}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ health\ -\/=\ amount;}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (health\ <\ 0)\ health\ =\ 0;}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity_a5878397f0f220072ebc9d6b4d3a86ea4}{lastHitTime}}\ =\ (float)glfwGetTime();}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_entity_a4909305125a6d7643860aa6d79ca2b7a}{IsHurt}}()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ((\textcolor{keywordtype}{float})glfwGetTime()\ -\/\ \doxymbox{\hyperlink{class_entity_a5878397f0f220072ebc9d6b4d3a86ea4}{lastHitTime}})\ <\ 0.2f;}
+\DoxyCodeLine{00082\ \ \ \ \ \}}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ Heal(\textcolor{keywordtype}{int}\ amount)\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (IsAlive())\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ health\ +=\ amount;}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (health\ >\ maxHealth)\ health\ =\ maxHealth;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsAlive()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ health\ >\ 0;\ \}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_entity_ade99d386aae9b3a8c3cafe4464104e49}{UpdateDeath}}(\textcolor{keywordtype}{float}\ dt)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!IsAlive())\ \{}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity_a0c0c1303ca00b329ab8537ae5aa0440b}{deathTimer}}\ +=\ dt;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\doxymbox{\hyperlink{class_entity_a0c0c1303ca00b329ab8537ae5aa0440b}{deathTimer}}\ >\ 1.0f)\ \{\ \textcolor{comment}{//\ Animacja\ trwa\ 1\ sekundê}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{class_entity_a7002f96d437466565d4490a1eafb6063}{deathAnimFinished}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}{UseActionPoints}}(\textcolor{keywordtype}{int}\ ap\_used\ =\ 1)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ActionPoints\ -\/\ ap\_used\ >=\ 0)\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ ActionPoints\ -\/=\ ap\_used;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00116\ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{keywordtype}{void}\ ResetActionPoints(\textcolor{keywordtype}{int}\ ap)\ \{\ ActionPoints\ =\ ap;\ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \doxymbox{\hyperlink{class_entity_a5a1f94c6636ee666ff406594b006ff43}{Attack}}(Entity*\ target)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!target\ ||\ !\doxymbox{\hyperlink{class_entity_a27d0d9d6623e3b557c9400bcdaaff803}{UseActionPoints}}(1))\ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ glm::ivec2\ front\ =\ GetForwardTile();}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (target-\/>GameX\ ==\ front.x\ \&\&\ target-\/>GameY\ ==\ front.y)\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ target-\/>TakeDamage(base\_damage);}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00131\ \ \ \ \ \}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \textcolor{keywordtype}{void}\ TurnLeft()\ \{\ yaw\ =\ (yaw\ -\/\ 90\ +\ 360)\ \%\ 360;\ UpdateOrientation();\ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordtype}{void}\ TurnRight()\ \{\ yaw\ =\ (yaw\ +\ 90)\ \%\ 360;\ UpdateOrientation();\ \}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00137\ \ \ \ \ \textcolor{comment}{//\ Prywatna\ metoda\ pomocnicza\ do\ ruchu\ (nieu¿ywana\ w\ obecnej\ logice\ App)}}
+\DoxyCodeLine{00138\ \ \ \ \ \textcolor{keywordtype}{void}\ MoveInDirection(\textcolor{keywordtype}{int}\ map[MAP\_HEIGHT\_MAX][MAP\_WIDTH\_MAX],\ \textcolor{keywordtype}{int}\ offsetSteps)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ glm::ivec2\ target\ =\ GetTileInDirection(offsetSteps);}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newX\ =\ target.x;}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ newY\ =\ target.y;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (newX\ >=\ 0\ \&\&\ newX\ <\ MAP\_WIDTH\_MAX\ \&\&}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ newY\ >=\ 0\ \&\&\ newY\ <\ MAP\_HEIGHT\_MAX\ \&\&}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ map[newY][newX]\ ==\ 0)}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ GameX\ =\ newX;}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ GameY\ =\ newY;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ RenderPosition\ =\ glm::vec3(GameX,\ 0,\ GameY);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//GRA\_DUNGEON\_CRAWLER\_ENTITY\_H}}
+
+\end{DoxyCode}

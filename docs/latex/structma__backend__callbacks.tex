@@ -1,0 +1,49 @@
+\doxysection{ma\+\_\+backend\+\_\+callbacks Struct Reference}
+\hypertarget{structma__backend__callbacks}{}\label{structma__backend__callbacks}\index{ma\_backend\_callbacks@{ma\_backend\_callbacks}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__backend__callbacks_a7a90252e54d7f66cf6fc54c18cacecd1}\label{structma__backend__callbacks_a7a90252e54d7f66cf6fc54c18cacecd1} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Context\+Init} )(\doxymbox{\hyperlink{structma__context}{ma\+\_\+context}} \texorpdfstring{$\ast$}{*}p\+Context, const \doxymbox{\hyperlink{structma__context__config}{ma\+\_\+context\+\_\+config}} \texorpdfstring{$\ast$}{*}p\+Config, \doxymbox{\hyperlink{structma__backend__callbacks}{ma\+\_\+backend\+\_\+callbacks}} \texorpdfstring{$\ast$}{*}p\+Callbacks)
+\item 
+\Hypertarget{structma__backend__callbacks_ac53a206df82391293600aca6ef2173b9}\label{structma__backend__callbacks_ac53a206df82391293600aca6ef2173b9} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Context\+Uninit} )(\doxymbox{\hyperlink{structma__context}{ma\+\_\+context}} \texorpdfstring{$\ast$}{*}p\+Context)
+\item 
+\Hypertarget{structma__backend__callbacks_ade30dc2dc011e30a1dc54ef2bb782e08}\label{structma__backend__callbacks_ade30dc2dc011e30a1dc54ef2bb782e08} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Context\+Enumerate\+Devices} )(\doxymbox{\hyperlink{structma__context}{ma\+\_\+context}} \texorpdfstring{$\ast$}{*}p\+Context, ma\+\_\+enum\+\_\+devices\+\_\+callback\+\_\+proc callback, void \texorpdfstring{$\ast$}{*}p\+User\+Data)
+\item 
+\Hypertarget{structma__backend__callbacks_ac83037a2a8ccf56aa9dde7e3f23c8080}\label{structma__backend__callbacks_ac83037a2a8ccf56aa9dde7e3f23c8080} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Context\+Get\+Device\+Info} )(\doxymbox{\hyperlink{structma__context}{ma\+\_\+context}} \texorpdfstring{$\ast$}{*}p\+Context, ma\+\_\+device\+\_\+type device\+Type, const \doxymbox{\hyperlink{unionma__device__id}{ma\+\_\+device\+\_\+id}} \texorpdfstring{$\ast$}{*}p\+Device\+ID, \doxymbox{\hyperlink{structma__device__info}{ma\+\_\+device\+\_\+info}} \texorpdfstring{$\ast$}{*}p\+Device\+Info)
+\item 
+\Hypertarget{structma__backend__callbacks_a65185b25e6b480a39566046252e4df46}\label{structma__backend__callbacks_a65185b25e6b480a39566046252e4df46} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Init} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device, const \doxymbox{\hyperlink{structma__device__config}{ma\+\_\+device\+\_\+config}} \texorpdfstring{$\ast$}{*}p\+Config, \doxymbox{\hyperlink{structma__device__descriptor}{ma\+\_\+device\+\_\+descriptor}} \texorpdfstring{$\ast$}{*}p\+Descriptor\+Playback, \doxymbox{\hyperlink{structma__device__descriptor}{ma\+\_\+device\+\_\+descriptor}} \texorpdfstring{$\ast$}{*}p\+Descriptor\+Capture)
+\item 
+\Hypertarget{structma__backend__callbacks_a4f0017de3b83ae0a870c851999f44cae}\label{structma__backend__callbacks_a4f0017de3b83ae0a870c851999f44cae} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Uninit} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device)
+\item 
+\Hypertarget{structma__backend__callbacks_a6957420a1cb860465c28a7f6154d2b28}\label{structma__backend__callbacks_a6957420a1cb860465c28a7f6154d2b28} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Start} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device)
+\item 
+\Hypertarget{structma__backend__callbacks_a1fac3ea46120e3d40c98a93af6d38d88}\label{structma__backend__callbacks_a1fac3ea46120e3d40c98a93af6d38d88} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Stop} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device)
+\item 
+\Hypertarget{structma__backend__callbacks_a55ae6cd6b68b46363c883f6ab2048d22}\label{structma__backend__callbacks_a55ae6cd6b68b46363c883f6ab2048d22} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Read} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device, void \texorpdfstring{$\ast$}{*}p\+Frames, ma\+\_\+uint32 frame\+Count, ma\+\_\+uint32 \texorpdfstring{$\ast$}{*}p\+Frames\+Read)
+\item 
+\Hypertarget{structma__backend__callbacks_a51dc0f3af5c8d22b387b49195a1857de}\label{structma__backend__callbacks_a51dc0f3af5c8d22b387b49195a1857de} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Write} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device, const void \texorpdfstring{$\ast$}{*}p\+Frames, ma\+\_\+uint32 frame\+Count, ma\+\_\+uint32 \texorpdfstring{$\ast$}{*}p\+Frames\+Written)
+\item 
+\Hypertarget{structma__backend__callbacks_a89f3c928eadaafe1fa8bf50939c7aa84}\label{structma__backend__callbacks_a89f3c928eadaafe1fa8bf50939c7aa84} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Data\+Loop} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device)
+\item 
+\Hypertarget{structma__backend__callbacks_aaea754348a4cc5f714128ebd61b1e721}\label{structma__backend__callbacks_aaea754348a4cc5f714128ebd61b1e721} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Data\+Loop\+Wakeup} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device)
+\item 
+\Hypertarget{structma__backend__callbacks_a6674c8d6f45272df8866ea9dfddbd7ca}\label{structma__backend__callbacks_a6674c8d6f45272df8866ea9dfddbd7ca} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Device\+Get\+Info} )(\doxymbox{\hyperlink{structma__device}{ma\+\_\+device}} \texorpdfstring{$\ast$}{*}p\+Device, ma\+\_\+device\+\_\+type type, \doxymbox{\hyperlink{structma__device__info}{ma\+\_\+device\+\_\+info}} \texorpdfstring{$\ast$}{*}p\+Device\+Info)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

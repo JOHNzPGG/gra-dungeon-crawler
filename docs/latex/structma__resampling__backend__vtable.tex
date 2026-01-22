@@ -1,0 +1,40 @@
+\doxysection{ma\+\_\+resampling\+\_\+backend\+\_\+vtable Struct Reference}
+\hypertarget{structma__resampling__backend__vtable}{}\label{structma__resampling__backend__vtable}\index{ma\_resampling\_backend\_vtable@{ma\_resampling\_backend\_vtable}}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structma__resampling__backend__vtable_ae114e513358590a64bf5018cb6c3a0c5}\label{structma__resampling__backend__vtable_ae114e513358590a64bf5018cb6c3a0c5} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Get\+Heap\+Size} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const \doxymbox{\hyperlink{structma__resampler__config}{ma\+\_\+resampler\+\_\+config}} \texorpdfstring{$\ast$}{*}p\+Config, size\+\_\+t \texorpdfstring{$\ast$}{*}p\+Heap\+Size\+In\+Bytes)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_ad88d0d4c18cb1ac18997692d07864411}\label{structma__resampling__backend__vtable_ad88d0d4c18cb1ac18997692d07864411} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Init} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const \doxymbox{\hyperlink{structma__resampler__config}{ma\+\_\+resampler\+\_\+config}} \texorpdfstring{$\ast$}{*}p\+Config, void \texorpdfstring{$\ast$}{*}p\+Heap, ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}pp\+Backend)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_ab4800d523d691d0a7daf6e80c4730c32}\label{structma__resampling__backend__vtable_ab4800d523d691d0a7daf6e80c4730c32} 
+void(\texorpdfstring{$\ast$}{*} {\bfseries on\+Uninit} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend, const \doxymbox{\hyperlink{structma__allocation__callbacks}{ma\+\_\+allocation\+\_\+callbacks}} \texorpdfstring{$\ast$}{*}p\+Allocation\+Callbacks)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a32a54a6409d7cd9a6f78dfa594fa1a41}\label{structma__resampling__backend__vtable_a32a54a6409d7cd9a6f78dfa594fa1a41} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Process} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend, const void \texorpdfstring{$\ast$}{*}p\+Frames\+In, ma\+\_\+uint64 \texorpdfstring{$\ast$}{*}p\+Frame\+Count\+In, void \texorpdfstring{$\ast$}{*}p\+Frames\+Out, ma\+\_\+uint64 \texorpdfstring{$\ast$}{*}p\+Frame\+Count\+Out)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a9e4b37976d259c17d695515c34c8af9a}\label{structma__resampling__backend__vtable_a9e4b37976d259c17d695515c34c8af9a} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Set\+Rate} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend, ma\+\_\+uint32 sample\+Rate\+In, ma\+\_\+uint32 sample\+Rate\+Out)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a26b7c9632f173f197c23923ae89bb84a}\label{structma__resampling__backend__vtable_a26b7c9632f173f197c23923ae89bb84a} 
+ma\+\_\+uint64(\texorpdfstring{$\ast$}{*} {\bfseries on\+Get\+Input\+Latency} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a1798bca8588a1aa84c1f39fe6028eb17}\label{structma__resampling__backend__vtable_a1798bca8588a1aa84c1f39fe6028eb17} 
+ma\+\_\+uint64(\texorpdfstring{$\ast$}{*} {\bfseries on\+Get\+Output\+Latency} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a1b9faeed95158f3283be02da6e1337bf}\label{structma__resampling__backend__vtable_a1b9faeed95158f3283be02da6e1337bf} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Get\+Required\+Input\+Frame\+Count} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend, ma\+\_\+uint64 output\+Frame\+Count, ma\+\_\+uint64 \texorpdfstring{$\ast$}{*}p\+Input\+Frame\+Count)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_a37a870ce96e418fd6018bbe2d5fb9e76}\label{structma__resampling__backend__vtable_a37a870ce96e418fd6018bbe2d5fb9e76} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Get\+Expected\+Output\+Frame\+Count} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, const ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend, ma\+\_\+uint64 input\+Frame\+Count, ma\+\_\+uint64 \texorpdfstring{$\ast$}{*}p\+Output\+Frame\+Count)
+\item 
+\Hypertarget{structma__resampling__backend__vtable_abcc40c58874007d4f6ee79690e2662d6}\label{structma__resampling__backend__vtable_abcc40c58874007d4f6ee79690e2662d6} 
+ma\+\_\+result(\texorpdfstring{$\ast$}{*} {\bfseries on\+Reset} )(void \texorpdfstring{$\ast$}{*}p\+User\+Data, ma\+\_\+resampling\+\_\+backend \texorpdfstring{$\ast$}{*}p\+Backend)
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+miniaudio.\+h\end{DoxyCompactItemize}

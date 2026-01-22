@@ -1,0 +1,71 @@
+\doxysection{dungeon::\+gfx::\+Shader Class Reference}
+\hypertarget{classdungeon_1_1gfx_1_1_shader}{}\label{classdungeon_1_1gfx_1_1_shader}\index{dungeon::gfx::Shader@{dungeon::gfx::Shader}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{classdungeon_1_1gfx_1_1_shader_a2bd5554301b76d10c0d0bc616830354d}{Shader}} (const char \texorpdfstring{$\ast$}{*}vs\+\_\+src, const char \texorpdfstring{$\ast$}{*}fs\+\_\+src)
+\begin{DoxyCompactList}\small\item\em Konstruktor klasy \doxylink{classdungeon_1_1gfx_1_1_shader}{Shader}. Linkuje Vertex i Fragment shader w jeden program. \end{DoxyCompactList}\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a52c9391d9aa536fee6518b2ecf7a56f1}\label{classdungeon_1_1gfx_1_1_shader_a52c9391d9aa536fee6518b2ecf7a56f1} 
+{\bfseries Shader} (const Shader \&)=delete
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a8704499183359ca0f546f55d1279ced8}\label{classdungeon_1_1gfx_1_1_shader_a8704499183359ca0f546f55d1279ced8} 
+Shader \& {\bfseries operator=} (const Shader \&)=delete
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a3b8d6f8fe947e559373e41ffaa1ad467}\label{classdungeon_1_1gfx_1_1_shader_a3b8d6f8fe947e559373e41ffaa1ad467} 
+{\bfseries Shader} (Shader \&\&) noexcept
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_abb4d8489fd4d5d92c6b2c1901b92939e}\label{classdungeon_1_1gfx_1_1_shader_abb4d8489fd4d5d92c6b2c1901b92939e} 
+Shader \& {\bfseries operator=} (Shader \&\&) noexcept
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_ae50aba1b562e63b374953283d07c177a}\label{classdungeon_1_1gfx_1_1_shader_ae50aba1b562e63b374953283d07c177a} 
+void {\bfseries use} () const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a21536b250b58ea2f93e2c445416f5fa8}\label{classdungeon_1_1gfx_1_1_shader_a21536b250b58ea2f93e2c445416f5fa8} 
+unsigned {\bfseries id} () const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a143477b365310063f401c26f2f206c7e}\label{classdungeon_1_1gfx_1_1_shader_a143477b365310063f401c26f2f206c7e} 
+void {\bfseries set\+Mat4} (const char \texorpdfstring{$\ast$}{*}name, const float \texorpdfstring{$\ast$}{*}m) const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a88884da2a9854aa42d906853183aff65}\label{classdungeon_1_1gfx_1_1_shader_a88884da2a9854aa42d906853183aff65} 
+void {\bfseries set\+Vec3} (const char \texorpdfstring{$\ast$}{*}name, float x, float y, float z) const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a49d9f2d0c01a030e3a2ec0336669a614}\label{classdungeon_1_1gfx_1_1_shader_a49d9f2d0c01a030e3a2ec0336669a614} 
+void {\bfseries set\+Int} (const char \texorpdfstring{$\ast$}{*}name, int v) const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_ad229e382e0f35d497814ccaa166e80fc}\label{classdungeon_1_1gfx_1_1_shader_ad229e382e0f35d497814ccaa166e80fc} 
+void {\bfseries set\+Vec4} (const char \texorpdfstring{$\ast$}{*}name, float x, float y, float z, float w) const
+\item 
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_aa45bb48d32eb7f1695bd034c6cc096b3}\label{classdungeon_1_1gfx_1_1_shader_aa45bb48d32eb7f1695bd034c6cc096b3} 
+void {\bfseries set\+Float} (const std::\+string \&name, float value) const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classdungeon_1_1gfx_1_1_shader_a2bd5554301b76d10c0d0bc616830354d}\index{dungeon::gfx::Shader@{dungeon::gfx::Shader}!Shader@{Shader}}
+\index{Shader@{Shader}!dungeon::gfx::Shader@{dungeon::gfx::Shader}}
+\doxysubsubsection{\texorpdfstring{Shader()}{Shader()}}
+{\footnotesize\ttfamily \label{classdungeon_1_1gfx_1_1_shader_a2bd5554301b76d10c0d0bc616830354d} 
+dungeon::\+gfx::\+\+Shader::\+\+Shader (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{vs\+\_\+src}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{fs\+\_\+src}{}\end{DoxyParamCaption})}
+
+
+
+Konstruktor klasy \doxylink{classdungeon_1_1gfx_1_1_shader}{Shader}. Linkuje Vertex i Fragment shader w jeden program. 
+
+
+\begin{DoxyItemize}
+\item 
+\begin{DoxyParams}{Parameters}
+{\em vs\+\_\+src} & Kod Ÿród³owy Vertex Shadera. \\
+\hline
+{\em fs\+\_\+src} & Kod Ÿród³owy Fragment Shadera. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+include/\+dungeon/\+gfx/\+Shader.\+hpp\item 
+D:\+/\+\+Pliki/\+gra dungeon projekt/\+\+G3\+Di\+PKG2\+\_\+24\+\_\+\+SZKUTNIK\+\_\+\+KACPER\+\_\+\+DZIK\+\_\+\+WIKTOR\+\_\+\+KANTOR\+\_\+\+JAN/\+gra-\/dungeon-\/crawler/\+src/\+gfx/\+Shader.\+cpp\end{DoxyCompactItemize}

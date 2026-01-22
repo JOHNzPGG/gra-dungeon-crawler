@@ -81,7 +81,7 @@ namespace dungeon {
             char t = spawn.type;
 
             if (t == 'P') {
-                ItemStats stats; stats.health = 25;
+                ItemStats stats; stats.health = 30;
                 newItem = new Item("Health Potion", ItemType::Consumable, true, stats);
             }
             else if (t == 'M') {
@@ -89,7 +89,7 @@ namespace dungeon {
                 newItem = new Item("MAXWELL", ItemType::Weapon, false, stats); // Easter Egg
             }
             else if (t == '1') {
-                ItemStats stats; stats.damage = 15;
+                ItemStats stats; stats.damage = 20;
                 newItem = new Item("Rusty Sword", ItemType::Weapon, false, stats);
             }
             else if (t == '2') {
